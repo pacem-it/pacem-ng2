@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{89E1703B-CAF5-4DE8-9D73-6D312DB40DEF}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="index.html" />
+    <Content Include="pacem\dist\css\app.css" />
+    <Content Include="pacem\dist\css\app.min.css">
+      <DependentUpon>app.css</DependentUpon>
+    </Content>
+    <Content Include="pacem\dist\css\pacem.css" />
+    <Content Include="pacem\dist\css\pacem.min.css">
+      <DependentUpon>pacem.css</DependentUpon>
+    </Content>
+    <Content Include="systemjs.config.js" />
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="barchessa.json" />
+    <Content Include="foodEntities.json" />
+    <Content Include="foods.json" />
+    <Content Include="LICENSE" />
+    <Content Include="metadata.json" />
+    <Content Include="pacem\images\balloon-pointer.svg" />
+    <Content Include="pacem\images\bold.svg" />
+    <Content Include="pacem\images\camera.svg" />
+    <Content Include="pacem\images\check.svg" />
+    <Content Include="pacem\images\cross.svg" />
+    <Content Include="pacem\images\down.svg" />
+    <Content Include="pacem\images\gallery.svg" />
+    <Content Include="pacem\images\info.svg" />
+    <Content Include="pacem\images\italic.svg" />
+    <Content Include="pacem\images\link.svg" />
+    <Content Include="pacem\images\orderedlist.svg" />
+    <Content Include="pacem\images\pie.svg" />
+    <Content Include="pacem\images\refresh.svg" />
+    <Content Include="pacem\images\replay.svg" />
+    <Content Include="pacem\images\underline.svg" />
+    <Content Include="pacem\images\undo.svg" />
+    <Content Include="pacem\images\unorderedlist.svg" />
+    <Content Include="pacem\images\upload.svg" />
+    <Content Include="pacem\less\app.less" />
+    <Content Include="pacem\less\pacem-scaffolding.less" />
+    <Content Include="pacem\less\pacem-ui.less" />
+    <Content Include="pacem\less\pacem.less" />
+    <Content Include="pacem\less\shared.less" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Content Include="tsconfig.json" />
+    <Content Include="typings.json" />
+    <Content Include="packages.config" />
+    <Content Include="autocomplete.ashx" />
+    <Content Include="uploader.ashx" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="app\app.404.component.ts" />
+    <TypeScriptCompile Include="app\app.component.ts" />
+    <TypeScriptCompile Include="app\app.module.ts" />
+    <TypeScriptCompile Include="app\app.pacem3D.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemBalloon.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemBind.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemCharts.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemInfiniteScroll.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemLightbox.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemMap.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemScaffolding.component.ts" />
+    <TypeScriptCompile Include="app\app.pacemUploader.component.ts" />
+    <TypeScriptCompile Include="app\app.routing.ts" />
+    <TypeScriptCompile Include="app\main.ts" />
+    <TypeScriptCompile Include="pacem\pacem-3d.ts" />
+    <TypeScriptCompile Include="pacem\pacem-core.ts" />
+    <TypeScriptCompile Include="pacem\pacem-maps-leaflet.ts" />
+    <TypeScriptCompile Include="pacem\pacem-net.ts" />
+    <TypeScriptCompile Include="pacem\pacem-scaffolding.ts" />
+    <TypeScriptCompile Include="pacem\pacem-ui.ts" />
+    <TypeScriptCompile Include="pacem\three-objmtlloader.ts" />
+    <TypeScriptCompile Include="Scripts\typings\geojson\geojson.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\leaflet\leaflet.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\detector.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-canvasrenderer.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-copyshader.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-css3drenderer.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-editorcontrols.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-effectcomposer.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-FirstPersonControls.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-loaders.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-maskpass.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-orbitcontrols.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-orthographictrackballcontrols.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-projector.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-renderpass.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-shaderpass.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-trackballcontrols.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-transformcontrols.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-vrcontrols.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three-vreffect.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\threejs\three.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PacemJS\PacemJS.csproj">
+      <Project>{b1ca8039-aefa-4c19-b4ef-8b996fb47573}</Project>
+      <Name>PacemJS</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\Files\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>PacemNg2</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57037</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:57037/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+</Project>

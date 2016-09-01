@@ -1,0 +1,165 @@
+﻿[
+  {
+    "prop": "Password",
+    "type": "password",
+    "validators": [
+      {
+        "type": "required",
+        "errorMessage": "field is required"
+      }
+    ]
+  },
+  {
+    "prop": "PwdRepeat",
+    "type": "password",
+    "display": { "name": "Password (confirm)" },
+    "validators": [
+      {
+        "type": "compare",
+        "errorMessage": "the two password fields are not equal",
+        "params": {
+          "to": "Password",
+          "operator": "equal"
+        }
+      }
+    ]
+  },
+  {
+    "prop": "Name",
+    "type": "text",
+    "display": { "watermark": "name..." }
+  },
+  {
+    "prop": "Surname",
+    "type": "text",
+    "display": { "watermark": "your family name here..." },
+    "validators": [
+      {
+        "type": "required",
+        "errorMessage": "field is required"
+      },
+      {
+        "type": "length",
+        "errorMessage": "length must be between 2 and 10",
+        "params": {
+          "max": 10,
+          "min": 2
+        }
+      }
+    ]
+  },
+  {
+    "prop": "FavFood",
+    "type": "string",
+    "display": {
+      "ui": "oneToMany",
+      "name": "Favorite Food",
+      "watermark": "pick your poison..."
+    },
+    "extra": { "sourceUrl": "foods.json" },
+    "validators": [
+      {
+        "type": "required",
+        "errorMessage": "Please select your favorite food"
+      }
+    ]
+  },
+  {
+    "prop": "FavFoods",
+    "type": "string",
+    "display": {
+      "ui": "manyToMany",
+      "name": "Favorite Foods",
+      "watermark": "pick your poisons..."
+    },
+    "extra": {
+      "sourceUrl": "foodEntities.json",
+      "textProperty": "Name",
+      "valueProperty": "ID"
+    },
+    "validators": [
+      {
+        "type": "required",
+        "errorMessage": "Please select at least one item"
+      }
+    ]
+  },
+  {
+    "prop": "Birthdate",
+    "type": "date",
+    "display": {
+      "watermark": "when did you see the light?...",
+      "format": "{0:D}"
+    },
+    "validators": [
+      {
+        "type": "range",
+        "errorMessage": "value must be more recent than Jan 1st, 1970.",
+        "params": { "min": "1970-01-01" }
+      }
+    ]
+  },
+  {
+    "prop": "State",
+    "type": "text",
+    "display": {
+      "ui": "autocomplete",
+      "name": "State",
+      "watermark": "type your region's name...",
+      "description": "Type you state's initials and then pick it by selecting from the list"
+    },
+    "extra": {
+      "sourceUrl": "autocomplete.ashx",
+      "textProperty": "Name",
+      "valueProperty": "ID",
+      "tooltip": true
+    },
+    "validators": [
+      {
+        "type": "required",
+        "errorMessage": "Please select an item from the dropdown"
+      }
+    ]
+  },
+  {
+    "prop": "Email",
+    "type": "emailaddress",
+    "validators": [
+      {
+        "type": "email",
+        "errorMessage": "this isn't a valid email address at all"
+      }
+    ]
+  },
+  {
+    "prop": "Height",
+    "type": "float",
+    "display": { "name": "Height (m)" },
+    "validators": [
+      {
+        "type": "range",
+        "errorMessage": "height must be between 1.0m and 2.5m",
+        "params": {
+          "max": 2.5,
+          "min": 1.0
+        }
+      }
+    ]
+  },
+  {
+    "prop": "Mobile",
+    "type": "phonenumber",
+    "display": { "watermark": "000 0000000..." }
+  },
+  {
+    "prop": "Resume",
+    "type": "text",
+    "display": { "ui": "contentEditable" },
+    "validators": [
+      {
+        "type": "required",
+        "errorMessage": "resume is required"
+      }
+    ]
+  }
+]

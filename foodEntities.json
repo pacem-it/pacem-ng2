@@ -1,0 +1,25 @@
+﻿{
+  "success": true,
+  "result": [
+    {
+      "ID": 1,
+      "Name": "pizza"
+    },
+    {
+      "ID": 2,
+      "Name": "ice cream"
+    },
+    {
+      "ID": 3,
+      "Name": "chicken wings"
+    },
+    {
+      "ID": 4,
+      "Name": "fried bacon"
+    },
+    {
+      "ID": 5,
+      "Name": "prime rib"
+    }
+  ]
+}
