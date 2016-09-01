@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "pacem/dist/css/pacem.css",
+    "inputFile": "pacem/less/pacem.less"
+  },
+  {
+    "outputFile": "pacem/dist/css/app.css",
+    "inputFile": "pacem/less/app.less"
+  }
+]

@@ -1,19 +1,26 @@
 {
   "name": "pacem-ng2",
-  "version": "0.2.1",
+  "version": "0.2.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pacem-it/pacem-ng2.git"
   },
   "files": [
     "pacem/*.*",
-    "app/*.*",
-    "pacem/dist/**/*.*",
-    "pacem/typings/**/*.d.ts",
-    "pacem/less/*.less",
+    "pacem/dist/css/pacem.min.css",
+    "Scripts/typings/geojson/*.ts",
+    "Scripts/typings/jquery/*.ts",
+    "Scripts/typings/geojson/*.ts",
+    "Scripts/typings/leaflet/*.ts",
+    "Scripts/typings/signalr/*.ts",
+    "Scripts/typings/threejs/*.ts",
+    "pacem/less/pacem-scaffolding.less",
+    "pacem/less/pacem-ui.less",
+    "pacem/less/pacem.less",
+    "pacem/less/shared.less",
     "index.html",
-    "*.json",
-    "system.config.js"
+    "system.config.js",
+    "typings.json"
   ],
   "engines": {
     "node": ">=0.10.0"

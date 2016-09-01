@@ -93,13 +93,21 @@ a {
 textarea {
   overflow: auto;
 }
-/* #region CUSTOM FONTS */
 :invalid {
   box-shadow: none;
   /* Firefox invalid inputs decoration */
 }
+/* #region CUSTOM FONTS */
 /* #endregion */
 /* #region VARIABLES*/
+/*#endregion*/
+html,
+body {
+  font-family: 'Yanone Kaffeesatz', 'Segoe UI', Helvetica, sans-serif;
+  font-size: 1em;
+  background: #1e2336;
+  color: #fff;
+}
 /*#region HIDDEN*/
 @keyframes hideAway {
   0% {

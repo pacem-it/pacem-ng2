@@ -1,11 +1,5 @@
 ﻿/* #region VARIABLES*/
-html,
-body {
-  font-family: 'Yanone Kaffeesatz', 'Segoe UI', Helvetica, sans-serif;
-  font-size: 1em;
-  background: #1e2336;
-  color: #fff;
-}
+/*#endregion*/
 pacem-scripts {
   display: block;
 }

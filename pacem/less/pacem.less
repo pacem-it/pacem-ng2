@@ -12,14 +12,25 @@ blockquote, q {quotes:"" "";}
 a img { border:none; }
 a {text-decoration:none;}
 *:focus, *:active { outline:none; }
-textarea{ overflow: auto; }/* #region CUSTOM FONTS */
+textarea{ overflow: auto; }
 :invalid{ box-shadow: none; /* Firefox invalid inputs decoration */ }
+
+/* #region CUSTOM FONTS */
 
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow);
 @import url(http://fonts.googleapis.com/css?family=Share+Tech+Mono);
 
 /* #endregion */
+
+@import 'shared.less';
+
+html, body {
+    font-family: @font_std;
+    font-size: 1em;
+    background: @color_blue;
+    color: @color_light;
+}
 
 @import 'pacem-ui.less';
 @import 'pacem-scaffolding.less';
