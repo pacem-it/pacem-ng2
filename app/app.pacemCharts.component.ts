@@ -36,8 +36,8 @@ import { Component, Input, ViewChild } from '@angular/core';
     <li class="pacem-input-container"><input class="pacem-input" type="number" required [(ngModel)]="value4" max="100" min="0" /></li>
 
 </ol>
-`,
-    directives: [PacemRingChart, PacemRingChartItem, PacemPieChart, PacemPieChartSlice]
+`/*,
+    entryComponents: [PacemRingChart, PacemRingChartItem, PacemPieChart]*/
 })
 export class PacemChartsComponent {
     

@@ -14,8 +14,7 @@ import { PacemInfiniteScroll, PacemInViewport } from './../pacem/pacem-ui';
         'ol > li { display: inline-block; font-size: 0; width: 25%; }',
         '.card { transition: opacity 1s; opacity: 0.25; font-size: 12px; color: #000; border: 1px solid #c0c0c0; background: #fff; padding: 48px 24px; }',
         '.card.pacem-in-viewport { opacity: 1 }'
-    ],
-    directives: [PacemInfiniteScroll, PacemInViewport ]
+    ]
 })
 export class PacemInfiniteScrollComponent {
 

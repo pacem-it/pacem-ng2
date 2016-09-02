@@ -1,7 +1,8 @@
 ﻿/// <reference path="../scripts/typings/threejs/three.d.ts" />
 /// <reference path="../scripts/typings/threejs/three-projector.d.ts" />
 /// <reference path="../scripts/typings/threejs/three-orbitcontrols.d.ts" />
-import { Component, Injectable, Directive,
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+import { Component, Injectable, Directive, NgModule,
     ViewChild, ElementRef, Input, Output, EventEmitter,
     OnChanges, SimpleChange, SimpleChanges,
     AfterViewInit, OnInit, OnDestroy } from '@angular/core';
@@ -395,7 +396,7 @@ export class Pacem3DObject implements OnInit, OnDestroy {
         }
         return mesh.geometry.boundingSphere;
     }
-    
+
     private getPointCoords(point: THREE.Vector3) {
         let renderer = this.pacem3dCtrl.renderer;
         var widthHalf = 0.5 * renderer.domElement.width;
@@ -610,3 +611,9 @@ export class Pacem3DLight implements OnInit, OnDestroy, OnChanges {
     }
 
 }
+
+@NgModule({
+    declarations: [ Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject],
+    exports: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject]
+})
+export class Pacem3DModule { }

@@ -11,7 +11,7 @@ import { Pacem3DComponent } from './app.pacem3D.component';
 import { PacemBindComponent } from './app.pacemBind.component';
 import { Type } from '@angular/core';
 
-export const pages: { label: string, component: Type }[] = [
+export const pages: { label: string, component: Type<any> }[] = [
     { label: 'map (leafletJS)', component: PacemMapComponent },
     { label: 'infinite scroll', component: PacemInfiniteScrollComponent },
     { label: 'lightbox', component: PacemLightboxComponent },

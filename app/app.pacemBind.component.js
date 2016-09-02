@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var pacem_core_1 = require('./../pacem/pacem-core');
 var pacem_ui_1 = require('./../pacem/pacem-ui');
-var pacem_3d_1 = require('./../pacem/pacem-3d');
 var PacemBindComponent = (function () {
     function PacemBindComponent() {
         this.obj = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshNormalMaterial());
@@ -54,8 +53,8 @@ var PacemBindComponent = (function () {
                 '.source { top: 250px; left: 250px; background: #080; cursor: move; }',
                 '.source.target { background: #fc0; top: 250px; left: 450px;  }',
                 '.source:nth-child(2n) { top: 275px; left: 450px; }'
-            ],
-            directives: [pacem_3d_1.Pacem3D, pacem_3d_1.Pacem3DCamera, pacem_3d_1.Pacem3DLight, pacem_3d_1.Pacem3DObject, pacem_ui_1.PacemBindTarget, pacem_ui_1.PacemBindTargets]
+            ] /*,
+            entryComponents: [Pacem3D, PacemBindTarget, PacemBindTargets]*/
         }), 
         __metadata('design:paramtypes', [])
     ], PacemBindComponent);

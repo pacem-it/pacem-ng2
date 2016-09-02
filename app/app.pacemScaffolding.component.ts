@@ -19,9 +19,8 @@ It includes styling, custom validation and fetching for complex data.</p>
     </form>
 
 `,
-    providers: [PacemLooper, PacemHttp],
-    directives: [PacemField],
-    pipes: [JsonPipe]
+    providers: [PacemLooper, PacemHttp]/*,
+    entryComponents: [PacemField]*/
 })
 export class PacemScaffoldingComponent implements AfterViewInit {
 

@@ -9,8 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /// <reference path="../scripts/typings/leaflet/leaflet.d.ts" />
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
+var common_1 = require('@angular/common');
+var pacem_ui_1 = require('./pacem-ui');
 var consts = {
     TIMEOUT: 1000,
     MAP_SELECTOR: 'pacem-map',
@@ -40,10 +43,9 @@ var utils = {
 //#region LINK
 var PacemMapLink = (function () {
     function PacemMapLink(sanitizer) {
+        this.sanitizer = sanitizer;
         this.target = '';
         this.link = '#';
-        this.sanitizer = null;
-        this.sanitizer = sanitizer;
     }
     PacemMapLink.prototype.ngOnChanges = function () {
         this.updateLink();
@@ -66,7 +68,7 @@ var PacemMapLink = (function () {
             selector: consts.LINK_SELECTOR,
             template: '<a [href]="link"><ng-content></ng-content></a>'
         }), 
-        __metadata('design:paramtypes', [platform_browser_1.DomSanitizationService])
+        __metadata('design:paramtypes', [platform_browser_1.DomSanitizer])
     ], PacemMapLink);
     return PacemMapLink;
 }());
@@ -778,3 +780,17 @@ var PacemMapPolyline = (function () {
 }());
 exports.PacemMapPolyline = PacemMapPolyline;
 //#endregion
+var PacemMapsLeafletModule = (function () {
+    function PacemMapsLeafletModule() {
+    }
+    PacemMapsLeafletModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule, pacem_ui_1.PacemUIModule],
+            declarations: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline],
+            exports: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PacemMapsLeafletModule);
+    return PacemMapsLeafletModule;
+}());
+exports.PacemMapsLeafletModule = PacemMapsLeafletModule;

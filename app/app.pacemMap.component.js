@@ -65,9 +65,8 @@ var PacemMapComponent = (function () {
         core_1.Component({
             selector: 'app-pacem-map',
             template: "<h2>Pacem Map</h2>\n<div #container (window:resize)=\"onResize($event)\"><pacem-map>\n    <pacem-map-polyline [stroke]=\"'yellow'\" [path]=\"steps\">I'm a polyline!</pacem-map-polyline>\n    <pacem-map-circle [center]=\"hereSpot\" [radius]=\"hereInfluence\">Influence of <b>{{ (hereInfluence * 0.001) }}</b>km radius</pacem-map-circle>\n    <pacem-map-marker [position]=\"hereSpot\">I'm <b>here</b>!</pacem-map-marker>\n    <pacem-map-marker [position]=\"plungeSpot\" (drag)=\"onDrag($event)\" [draggable]=\"true\">\n        Plunge here!\n        <br />(<pacem-map-link [target]=\"plungeSpot\">navigate</pacem-map-link>)\n    </pacem-map-marker>\n    <pacem-map-marker *ngFor=\"let marker of markers; let i=index\" [position]=\"marker.pos\" \n        (info)=\"setupInfo(i)\"\n        (close)=\"spliceMarker(i)\"><div [innerHTML]=\"marker.desc | pacemHighlight:(i+1).toString()\"></div></pacem-map-marker>\n</pacem-map></div>",
-            directives: [pacem_maps_leaflet_1.PacemMap, pacem_maps_leaflet_1.PacemMapMarker, pacem_maps_leaflet_1.PacemMapCircle, pacem_maps_leaflet_1.PacemMapLink, pacem_maps_leaflet_1.PacemMapPolyline],
-            pipes: [pacem_ui_1.PacemHighlight],
-            providers: [pacem_core_1.PacemPromise],
+            entryComponents: [pacem_maps_leaflet_1.PacemMap, pacem_maps_leaflet_1.PacemMapMarker, pacem_maps_leaflet_1.PacemMapCircle, pacem_maps_leaflet_1.PacemMapLink, pacem_maps_leaflet_1.PacemMapPolyline],
+            providers: [pacem_core_1.PacemPromise, pacem_ui_1.PacemHighlight],
             inputs: ['markers', 'steps']
         }), 
         __metadata('design:paramtypes', [])

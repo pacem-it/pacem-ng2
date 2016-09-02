@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var pacem_ui_1 = require('./../pacem/pacem-ui');
 var PacemInfiniteScrollComponent = (function () {
     function PacemInfiniteScrollComponent() {
         this.items = [];
@@ -33,8 +32,7 @@ var PacemInfiniteScrollComponent = (function () {
                 'ol > li { display: inline-block; font-size: 0; width: 25%; }',
                 '.card { transition: opacity 1s; opacity: 0.25; font-size: 12px; color: #000; border: 1px solid #c0c0c0; background: #fff; padding: 48px 24px; }',
                 '.card.pacem-in-viewport { opacity: 1 }'
-            ],
-            directives: [pacem_ui_1.PacemInfiniteScroll, pacem_ui_1.PacemInViewport]
+            ]
         }), 
         __metadata('design:paramtypes', [])
     ], PacemInfiniteScrollComponent);

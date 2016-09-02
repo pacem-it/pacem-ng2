@@ -1,7 +1,10 @@
 ﻿/// <reference path="../scripts/typings/leaflet/leaflet.d.ts" />
-import {Component, Input, Directive, Output, EventEmitter, ViewChild, ElementRef, Renderer,
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+import {NgModule, Component, Input, Directive, Output, EventEmitter, ViewChild, ElementRef, Renderer,
     AfterViewInit, AfterContentInit, ContentChildren, QueryList, SimpleChange } from '@angular/core';
-import {DomSanitizationService, SafeUrl} from '@angular/platform-browser';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
+import {PacemUIModule} from './pacem-ui';
 
 const consts = {
     TIMEOUT: 1000,
@@ -38,10 +41,8 @@ export class PacemMapLink {
     @Input() target: string | number[] = '';
 
     private link: SafeUrl = '#';
-    private sanitizer: DomSanitizationService = null;
 
-    constructor(sanitizer: DomSanitizationService) {
-        this.sanitizer = sanitizer;
+    constructor(private sanitizer: DomSanitizer) {
     }
 
     ngOnChanges() {
@@ -655,3 +656,11 @@ export class PacemMapPolyline {
     }
 }
 //#endregion
+
+@NgModule({
+    imports: [CommonModule, PacemUIModule],
+    declarations: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline],
+    exports: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline]
+})
+export class PacemMapsLeafletModule {
+}

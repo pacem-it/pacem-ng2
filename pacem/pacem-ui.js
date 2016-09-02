@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var common_1 = require('@angular/common');
@@ -83,7 +84,7 @@ var PacemHighlight = (function () {
         core_1.Pipe({
             name: 'pacemHighlight'
         }), 
-        __metadata('design:paramtypes', [platform_browser_1.DomSanitizationService])
+        __metadata('design:paramtypes', [platform_browser_1.DomSanitizer])
     ], PacemHighlight);
     return PacemHighlight;
 }());
@@ -315,8 +316,7 @@ var PacemLightbox = (function () {
     PacemLightbox = __decorate([
         core_1.Component({
             selector: 'pacem-lightbox',
-            template: "<div class=\"pacem-lightbox-wrapper\" [hidden]=\"hide\" [pacemHidden]=\"hide\" #wrapper>\n<div class=\"pacem-lightbox\"><ng-content></ng-content></div>\n</div>",
-            directives: [PacemHidden]
+            template: "<div class=\"pacem-lightbox-wrapper\" [hidden]=\"hide\" [pacemHidden]=\"hide\" #wrapper>\n<div class=\"pacem-lightbox\"><ng-content></ng-content></div>\n</div>"
         }), 
         __metadata('design:paramtypes', [])
     ], PacemLightbox);
@@ -426,8 +426,8 @@ var PacemGallery = (function () {
     PacemGallery = __decorate([
         core_1.Component({
             selector: 'pacem-gallery',
-            template: "<pacem-lightbox class=\"pacem-gallery\" [show]=\"!hide\" (onclose)=\"close($event)\">\n    <ol class=\"pacem-gallery-list\">\n        <template ngFor \n            [ngForOf]=\"items\" \n            let-pic=\"$implicit\" \n            let-ndx=\"index\">\n        <li *ngIf=\"isNear(ndx)\"\n        [ngClass]=\"{ 'pacem-gallery-active': ndx === focusIndex }\" \n        [ngStyle]=\"{ 'background-image': 'url('+pic.url+')' }\">\n            <div class=\"pacem-gallery-caption\" [innerHTML]=\"pic.caption\"></div>\n        </li></template>\n    </ol>\n    <div class=\"pacem-gallery-close\" (click)=\"close($event)\">X</div>\n    <div class=\"pacem-gallery-previous\" (click)=\"previous($event)\" *ngIf=\"items.length > 1\">&lt;</div>\n    <div class=\"pacem-gallery-next\" (click)=\"next($event)\" *ngIf=\"items.length > 1\">&gt;</div>\n</pacem-lightbox>",
-            directives: [PacemLightbox, common_1.NgClass, common_1.NgStyle]
+            template: "<pacem-lightbox class=\"pacem-gallery\" [show]=\"!hide\" (close)=\"close($event)\">\n    <ol class=\"pacem-gallery-list\">\n        <template ngFor \n            [ngForOf]=\"items\" \n            let-pic=\"$implicit\" \n            let-ndx=\"index\">\n        <li *ngIf=\"isNear(ndx)\"\n        [ngClass]=\"{ 'pacem-gallery-active': ndx === focusIndex }\" \n        [ngStyle]=\"{ 'background-image': 'url('+pic.url+')' }\">\n            <div class=\"pacem-gallery-caption\" [innerHTML]=\"pic.caption\"></div>\n        </li></template>\n    </ol>\n    <div class=\"pacem-gallery-close\" (click)=\"close($event)\">X</div>\n    <div class=\"pacem-gallery-previous\" (click)=\"previous($event)\" *ngIf=\"items.length > 1\">&lt;</div>\n    <div class=\"pacem-gallery-next\" (click)=\"next($event)\" *ngIf=\"items.length > 1\">&gt;</div>\n</pacem-lightbox>",
+            entryComponents: [PacemLightbox]
         }), 
         __metadata('design:paramtypes', [])
     ], PacemGallery);
@@ -1672,7 +1672,7 @@ var PacemPieChart = (function () {
             selector: 'pacem-pie-chart',
             template: "<div class=\"pacem-pie-chart\">\n<ng-content></ng-content>\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0,0,100,100\" width=\"100%\" height=\"100%\">\n    <defs>\n    <mask id=\"slices-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"45\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#000\" />\n    </mask>\n    <mask id=\"inner-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#000\" />\n    </mask>\n    </defs>\n    <circle cx=\"50\" cy=\"50\" r=\"50\" [attr.mask]=\"'url('+ location.path() +'#inner-mask)'\" class=\"pacem-pie-chart-background\" />\n    <g>\n        <svg:path *ngFor=\"let slice of slices\" \n                [attr.mask]=\"'url('+ location.path() +'#slices-mask)'\"\n                [attr.fill]=\"slice.color\" \n                [attr.d]=\"slice.path\"\n                [attr.style]=\"slice.style\"></svg:path>\n    </g>\n</svg></div>"
         }), 
-        __metadata('design:paramtypes', [platform_browser_1.DomSanitizationService, common_1.Location])
+        __metadata('design:paramtypes', [platform_browser_1.DomSanitizer, common_1.Location])
     ], PacemPieChart);
     return PacemPieChart;
 }());
@@ -1683,7 +1683,7 @@ exports.PacemPieChart = PacemPieChart;
 var PacemToast = (function () {
     function PacemToast() {
         this.autohide = true;
-        this.timeout = 4000;
+        this.timeout = 3000;
         this.onclose = new core_1.EventEmitter();
         this._hide = true;
     }
@@ -1730,8 +1730,7 @@ var PacemToast = (function () {
     PacemToast = __decorate([
         core_1.Component({
             selector: 'pacem-toast',
-            template: "<div class=\"pacem-toast\" [pacemHidden]=\"hidden\" (click)=\"doHide($event)\"><ng-content></ng-content></div>",
-            directives: [PacemHidden]
+            template: "<div class=\"pacem-toast\" [pacemHidden]=\"hidden\" (click)=\"doHide($event)\"><ng-content></ng-content></div>"
         }), 
         __metadata('design:paramtypes', [])
     ], PacemToast);
@@ -2024,3 +2023,39 @@ var PacemBindTarget = (function () {
 }());
 exports.PacemBindTarget = PacemBindTarget;
 // #endregion
+/**
+ * PacemHamburgerMenu Component
+ */
+var PacemHamburgerMenu = (function () {
+    function PacemHamburgerMenu() {
+        this.open = false;
+    }
+    PacemHamburgerMenu = __decorate([
+        core_1.Component({
+            selector: 'pacem-hamburger-menu',
+            template: "<div class=\"pacem-hamburger-menu\" [pacemHidden]=\"!open\" (click)=\"open=false\">\n    <nav>\n        <ng-content></ng-content>\n    </nav>\n    <button class=\"pacem-back\" (click)=\"$event.stopPropagation(); $event.preventDefault(); open = !open\">BACK</button>\n    <button class=\"pacem-hamburger\" (click)=\"$event.stopPropagation(); $event.preventDefault(); open = !open\">MENU</button>\n</div>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PacemHamburgerMenu);
+    return PacemHamburgerMenu;
+}());
+exports.PacemHamburgerMenu = PacemHamburgerMenu;
+var PacemUIModule = (function () {
+    function PacemUIModule() {
+    }
+    PacemUIModule = __decorate([
+        core_1.NgModule({
+            imports: [common_1.CommonModule],
+            declarations: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+                PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
+                PacemToast, PacemUploader],
+            exports: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+                PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
+                PacemToast, PacemUploader],
+            providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PacemUIModule);
+    return PacemUIModule;
+}());
+exports.PacemUIModule = PacemUIModule;

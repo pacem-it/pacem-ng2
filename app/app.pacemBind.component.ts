@@ -30,8 +30,8 @@ import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from
         '.source { top: 250px; left: 250px; background: #080; cursor: move; }',
         '.source.target { background: #fc0; top: 250px; left: 450px;  }',
         '.source:nth-child(2n) { top: 275px; left: 450px; }'
-    ],
-    directives: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, PacemBindTarget, PacemBindTargets]
+    ]/*,
+    entryComponents: [Pacem3D, PacemBindTarget, PacemBindTargets]*/
 })
 export class PacemBindComponent {
 

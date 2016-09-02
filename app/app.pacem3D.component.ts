@@ -11,8 +11,8 @@ import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from
         (itemout)="onOut($event)">
     <pacem-3d-object *ngFor="let obj of objects; let i=index" [url]="obj.url" [object]="obj.mesh" [position]="obj.position" [tag]="obj.tag" [format]="obj.format"></pacem-3d-object>
     <pacem-3d-light position="25 12.5 50" intensity="1" color="#8fbbcc"></pacem-3d-light>
-</pacem-3d></div>`,
-    directives: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject]
+</pacem-3d></div>`/*, 
+    entryComponents: [Pacem3D]*/
 })
 export class Pacem3DComponent implements AfterViewInit {
 

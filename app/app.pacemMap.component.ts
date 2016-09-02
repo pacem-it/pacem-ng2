@@ -18,9 +18,8 @@ import { PacemPromise, PacemUtils } from './../pacem/pacem-core';
         (info)="setupInfo(i)"
         (close)="spliceMarker(i)"><div [innerHTML]="marker.desc | pacemHighlight:(i+1).toString()"></div></pacem-map-marker>
 </pacem-map></div>`,
-    directives: [PacemMap, PacemMapMarker, PacemMapCircle, PacemMapLink, PacemMapPolyline],
-    pipes: [PacemHighlight],
-    providers: [PacemPromise],
+    entryComponents: [PacemMap, PacemMapMarker, PacemMapCircle, PacemMapLink, PacemMapPolyline],
+    providers: [PacemPromise, PacemHighlight],
     inputs: ['markers', 'steps']
 })
 export class PacemMapComponent implements AfterViewInit {

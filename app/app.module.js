@@ -12,19 +12,19 @@ var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
+var common_1 = require('@angular/common');
 var app_routing_1 = require('./app.routing');
 var app_component_1 = require('./app.component');
 var app_404_component_1 = require('./app.404.component');
-var pacem_ui_1 = require('./../pacem/pacem-ui');
+var pacem_module_1 = require('./../pacem/pacem-module');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [
-                platform_browser_1.BrowserModule, forms_1.FormsModule, app_routing_1.routing, http_1.HttpModule
+                platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, common_1.CommonModule, pacem_module_1.PacemModule, app_routing_1.routing
             ],
-            providers: [pacem_ui_1.PacemBindService],
             declarations: app_routing_1.pages.map(function (p) { return p.component; }).concat([
                 app_component_1.AppComponent,
                 app_404_component_1.PageNotFoundComponent

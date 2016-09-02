@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var app_routing_1 = require('./app.routing');
+var pacem_ui_1 = require('./../pacem/pacem-ui');
 var AppComponent = (function () {
     function AppComponent() {
         this.components = app_routing_1.pages.map(function (p) { return { name: p.component.name, caption: p.label }; });
@@ -17,7 +18,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'pacem-scripts',
-            template: "<h1>Angular2 - Pacem Scripts</h1>\n<nav>\n    <a *ngFor=\"let cmp of components\" [routerLink]=\"['/pacem', cmp.name]\" [routerLinkActive]=\"'active'\">{{ cmp.caption }}</a>\n</nav>\n<router-outlet></router-outlet>\n"
+            template: "<h1>Pacem - Angular 2 Utility Library</h1>\n<pacem-hamburger-menu>\n    <a *ngFor=\"let cmp of components\" [routerLink]=\"['/pacem', cmp.name]\" [routerLinkActive]=\"'active'\">{{ cmp.caption }}</a>\n</pacem-hamburger-menu>\n<router-outlet></router-outlet>\n", entryComponents: [pacem_ui_1.PacemHamburgerMenu]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

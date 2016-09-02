@@ -1,4 +1,5 @@
-﻿import { Injectable, Pipe } from '@angular/core';
+﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+import { Injectable, Pipe, NgModule } from '@angular/core';
 
 var id: string = 'Pacem';
 export declare var pacem;
@@ -297,3 +298,10 @@ export class PacemLooper {
     }
 
 }
+
+@NgModule({
+    providers: [PacemProfile],
+    declarations: [PacemDate],
+    exports: [PacemDate]
+})
+export class PacemCoreModule { }

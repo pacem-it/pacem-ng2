@@ -32,7 +32,7 @@ Webcam access is <b>impossile</b> on this machine!
 </pacem-snapshot>
 <p>The style provided along with the <i>snapshot</i> component automatically changes its size based on the status of the process.</p>
 `,
-    directives: [PacemUploader, PacemSnapshot]
+    entryComponents: [PacemUploader, PacemSnapshot]
 })
 export class PacemUploaderComponent implements AfterViewInit {
 

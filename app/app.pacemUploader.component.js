@@ -35,7 +35,7 @@ var PacemUploaderComponent = (function () {
         core_1.Component({
             selector: 'app-pacem-uploader',
             template: "<h2>Pacem Uploader</h2>\n\n<p>Select a file from your storage and send it for upload.<br />\nJust by selecting it, the upload process starts.</p>\n\n<div style=\"position: relative; width: 108px; height: 108px;\">\n<pacem-ring-chart #chart>\n    <pacem-ring-chart-item [value]=\"uploader.percentage\"></pacem-ring-chart-item>\n</pacem-ring-chart>\n<form style=\"position: absolute; width: 32px; height: 32px; top: 50%; left: 50%; margin-top: -16px; margin-left: -16px\" #form>\n    <pacem-uploader [startUrl]=\"startUrl\"\n                    [uploadUrl]=\"doUrl\" \n                    [undoUrl]=\"undoUrl\" \n                    pattern=\"(jpg|png|pdf)$\"\n                    (complete)=\"complete($event)\"\n                    #uploader></pacem-uploader>\n</form></div>\n    <div [hidden]=\"!uploader.invalidFile\">File non valido! ({{ uploader.pattern }})</div>\n\n<h2>Pacem Snapshot</h2>\n<p>Pick a snapshot from you <b>webcam</b> and send it to the uploader</p>\n\n<pacem-snapshot (select)=\"upload($event)\">\nWebcam access is <b>impossile</b> on this machine!\n</pacem-snapshot>\n<p>The style provided along with the <i>snapshot</i> component automatically changes its size based on the status of the process.</p>\n",
-            directives: [pacem_ui_1.PacemUploader, pacem_ui_1.PacemSnapshot]
+            entryComponents: [pacem_ui_1.PacemUploader, pacem_ui_1.PacemSnapshot]
         }), 
         __metadata('design:paramtypes', [core_1.Renderer])
     ], PacemUploaderComponent);

@@ -1,14 +1,16 @@
-﻿import { Directive, Component, Injectable, Compiler, Renderer, Input, Output, EventEmitter, Optional,
-    ViewContainerRef, ViewChild, ElementRef, ComponentRef, Provider, forwardRef,
+﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+import { NgModule, Directive, Component, Injectable, Compiler, Renderer, Input, Output, EventEmitter, Optional,
+    ViewContainerRef, ViewChild, ElementRef, ComponentRef, forwardRef,
     DoCheck, ChangeDetectorRef, KeyValueDiffers, KeyValueDiffer, ChangeDetectionStrategy,
     OnDestroy, OnInit, OnChanges, AfterViewInit, SimpleChange, SimpleChanges, Attribute } from '@angular/core';
 import { Validators, Validator, ValidatorFn, NG_VALIDATORS, AbstractControl, NgControl,
-    SelectControlValueAccessor, NgSelectOption, CheckboxControlValueAccessor, NgModel } from '@angular/forms';
-import { PacemUtils, PacemDate } from './pacem-core';
-import {DomSanitizationService, SafeHtml} from '@angular/platform-browser';
-import { PacemBalloon, PacemHighlight } from './pacem-ui';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR, CORE_DIRECTIVES} from "@angular/common";
-import { HTTP_PROVIDERS, Http, Response, XHRBackend }     from '@angular/http';
+    SelectControlValueAccessor, NgSelectOption, CheckboxControlValueAccessor, ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel,
+    FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { PacemUtils, PacemDate, PacemCoreModule } from './pacem-core';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import { PacemBalloon, PacemHighlight, PacemUIModule } from './pacem-ui';
+import { Http, Response, XHRBackend }     from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
@@ -184,14 +186,6 @@ export abstract class BaseValueAccessor implements ControlValueAccessor {
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }
 
-function MakeValueAccessorProvider(type: any) {
-    return new Provider(
-        NG_VALUE_ACCESSOR, {
-            useExisting: forwardRef(() => type),
-            multi: true
-        });
-}
-
 function MakeValidatorProvider(type: any) {
     return {
         provide: NG_VALIDATORS,
@@ -353,7 +347,6 @@ const keys = {
 
 @Component({
     selector: 'pacem-autocomplete',
-    directives: [PacemBalloon],
     template: `<div class="pacem-autocomplete">
     <input  (keyup)="onKeyup($event);fetchTerm(search.value)"
             (search)="fetchTerm(search.value)"
@@ -373,8 +366,7 @@ const keys = {
             (mousedown)="onClick($event, ndx)"
             [ngClass]="{ 'pacem-focused': focusIndex == ndx }" [innerHTML]="item.caption | pacemHighlight:search.value"></li>
     </ol></div>
-</div>`,
-    pipes: [PacemHighlight]
+</div>`
 })
 class PacemAutocomplete extends BaseValueAccessor implements IPacemWithDatasource, OnChanges, OnDestroy {
 
@@ -505,7 +497,7 @@ class PacemAutocomplete extends BaseValueAccessor implements IPacemWithDatasourc
 })
 class PacemContentEditable extends BaseValueAccessor implements OnInit, OnDestroy {
 
-    constructor(private element: ElementRef, private sce: DomSanitizationService, private execCommand: PacemExecCommand, ctrl: NgControl) {
+    constructor(private element: ElementRef, private sce: DomSanitizer, private execCommand: PacemExecCommand, ctrl: NgControl) {
         super(ctrl);
         this.subscription = ctrl.valueChanges.subscribe(_ => {
             if (this.container && _ != this.container.innerHTML)
@@ -697,14 +689,25 @@ class PacemDefaultSelectOption implements DoCheck {
 
 }
 
+@NgModule({
+    imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule],
+    declarations: [CompareValidator, MinValidator, MaxValidator,
+        PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
+    exports: [CompareValidator, MinValidator, MaxValidator,
+        PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
+    providers: [PacemExecCommand, DatasourceFetcher]
+})
+class PacemScaffoldingInternalModule { }
+
 @Injectable()
 class PacemFieldBuilder {
 
     public createComponent(selector: string, template: string, ctrlRef: string, injectDirectives?: any[]): any {
+
         @Component({
             selector: selector,
             template: template,
-            directives: injectDirectives/*,
+            providers: injectDirectives/*,
             changeDetection: ChangeDetectionStrategy.OnPush*/
         })
         class PacemFieldDynamicField implements IPacemWithEntity, OnChanges, OnDestroy, OnInit, AfterViewInit
@@ -799,7 +802,15 @@ class PacemFieldBuilder {
                 this.sub2.unsubscribe();
             }
         };
-        return PacemFieldDynamicField;
+
+        @NgModule({
+            imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule], 
+            declarations: [PacemFieldDynamicField],
+            exports: [PacemFieldDynamicField]
+        })
+        class PacemFieldDynamicModule { }
+
+        return PacemFieldDynamicModule;
     }
 
 }
@@ -809,9 +820,9 @@ class PacemFieldBuilder {
     template: `
     <div #placeholder hidden></div>
     `,
-    directives: [MinValidator, MaxValidator, CompareValidator, PacemContentEditable, PacemDefaultSelectOption, PacemSelectMany, PacemAutocomplete],
-    providers: [PacemFieldBuilder, DatasourceFetcher, NgControl],
-    pipes: [PacemDate]
+    //entryComponents: [PacemSelectMany, PacemAutocomplete],
+    providers: [/*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder, NgControl,
+        PacemDate, MinValidator, MaxValidator, CompareValidator]
 })
 export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
 
@@ -1077,13 +1088,15 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
             + '</div>' // *ngIf="!readonly"
             + detailTmpl.replace(/>/, ' *ngIf="readonly">')
             + '</div>';
-        let input = this.builder.createComponent('pacem-input', tmpl, formReference);
+
+        const selector = 'pacem-input';
+        let input = this.builder.createComponent(selector, tmpl, formReference);
         let cmpRef: any = input;
         this.compiler
-            .compileComponentAsync<IPacemWithEntity>(cmpRef)
+            .compileModuleAndAllComponentsAsync<IPacemWithEntity>(cmpRef)
             .then((factory) => {
                 // our component will be inserted after #dynamicContentPlaceHolder
-                this.componentRef = this.dynamicComponentTarget.createComponent(factory, 0);
+                this.componentRef = this.dynamicComponentTarget.createComponent(factory.componentFactories.filter((cmp) => cmp.selector == selector)[0], 0);
                 // and here we have access to our dynamic component
                 let component = this.componentRef.instance;
                 component.entity = this.entity;
@@ -1094,3 +1107,11 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     }
 
 }
+
+@NgModule({
+    imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule],
+    declarations: [PacemField],
+    exports: [PacemField],
+    providers: [PacemExecCommand]
+})
+export class PacemScaffoldingModule { }

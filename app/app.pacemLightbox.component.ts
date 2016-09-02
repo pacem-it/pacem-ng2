@@ -23,7 +23,7 @@ The <b>add</b>/<b>remove</b> picture button will trigger a <i>toast</i> message.
     {{ message }}
 </pacem-toast>
 `,
-    directives: [PacemLightbox, PacemGallery, PacemGalleryItem, PacemToast]
+    entryComponents: [PacemLightbox, PacemGallery, PacemToast]
 })
 export class PacemLightboxComponent {
 

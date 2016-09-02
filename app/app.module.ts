@@ -2,6 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 import { HttpModule }    from '@angular/http';
+import { CommonModule }    from '@angular/common';
 
 import { routing, pages }  from './app.routing';
 
@@ -9,13 +10,12 @@ import { AppComponent }  from './app.component';
 
 import { PageNotFoundComponent } from './app.404.component';
 
-import { PacemBindService } from './../pacem/pacem-ui';
+import { PacemModule } from './../pacem/pacem-module';
 
 @NgModule({
     imports: [
-        BrowserModule, FormsModule, routing, HttpModule
+        BrowserModule, FormsModule, HttpModule,CommonModule, PacemModule, routing
     ],
-    providers: [PacemBindService], //<- defining the provider here, makes it a singleton at application-level
     declarations: pages.map(p => p.component).concat([
         AppComponent,
         PageNotFoundComponent

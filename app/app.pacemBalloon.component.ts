@@ -36,8 +36,7 @@ import { NgForm } from '@angular/forms';
 <div id="balloon2" #balloon2 hidden>
     This is the <b>2nd</b> {{ model.position }}-positioned balloon!
 </div>
-`,
-    directives: [PacemBalloon, NgForm]
+`
 })
 export class PacemBalloonComponent implements OnInit {
 

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 /// <reference path="../scripts/typings/threejs/three.d.ts" />
 /// <reference path="../scripts/typings/threejs/three-projector.d.ts" />
 /// <reference path="../scripts/typings/threejs/three-orbitcontrols.d.ts" />
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 var core_1 = require('@angular/core');
 var pacem_core_1 = require('./pacem-core');
 var three_objmtlloader_1 = require('./three-objmtlloader');
@@ -654,3 +655,16 @@ var Pacem3DLight = (function () {
     return Pacem3DLight;
 }());
 exports.Pacem3DLight = Pacem3DLight;
+var Pacem3DModule = (function () {
+    function Pacem3DModule() {
+    }
+    Pacem3DModule = __decorate([
+        core_1.NgModule({
+            declarations: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject],
+            exports: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], Pacem3DModule);
+    return Pacem3DModule;
+}());
+exports.Pacem3DModule = Pacem3DModule;

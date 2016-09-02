@@ -2,27 +2,10 @@
 
 /*#region HIDDEN*/
 
-@keyframes hideAway {
-    0% {
-        opacity: 1;
-        transform: scale(1,1);
-    }
-
-    99% {
-        display: normal;
-        opacity: 0.25;
-        transform: scale(0,0);
-    }
-
-    100% {
-        display: none !important;
-    }
-}
-
 .pacem-hidden {
     transition: all .3s cubic-bezier(0.6, -0.28, 0.735, 0.045), display .01s .3s;
     //display: none !important;
-    opacity: 0.25;
+    opacity: 0;
     transform: scale(0,0);
 }
 
@@ -35,9 +18,10 @@
 
 /*#endregion*/
 
-@toast-z-index: 1000;
+@toast-z-index: 2000; // < leaflet controls z-index = 1000
 @lightbox-z-index: @toast-z-index - 1;
 @balloon-z-index: @lightbox-z-index - 1;
+@hamburger-z-index: @balloon-z-index - 1;
 
 .pacem-highlight {
     background-color: #ff0;
@@ -50,7 +34,8 @@ pacem-toast {
     position: fixed;
     top: 0;
     left: 0;
-
+    height: 0;
+    overflow: visible;
 
     .pacem-toast {
 
@@ -427,7 +412,7 @@ pacem-toast {
             // this maps to the background stroke of the ring
             border-color: rgba(255,255,255,.1);
 
-            &.pacem-interactive{
+            &.pacem-interactive {
                 cursor: pointer;
             }
         }
@@ -661,10 +646,10 @@ pacem-toast {
 
 /*#region BIND*/
 
-svg.pacem-bind{
+svg.pacem-bind {
     pointer-events: none !important;
 
-    path{
+    path {
         //cursor: pointer;
         //pointer-events: all;
         fill: none;
@@ -672,7 +657,118 @@ svg.pacem-bind{
         stroke-width: 2px;
         stroke-linecap: square;
     }
+}
 
+/*#endregion*/
+
+/*#region HAMBURGER MENU*/
+
+.pacem-hamburger-menu {
+    position: fixed;
+    z-index: @hamburger-z-index;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    transform: translateX(-100vw) translateY(0) translateZ(0);
+    transition: transform .3s cubic-bezier(0.39, 0.575, 0.565, 1) .2s, background-color .25s linear .1s;
+    background-color: rgba(0,0,0,0);
+
+    button.pacem-back,
+    button.pacem-hamburger {
+        position: absolute;
+        font-size: 0;
+        border: none;
+        top: 0;
+        cursor: pointer;
+        width: @grid_cell;
+        height: @grid_cell;
+        background: center center no-repeat;
+        background-size: .8 * @grid_cell;
+    }
+
+    button.pacem-back {
+        background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjYTdmOGFiIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTUuNDEgNy40MUwxNCA2bC02IDYgNiA2IDEuNDEtMS40MUwxMC44MyAxMnoiIC8+DQogICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz4NCjwvc3ZnPg==') /*../images/left.svg*/;
+        left: -@grid_cell;
+        transition: transform .25s ease-out .075s;
+    }
+
+    button.pacem-hamburger {
+        transition: transform .25s ease-in-out;
+        background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0zIDE4aDE4di0ySDN2MnptMC01aDE4di0ySDN2MnptMC03djJoMThWNkgzeiIgLz4NCjwvc3ZnPg==') /*../images/menu.svg*/;
+        right: -@grid_cell;
+    }
+
+    &.pacem-hidden {
+        opacity: 1;
+
+        button.pacem-hamburger {
+            transition-delay: .4s;
+        }
+    }
+
+    nav {
+        position: relative;
+        background-color: @color_lightblue;
+        box-shadow: @grid_spacing/4 0 @grid_spacing/3 #000;
+        overflow: auto;
+        height: 100vh;
+        width: 33vw;
+        box-sizing: border-box;
+        padding-top: @grid_cell;
+        border-right: 1px solid @color_tech;
+        transform: translateX(-33vw) translateY(0) translateZ(0);
+        transition: transform .325s cubic-bezier(0.39, 0.575, 0.565, 1) .5s;
+
+        a {
+            display: block;
+            padding: .5 * @grid_spacing @grid_spacing;
+            color: @color_light;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            font-size: 1.25em;
+
+            &:first-child {
+                border-top: none;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover {
+                color: @color_teal;
+            }
+
+            .active {
+                color: @color_tech;
+                cursor: default;
+
+                &:hover {
+                    color: @color_tech;
+                }
+            }
+        }
+    }
+
+    &.pacem-shown {
+        background-color: rgba(0,0,0,0.5);
+        transform: translateX(0) translateY(0) translateZ(0);
+
+        button.pacem-hamburger {
+            transform: scale(0);
+        }
+
+        button.pacem-back {
+            transition-delay: .625s;
+            transform: translateX(33vw) translateY(0) translateZ(0);
+        }
+
+        nav {
+            transform: translateX(0) translateY(0) translateZ(0);
+        }
+    }
 }
 
 /*#endregion*/

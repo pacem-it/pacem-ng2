@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 var core_1 = require('@angular/core');
 var id = 'Pacem';
 exports.pacem = window[id] = window[id] || {};
@@ -319,3 +320,17 @@ var PacemLooper = (function () {
     return PacemLooper;
 }());
 exports.PacemLooper = PacemLooper;
+var PacemCoreModule = (function () {
+    function PacemCoreModule() {
+    }
+    PacemCoreModule = __decorate([
+        core_1.NgModule({
+            providers: [PacemProfile],
+            declarations: [PacemDate],
+            exports: [PacemDate]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PacemCoreModule);
+    return PacemCoreModule;
+}());
+exports.PacemCoreModule = PacemCoreModule;

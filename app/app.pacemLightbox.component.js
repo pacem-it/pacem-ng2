@@ -43,7 +43,7 @@ var PacemLightboxComponent = (function () {
         core_1.Component({
             selector: 'app-pacem-lightbox',
             template: "<h2>Pacem Lightbox</h2>\n<p>Toggle <i>lightboxes</i> and picture <i>galleries</i> visibility using the buttons below.<br />\nThe <b>add</b>/<b>remove</b> picture button will trigger a <i>toast</i> message.</p>\n<button (click)=\"visible=true\">Lightbox</button>\n<button (click)=\"galleryVisible=true\">Gallery</button>\n<button (click)=\"addPic($event)\" [hidden]=\"pictures.length > 2\">Add picture</button>\n<button (click)=\"removePic($event)\" [hidden]=\"pictures.length <= 2\">Remove picture</button>\n\n<pacem-lightbox [show]=\"visible\" (close)=\"visible=false\">\n    <p>Lightbox content</p>\n</pacem-lightbox>\n\n<pacem-gallery [show]=\"galleryVisible\" startIndex=\"1\" (close)=\"galleryVisible=false\">\n    <pacem-gallery-item *ngFor=\"let pic of pictures, let i = index\" [url]=\"pic.url\" [caption]=\"'('+ (i+1) +'/'+ (pictures.length) +') - '+ pic.caption\"></pacem-gallery-item>\n</pacem-gallery>\n\n<pacem-toast #toast>\n    {{ message }}\n</pacem-toast>\n",
-            directives: [pacem_ui_1.PacemLightbox, pacem_ui_1.PacemGallery, pacem_ui_1.PacemGalleryItem, pacem_ui_1.PacemToast]
+            entryComponents: [pacem_ui_1.PacemLightbox, pacem_ui_1.PacemGallery, pacem_ui_1.PacemToast]
         }), 
         __metadata('design:paramtypes', [])
     ], PacemLightboxComponent);

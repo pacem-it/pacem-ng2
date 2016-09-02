@@ -10,8 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var pacem_core_1 = require('./../pacem/pacem-core');
 var pacem_net_1 = require('./../pacem/pacem-net');
-var pacem_scaffolding_1 = require('./../pacem/pacem-scaffolding');
-var common_1 = require('@angular/common');
 var core_1 = require('@angular/core');
 var PacemScaffoldingComponent = (function () {
     function PacemScaffoldingComponent(ref, looper, http) {
@@ -38,9 +36,8 @@ var PacemScaffoldingComponent = (function () {
         core_1.Component({
             selector: 'app-pacem-scaffolding',
             template: "<h2>Pacem Scaffolding</h2>\n<p>Many input data types (and more to come) are involved in this self-composing form system.<br />\nIt includes styling, custom validation and fetching for complex data.</p>\n    <form>\n    <pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n    <p>{{ entity | json }}</p>\n    \n<p>This is the readonly version synchronized with the form above:</p>\n\n    <pacem-field *ngFor=\"let item of meta\" readonly=\"true\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n    </form>\n\n",
-            providers: [pacem_core_1.PacemLooper, pacem_net_1.PacemHttp],
-            directives: [pacem_scaffolding_1.PacemField],
-            pipes: [common_1.JsonPipe]
+            providers: [pacem_core_1.PacemLooper, pacem_net_1.PacemHttp] /*,
+            entryComponents: [PacemField]*/
         }), 
         __metadata('design:paramtypes', [core_1.ChangeDetectorRef, pacem_core_1.PacemLooper, pacem_net_1.PacemHttp])
     ], PacemScaffoldingComponent);

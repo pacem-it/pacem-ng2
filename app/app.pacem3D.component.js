@@ -58,8 +58,8 @@ var Pacem3DComponent = (function () {
     Pacem3DComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-3d',
-            template: "<h2>Pacem 3D</h2>\n<div #container (window:resize)=\"onResize($event)\"><pacem-3d orbit=\"true\" interactive=\"true\" #canvas\n        (itemclick)=\"onClick($event)\"\n        (itemover)=\"onOver($event)\"\n        (itemout)=\"onOut($event)\">\n    <pacem-3d-object *ngFor=\"let obj of objects; let i=index\" [url]=\"obj.url\" [object]=\"obj.mesh\" [position]=\"obj.position\" [tag]=\"obj.tag\" [format]=\"obj.format\"></pacem-3d-object>\n    <pacem-3d-light position=\"25 12.5 50\" intensity=\"1\" color=\"#8fbbcc\"></pacem-3d-light>\n</pacem-3d></div>",
-            directives: [pacem_3d_1.Pacem3D, pacem_3d_1.Pacem3DCamera, pacem_3d_1.Pacem3DLight, pacem_3d_1.Pacem3DObject]
+            template: "<h2>Pacem 3D</h2>\n<div #container (window:resize)=\"onResize($event)\"><pacem-3d orbit=\"true\" interactive=\"true\" #canvas\n        (itemclick)=\"onClick($event)\"\n        (itemover)=\"onOver($event)\"\n        (itemout)=\"onOut($event)\">\n    <pacem-3d-object *ngFor=\"let obj of objects; let i=index\" [url]=\"obj.url\" [object]=\"obj.mesh\" [position]=\"obj.position\" [tag]=\"obj.tag\" [format]=\"obj.format\"></pacem-3d-object>\n    <pacem-3d-light position=\"25 12.5 50\" intensity=\"1\" color=\"#8fbbcc\"></pacem-3d-light>\n</pacem-3d></div>" /*,
+                entryComponents: [Pacem3D]*/
         }), 
         __metadata('design:paramtypes', [])
     ], Pacem3DComponent);

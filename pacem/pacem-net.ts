@@ -1,5 +1,6 @@
 ﻿/// <reference path="../scripts/typings/signalr/signalr.d.ts" />
-import { Injectable } from '@angular/core';
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+import { Injectable, NgModule } from '@angular/core';
 import { Response } from '@angular/http';
 import { PacemUtils, PacemPromise, pacem } from './pacem-core';
 
@@ -224,3 +225,8 @@ export class PacemHub {
             this._disconnectCallbacks.splice(ndx, 1);
     }
 }
+
+@NgModule({
+    providers: [PacemHttp, PacemHub]
+})
+export class PacemNetModule { }

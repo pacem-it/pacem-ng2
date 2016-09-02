@@ -9,7 +9,7 @@ h1 {
     font-family: @font_main;
     height: @grid_cell;
     line-height: @grid_cell;
-    padding: 0 .5*@grid_spacing;
+    padding: 0 @grid_cell;
 }
 
 h2 {
@@ -19,7 +19,7 @@ h2 {
     //font-family: @font_main;
     height: @grid_spacing;
     line-height: @grid_spacing;
-    margin: 2em 0 0 0;
+    margin: 2em 0 @grid_spacing 0;
 
     &:first-child {
         margin-top: 0;
@@ -30,38 +30,10 @@ p {
     margin: 1.5em 0;
 }
 
-nav {
-    position: fixed;
-    left: 0;
-    top: @grid_cell;
-    width: 2 * @grid_cell;
-    box-sizing: border-box;
-    padding: 0 .5*@grid_spacing @grid_spacing .5*@grid_spacing;
-    border-right: 1px solid @color_tech;
-
-    a {
-        display: block;
-        padding-bottom: .5 * @grid_spacing;
-        color: @color_light;
-
-        &:hover {
-            color: @color_teal;
-        }
-
-        .active {
-            color: @color_tech;
-            cursor: default;
-
-            &:hover {
-                color: @color_tech;
-            }
-        }
-    }
-}
 
 router-outlet + * {
     display: block;
-    padding-left: @grid_spacing + 2 * @grid_cell;
+    padding: 0 @grid_cell;
 }
 
 app-pacem-charts {

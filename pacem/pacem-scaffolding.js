@@ -16,12 +16,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 var core_1 = require('@angular/core');
 var forms_1 = require('@angular/forms');
+var common_1 = require('@angular/common');
 var pacem_core_1 = require('./pacem-core');
 var platform_browser_1 = require('@angular/platform-browser');
 var pacem_ui_1 = require('./pacem-ui');
-var common_1 = require("@angular/common");
 var http_1 = require('@angular/http');
 var Subject_1 = require('rxjs/Subject');
 // Observable class extensions
@@ -154,12 +155,6 @@ var BaseValueAccessor = (function () {
     return BaseValueAccessor;
 }());
 exports.BaseValueAccessor = BaseValueAccessor;
-function MakeValueAccessorProvider(type) {
-    return new core_1.Provider(common_1.NG_VALUE_ACCESSOR, {
-        useExisting: core_1.forwardRef(function () { return type; }),
-        multi: true
-    });
-}
 function MakeValidatorProvider(type) {
     return {
         provide: forms_1.NG_VALIDATORS,
@@ -445,9 +440,7 @@ var PacemAutocomplete = (function (_super) {
     PacemAutocomplete = __decorate([
         core_1.Component({
             selector: 'pacem-autocomplete',
-            directives: [pacem_ui_1.PacemBalloon],
-            template: "<div class=\"pacem-autocomplete\">\n    <input  (keyup)=\"onKeyup($event);fetchTerm(search.value)\"\n            (search)=\"fetchTerm(search.value)\"\n            (keydown)=\"onKeydown($event)\"\n            (blur)=\"onBlur($event)\"\n            (focus)=\"onFocus($event);\"\n            [placeholder]=\"placeholder\"\n            type=\"search\" #search \n            [attr.id]=\"root.nativeElement.id +'_acq'\"\n            class=\"pacem-input\"\n            (popup)=\"resize(balloon, search)\"\n            [ngClass]=\"{ 'ng-invalid': model.invalid, 'ng-dirty': model.dirty, 'ng-valid': model.valid, 'ng-pristine': model.pristine }\"\n            [value]=\"caption\"\n            [pacemBalloon]=\"balloon\" [pacemBalloonOptions]=\"{ position: 'bottom', trigger: 'focus', behavior: 'menu' }\" />\n    <div #balloon hidden><ol [hidden]=\"!datasource?.length\">\n        <li *ngFor=\"let item of datasource; let ndx = index\" \n            (mousedown)=\"onClick($event, ndx)\"\n            [ngClass]=\"{ 'pacem-focused': focusIndex == ndx }\" [innerHTML]=\"item.caption | pacemHighlight:search.value\"></li>\n    </ol></div>\n</div>",
-            pipes: [pacem_ui_1.PacemHighlight]
+            template: "<div class=\"pacem-autocomplete\">\n    <input  (keyup)=\"onKeyup($event);fetchTerm(search.value)\"\n            (search)=\"fetchTerm(search.value)\"\n            (keydown)=\"onKeydown($event)\"\n            (blur)=\"onBlur($event)\"\n            (focus)=\"onFocus($event);\"\n            [placeholder]=\"placeholder\"\n            type=\"search\" #search \n            [attr.id]=\"root.nativeElement.id +'_acq'\"\n            class=\"pacem-input\"\n            (popup)=\"resize(balloon, search)\"\n            [ngClass]=\"{ 'ng-invalid': model.invalid, 'ng-dirty': model.dirty, 'ng-valid': model.valid, 'ng-pristine': model.pristine }\"\n            [value]=\"caption\"\n            [pacemBalloon]=\"balloon\" [pacemBalloonOptions]=\"{ position: 'bottom', trigger: 'focus', behavior: 'menu' }\" />\n    <div #balloon hidden><ol [hidden]=\"!datasource?.length\">\n        <li *ngFor=\"let item of datasource; let ndx = index\" \n            (mousedown)=\"onClick($event, ndx)\"\n            [ngClass]=\"{ 'pacem-focused': focusIndex == ndx }\" [innerHTML]=\"item.caption | pacemHighlight:search.value\"></li>\n    </ol></div>\n</div>"
         }), 
         __metadata('design:paramtypes', [forms_1.NgModel, core_1.ElementRef])
     ], PacemAutocomplete);
@@ -561,7 +554,7 @@ var PacemContentEditable = (function (_super) {
                 '[innerHTML]': "viewValue"
             }
         }), 
-        __metadata('design:paramtypes', [core_1.ElementRef, platform_browser_1.DomSanitizationService, PacemExecCommand, forms_1.NgControl])
+        __metadata('design:paramtypes', [core_1.ElementRef, platform_browser_1.DomSanitizer, PacemExecCommand, forms_1.NgControl])
     ], PacemContentEditable);
     return PacemContentEditable;
 }(BaseValueAccessor));
@@ -656,6 +649,22 @@ var PacemDefaultSelectOption = (function () {
     ], PacemDefaultSelectOption);
     return PacemDefaultSelectOption;
 }());
+var PacemScaffoldingInternalModule = (function () {
+    function PacemScaffoldingInternalModule() {
+    }
+    PacemScaffoldingInternalModule = __decorate([
+        core_1.NgModule({
+            imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule],
+            declarations: [CompareValidator, MinValidator, MaxValidator,
+                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
+            exports: [CompareValidator, MinValidator, MaxValidator,
+                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
+            providers: [PacemExecCommand, DatasourceFetcher]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PacemScaffoldingInternalModule);
+    return PacemScaffoldingInternalModule;
+}());
 var PacemFieldBuilder = (function () {
     function PacemFieldBuilder() {
     }
@@ -748,7 +757,7 @@ var PacemFieldBuilder = (function () {
                 core_1.Component({
                     selector: selector,
                     template: template,
-                    directives: injectDirectives /*,
+                    providers: injectDirectives /*,
                     changeDetection: ChangeDetectionStrategy.OnPush*/
                 }), 
                 __metadata('design:paramtypes', [core_1.ChangeDetectorRef, DatasourceFetcher])
@@ -756,7 +765,20 @@ var PacemFieldBuilder = (function () {
             return PacemFieldDynamicField;
         }());
         ;
-        return PacemFieldDynamicField;
+        var PacemFieldDynamicModule = (function () {
+            function PacemFieldDynamicModule() {
+            }
+            PacemFieldDynamicModule = __decorate([
+                core_1.NgModule({
+                    imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
+                    declarations: [PacemFieldDynamicField],
+                    exports: [PacemFieldDynamicField]
+                }), 
+                __metadata('design:paramtypes', [])
+            ], PacemFieldDynamicModule);
+            return PacemFieldDynamicModule;
+        }());
+        return PacemFieldDynamicModule;
     };
     PacemFieldBuilder = __decorate([
         core_1.Injectable(), 
@@ -1003,13 +1025,14 @@ var PacemField = (function () {
             + '</div>' // *ngIf="!readonly"
             + detailTmpl.replace(/>/, ' *ngIf="readonly">')
             + '</div>';
-        var input = this.builder.createComponent('pacem-input', tmpl, formReference);
+        var selector = 'pacem-input';
+        var input = this.builder.createComponent(selector, tmpl, formReference);
         var cmpRef = input;
         this.compiler
-            .compileComponentAsync(cmpRef)
+            .compileModuleAndAllComponentsAsync(cmpRef)
             .then(function (factory) {
             // our component will be inserted after #dynamicContentPlaceHolder
-            _this.componentRef = _this.dynamicComponentTarget.createComponent(factory, 0);
+            _this.componentRef = _this.dynamicComponentTarget.createComponent(factory.componentFactories.filter(function (cmp) { return cmp.selector == selector; })[0], 0);
             // and here we have access to our dynamic component
             var component = _this.componentRef.instance;
             component.entity = _this.entity;
@@ -1042,12 +1065,27 @@ var PacemField = (function () {
         core_1.Component({
             selector: 'pacem-field',
             template: "\n    <div #placeholder hidden></div>\n    ",
-            directives: [MinValidator, MaxValidator, CompareValidator, PacemContentEditable, PacemDefaultSelectOption, PacemSelectMany, PacemAutocomplete],
-            providers: [PacemFieldBuilder, DatasourceFetcher, forms_1.NgControl],
-            pipes: [pacem_core_1.PacemDate]
+            //entryComponents: [PacemSelectMany, PacemAutocomplete],
+            providers: [ /*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder, forms_1.NgControl,
+                pacem_core_1.PacemDate, MinValidator, MaxValidator, CompareValidator]
         }), 
         __metadata('design:paramtypes', [core_1.Compiler, PacemFieldBuilder])
     ], PacemField);
     return PacemField;
 }());
 exports.PacemField = PacemField;
+var PacemScaffoldingModule = (function () {
+    function PacemScaffoldingModule() {
+    }
+    PacemScaffoldingModule = __decorate([
+        core_1.NgModule({
+            imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
+            declarations: [PacemField],
+            exports: [PacemField],
+            providers: [PacemExecCommand]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PacemScaffoldingModule);
+    return PacemScaffoldingModule;
+}());
+exports.PacemScaffoldingModule = PacemScaffoldingModule;

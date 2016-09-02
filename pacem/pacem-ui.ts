@@ -1,9 +1,10 @@
-﻿import { QueryList, Pipe, PipeTransform, Directive, Component, Input, Output, OnChanges, Renderer,
-    SimpleChanges, SimpleChange, ElementRef, ViewContainerRef,
+﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+import { QueryList, Pipe, PipeTransform, Directive, Component, Input, Output, OnChanges, Renderer,
+    SimpleChanges, SimpleChange, ElementRef, ViewContainerRef, NgModule,
     EventEmitter, AfterContentInit, AfterViewInit, Injectable,
     OnInit, OnDestroy, ViewChild, ContentChildren, KeyValueDiffers, KeyValueDiffer, DoCheck, ChangeDetectorRef } from '@angular/core';
-import {DomSanitizationService, SafeHtml, SafeStyle} from '@angular/platform-browser';
-import { NgClass, NgStyle, Location } from '@angular/common';
+import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
+import { Location, CommonModule } from '@angular/common';
 import { PacemUtils, PacemPromise, pacem } from './pacem-core'
 import { Subscription, Subject, Observable} from 'rxjs/Rx';
 import { Pacem3DObject, Pacem3D } from './pacem-3d';
@@ -47,7 +48,7 @@ export class PacemHidden {
 })
 export class PacemHighlight implements PipeTransform {
 
-    constructor(private sce: DomSanitizationService) {
+    constructor(private sce: DomSanitizer) {
     }
 
     transform(src: string, query: string, css: string): SafeHtml {
@@ -193,8 +194,7 @@ export class PacemInfiniteScroll implements OnDestroy {
     selector: 'pacem-lightbox',
     template: `<div class="pacem-lightbox-wrapper" [hidden]="hide" [pacemHidden]="hide" #wrapper>
 <div class="pacem-lightbox"><ng-content></ng-content></div>
-</div>`,
-    directives: [PacemHidden]
+</div>`
 })
 export class PacemLightbox implements OnInit, OnChanges, OnDestroy {
 
@@ -280,7 +280,7 @@ export class PacemGalleryItem {
  */
 @Component({
     selector: 'pacem-gallery',
-    template: `<pacem-lightbox class="pacem-gallery" [show]="!hide" (onclose)="close($event)">
+    template: `<pacem-lightbox class="pacem-gallery" [show]="!hide" (close)="close($event)">
     <ol class="pacem-gallery-list">
         <template ngFor 
             [ngForOf]="items" 
@@ -296,7 +296,7 @@ export class PacemGalleryItem {
     <div class="pacem-gallery-previous" (click)="previous($event)" *ngIf="items.length > 1">&lt;</div>
     <div class="pacem-gallery-next" (click)="next($event)" *ngIf="items.length > 1">&gt;</div>
 </pacem-lightbox>`,
-    directives: [PacemLightbox, NgClass, NgStyle]
+    entryComponents: [PacemLightbox]
 })
 export class PacemGallery implements AfterContentInit, OnDestroy {
 
@@ -1479,7 +1479,7 @@ export class PacemPieChartSlice {
 })
 export class PacemPieChart implements OnDestroy, AfterContentInit {
 
-    constructor(private sce: DomSanitizationService, private location: Location) {
+    constructor(private sce: DomSanitizer, private location: Location) {
         this.supportsSVGTransforms = supportsSVGTransforms();
     }
 
@@ -1589,12 +1589,11 @@ export class PacemPieChart implements OnDestroy, AfterContentInit {
  */
 @Component({
     selector: 'pacem-toast',
-    template: `<div class="pacem-toast" [pacemHidden]="hidden" (click)="doHide($event)"><ng-content></ng-content></div>`,
-    directives: [PacemHidden]
+    template: `<div class="pacem-toast" [pacemHidden]="hidden" (click)="doHide($event)"><ng-content></ng-content></div>`
 })
 export class PacemToast {
     @Input() autohide: boolean = true;
-    @Input() timeout: number = 4000;
+    @Input() timeout: number = 3000;
     @Output('close') onclose = new EventEmitter();
 
     private _timeout: number;
@@ -1931,3 +1930,34 @@ export class PacemBindTarget implements OnDestroy, OnChanges {
 }
 
 // #endregion
+
+/**
+ * PacemHamburgerMenu Component
+ */
+@Component({
+    selector: 'pacem-hamburger-menu',
+    template: `<div class="pacem-hamburger-menu" [pacemHidden]="!open" (click)="open=false">
+    <nav>
+        <ng-content></ng-content>
+    </nav>
+    <button class="pacem-back" (click)="$event.stopPropagation(); $event.preventDefault(); open = !open">BACK</button>
+    <button class="pacem-hamburger" (click)="$event.stopPropagation(); $event.preventDefault(); open = !open">MENU</button>
+</div>`
+})
+export class PacemHamburgerMenu {
+
+    private open: boolean = false;
+
+}
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+        PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
+        PacemToast, PacemUploader],
+    exports: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+        PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
+        PacemToast, PacemUploader],
+    providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
+})
+export class PacemUIModule { }

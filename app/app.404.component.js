@@ -15,7 +15,7 @@ var PageNotFoundComponent = (function () {
     PageNotFoundComponent = __decorate([
         core_1.Component({
             selector: 'pacem-not-found',
-            template: "<h2>Component Not Found</h2>",
+            template: "<h2>Demo App</h2>\n<p>This is a demo web application meant to show and (user-)test the <b>pacem-ng2</b> library components.</p>\n",
         }), 
         __metadata('design:paramtypes', [])
     ], PageNotFoundComponent);
