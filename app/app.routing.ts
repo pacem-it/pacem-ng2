@@ -9,7 +9,7 @@ import { PacemChartsComponent } from './app.pacemCharts.component';
 import { PacemScaffoldingComponent } from './app.pacemScaffolding.component';
 import { Pacem3DComponent } from './app.pacem3D.component';
 import { PacemBindComponent } from './app.pacemBind.component';
-import { Type } from '@angular/core';
+import { Type, ModuleWithProviders } from '@angular/core';
 
 export const pages: { label: string, component: Type<any> }[] = [
     { label: 'map (leafletJS)', component: PacemMapComponent },
@@ -25,4 +25,4 @@ export const pages: { label: string, component: Type<any> }[] = [
 const appRoutes: Routes = pages.map((cmp) => { return { path: 'pacem/' + cmp.component.name, component: cmp.component }; })
     .concat([{ path: '**', component: PageNotFoundComponent }]);
 
-export const routing = RouterModule.forRoot(appRoutes);
+export const routing : ModuleWithProviders = RouterModule.forRoot(appRoutes);

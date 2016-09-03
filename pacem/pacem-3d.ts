@@ -1,13 +1,10 @@
-﻿/// <reference path="../scripts/typings/threejs/three.d.ts" />
-/// <reference path="../scripts/typings/threejs/three-projector.d.ts" />
-/// <reference path="../scripts/typings/threejs/three-orbitcontrols.d.ts" />
-/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 import { Component, Injectable, Directive, NgModule,
     ViewChild, ElementRef, Input, Output, EventEmitter,
     OnChanges, SimpleChange, SimpleChanges,
     AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { PacemUtils } from './pacem-core';
-import { OBJMTLLoader } from './three-objmtlloader';
+//import { OBJMTLLoader } from './three-objmtlloader';
 
 @Injectable()
 export class Detector3D {
@@ -365,15 +362,15 @@ export class Pacem3DObject implements OnInit, OnDestroy {
                     then(new THREE.Mesh(tuple.geometry, (m && m.length && m[0]) || new THREE.MeshLambertMaterial()));
                 }
                 break;
-            // #region OBJ
-            case 'obj':
+            // #region OBJ (deprecated, export JSON for three)
+            /*case 'obj':
                 (function () {
 
                     var loader = new OBJMTLLoader();
                     then(loader.parse(object));
 
                 })();
-                break;
+                break;*/
 
             // #endregion
 

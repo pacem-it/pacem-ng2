@@ -786,6 +786,7 @@ var PacemFieldBuilder = (function () {
     ], PacemFieldBuilder);
     return PacemFieldBuilder;
 }());
+exports.PacemFieldBuilder = PacemFieldBuilder;
 var PacemField = (function () {
     function PacemField(compiler, builder) {
         this.compiler = compiler;
@@ -1032,7 +1033,7 @@ var PacemField = (function () {
             .compileModuleAndAllComponentsAsync(cmpRef)
             .then(function (factory) {
             // our component will be inserted after #dynamicContentPlaceHolder
-            _this.componentRef = _this.dynamicComponentTarget.createComponent(factory.componentFactories.filter(function (cmp) { return cmp.selector == selector; })[0], 0);
+            _this.componentRef = _this.dynamicComponentTarget.createComponent(factory.componentFactories.find(function (cmp) { return cmp.selector == selector; }), 0);
             // and here we have access to our dynamic component
             var component = _this.componentRef.instance;
             component.entity = _this.entity;

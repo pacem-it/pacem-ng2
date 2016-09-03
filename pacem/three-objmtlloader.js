@@ -1,15 +1,3 @@
-/// <reference path="../scripts/typings/threejs/three.d.ts" />
-/// <reference path="../scripts/typings/threejs/three-loaders.d.ts" />
-/**
- * @author mrdoob / http://mrdoob.com/
- */
-//export class Group extends Object3D {
-//
-//    constructor() {
-//        super();
-//        this.type = 'Group';
-//    }
-//}
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -19,8 +7,6 @@ var __extends = (this && this.__extends) || function (d, b) {
 /**
  * Loads a Wavefront .obj file with materials
  *
- * @author mrdoob / http://mrdoob.com/
- * @author angelxuanchang
  */
 var OBJMTLLoader = (function (_super) {
     __extends(OBJMTLLoader, _super);

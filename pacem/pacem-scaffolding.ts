@@ -137,7 +137,7 @@ function getDateFormats(dotNetFormat: string) {
     }
 }
 
-interface IPacemFieldMetadata {
+export declare type pacemFieldMetadata = {
     prop: string;
     type: string;
     display: { name: string, description: string, short: string, watermark: string, null?: string, ui: string, format: string };
@@ -700,7 +700,7 @@ class PacemDefaultSelectOption implements DoCheck {
 class PacemScaffoldingInternalModule { }
 
 @Injectable()
-class PacemFieldBuilder {
+export class PacemFieldBuilder {
 
     public createComponent(selector: string, template: string, ctrlRef: string, injectDirectives?: any[]): any {
 
@@ -831,9 +831,9 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('placeholder', { read: ViewContainerRef })
     protected dynamicComponentTarget: ViewContainerRef;
     // this will be reference to dynamic content - to be able to destroy it
-    protected componentRef: ComponentRef<IPacemWithEntity>;
+    private componentRef: ComponentRef<IPacemWithEntity>;
 
-    @Input() field: IPacemFieldMetadata;
+    @Input() field: pacemFieldMetadata;
     @Input() entity: any;
     @Input() readonly: boolean;
 
@@ -1096,7 +1096,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
             .compileModuleAndAllComponentsAsync<IPacemWithEntity>(cmpRef)
             .then((factory) => {
                 // our component will be inserted after #dynamicContentPlaceHolder
-                this.componentRef = this.dynamicComponentTarget.createComponent(factory.componentFactories.filter((cmp) => cmp.selector == selector)[0], 0);
+                this.componentRef = this.dynamicComponentTarget.createComponent(factory.componentFactories.find((cmp) => cmp.selector == selector), 0);
                 // and here we have access to our dynamic component
                 let component = this.componentRef.instance;
                 component.entity = this.entity;

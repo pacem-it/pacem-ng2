@@ -1,5 +1,4 @@
-﻿/// <reference path="../scripts/typings/signalr/signalr.d.ts" />
-/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
+﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 import { Injectable, NgModule } from '@angular/core';
 import { Response } from '@angular/http';
 import { PacemUtils, PacemPromise, pacem } from './pacem-core';

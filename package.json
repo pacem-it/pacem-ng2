@@ -1,27 +1,39 @@
 {
   "name": "pacem-ng2",
-  "version": "0.2.7",
+  "version": "0.2.11",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pacem-it/pacem-ng2.git"
   },
   "files": [
-    "pacem/*.*",
+    "pacem/pacem-core.d.ts",
+    "pacem/pacem-net.d.ts",
+    "pacem/pacem-ui.d.ts",
+    "pacem/pacem-3d.d.ts",
+    "pacem/pacem-maps-leaflet.d.ts",
+    "pacem/pacem-scaffolding.d.ts",
+    "pacem/pacem-module.d.ts",
+
+    "pacem/pacem-core.js",
+    "pacem/pacem-net.js",
+    "pacem/pacem-ui.js",
+    "pacem/pacem-3d.js",
+    "pacem/pacem-maps-leaflet.js",
+    "pacem/pacem-scaffolding.js",
+    "pacem/pacem-module.js",
+
     "pacem/dist/css/pacem.min.css",
-    "Scripts/typings/geojson/*.ts",
-    "Scripts/typings/jquery/*.ts",
-    "Scripts/typings/geojson/*.ts",
-    "Scripts/typings/leaflet/*.ts",
-    "Scripts/typings/signalr/*.ts",
-    "Scripts/typings/threejs/*.ts",
     "pacem/less/pacem-scaffolding.less",
     "pacem/less/pacem-ui.less",
     "pacem/less/pacem-maps-leaflet.less",
     "pacem/less/pacem.less",
     "pacem/less/shared.less",
-    "index.html",
-    "system.config.js",
-    "typings.json"
+
+    "README.md",
+    "LICENSE",
+    "index.d.ts",
+    "index.js",
+    "package.json"
   ],
   "engines": {
     "node": ">=0.10.0"

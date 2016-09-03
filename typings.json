@@ -2,6 +2,13 @@
   "globalDependencies": {
     "core-js": "registry:dt/core-js#0.0.0+20160725163759",
     "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
-    "node": "registry:dt/node#6.0.0+20160831021119"
-  }
+    "node": "registry:dt/node#6.0.0+20160831021119",
+    "geojson": "registry:dt/geojson",
+    "leaflet": "registry:dt/leaflet",
+    "jquery": "registry:dt/jquery",
+    "signalr": "registry:dt/signalr",
+    "three": "github:DefinitelyTyped/DefinitelyTyped/threejs/three.d.ts",
+    "three-orbitcontrols": "github:DefinitelyTyped/DefinitelyTyped/threejs/three-orbitcontrols.d.ts"
+  }, 
+  "files": [ "pacem/typings/three-loaders.d.ts#" ]
 }

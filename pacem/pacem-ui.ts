@@ -17,7 +17,7 @@ function supportsSVGTransforms() {
     return 'transform' in svg;
 }
 
-type pacemBindAnchors = 'auto' | 'left' | 'top' | 'right' | 'bottom';
+export declare type pacemBindAnchors = 'auto' | 'left' | 'top' | 'right' | 'bottom';
 
 @Directive({
     selector: '[pacemHidden]'
@@ -1628,7 +1628,7 @@ export class PacemToast {
 
 // #region PACEM BIND
 
-declare type pacemBindTarget = HTMLElement | SVGElement | Pacem3DObject;
+export declare type pacemBindTarget = HTMLElement | SVGElement | Pacem3DObject;
 
 @Injectable()
 export class PacemBindService {
@@ -1673,7 +1673,7 @@ export class PacemBindService {
 
 }
 
-interface IPacemBindTarget {
+export declare type pacemBindTargetRef = {
     key: string;
     from: pacemBindAnchors,
     to: pacemBindAnchors,
@@ -1698,7 +1698,7 @@ export class PacemBindTargets implements OnChanges, OnDestroy, OnInit {
         this.debounceBindersBuild();
     }
 
-    @Input('pacemBindTargets') targetKeys: IPacemBindTarget[] | string[] = [];
+    @Input('pacemBindTargets') targetKeys: pacemBindTargetRef[] | string[] = [];
 
     ngOnInit() {
         let uiElement = <SVGSVGElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg');

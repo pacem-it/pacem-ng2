@@ -1,25 +1,10 @@
-﻿/// <reference path="../scripts/typings/threejs/three.d.ts" />
-/// <reference path="../scripts/typings/threejs/three-loaders.d.ts" />
-/**
- * @author mrdoob / http://mrdoob.com/
- */
-//export class Group extends Object3D {
-//
-//    constructor() {
-//        super();
-//        this.type = 'Group';
-//    }
-//}
-
-/**
+﻿/**
  * Loads a Wavefront .obj file with materials
  *
- * @author mrdoob / http://mrdoob.com/
- * @author angelxuanchang
  */
 export class OBJMTLLoader extends THREE.EventDispatcher {
 
-    constructor(manager?:THREE.LoadingManager) {
+    constructor(manager?: THREE.LoadingManager) {
         super();
         this.manager = (manager !== undefined) ? manager : THREE.DefaultLoadingManager;
     }
@@ -374,4 +359,3 @@ export class OBJMTLLoader extends THREE.EventDispatcher {
     }
 
 };
-

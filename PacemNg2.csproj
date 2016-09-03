@@ -79,6 +79,8 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="pacem\images\menu.svg" />
+    <Content Include="pacem\less\pacem-maps-leaflet.less" />
+    <Content Include="pacem\images\left.svg" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -101,36 +103,15 @@
     <TypeScriptCompile Include="app\app.pacemUploader.component.ts" />
     <TypeScriptCompile Include="app\app.routing.ts" />
     <TypeScriptCompile Include="app\main.ts" />
+    <TypeScriptCompile Include="index.ts" />
     <TypeScriptCompile Include="pacem\pacem-3d.ts" />
     <TypeScriptCompile Include="pacem\pacem-core.ts" />
     <TypeScriptCompile Include="pacem\pacem-maps-leaflet.ts" />
+    <TypeScriptCompile Include="pacem\pacem-module.ts" />
     <TypeScriptCompile Include="pacem\pacem-net.ts" />
     <TypeScriptCompile Include="pacem\pacem-scaffolding.ts" />
     <TypeScriptCompile Include="pacem\pacem-ui.ts" />
-    <TypeScriptCompile Include="pacem\three-objmtlloader.ts" />
-    <TypeScriptCompile Include="Scripts\typings\geojson\geojson.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\leaflet\leaflet.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\detector.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-canvasrenderer.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-copyshader.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-css3drenderer.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-editorcontrols.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-effectcomposer.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-FirstPersonControls.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-loaders.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-maskpass.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-orbitcontrols.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-orthographictrackballcontrols.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-projector.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-renderpass.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-shaderpass.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-trackballcontrols.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-transformcontrols.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-vrcontrols.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three-vreffect.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\threejs\three.d.ts" />
+    <TypeScriptCompile Include="pacem\typings\three-loaders.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PacemJS\PacemJS.csproj">

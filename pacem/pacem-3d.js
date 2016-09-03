@@ -8,13 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/// <reference path="../scripts/typings/threejs/three.d.ts" />
-/// <reference path="../scripts/typings/threejs/three-projector.d.ts" />
-/// <reference path="../scripts/typings/threejs/three-orbitcontrols.d.ts" />
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 var core_1 = require('@angular/core');
 var pacem_core_1 = require('./pacem-core');
-var three_objmtlloader_1 = require('./three-objmtlloader');
+//import { OBJMTLLoader } from './three-objmtlloader';
 var Detector3D = (function () {
     function Detector3D() {
         var _this = this;
@@ -356,13 +353,15 @@ var Pacem3DObject = (function () {
                     then(new THREE.Mesh(tuple.geometry, (m && m.length && m[0]) || new THREE.MeshLambertMaterial()));
                 }
                 break;
-            // #region OBJ
-            case 'obj':
+            // #region OBJ (deprecated, export JSON for three)
+            /*case 'obj':
                 (function () {
-                    var loader = new three_objmtlloader_1.OBJMTLLoader();
+
+                    var loader = new OBJMTLLoader();
                     then(loader.parse(object));
+
                 })();
-                break;
+                break;*/
             // #endregion
             // #region NATIVE
             case 'native':
