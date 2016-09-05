@@ -39,7 +39,7 @@ export class PacemPromise<T> {
         });
     }
 
-    then(onCompleted, onFailed) {
+    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed? : (v?: any) => void | PromiseLike<void>) {
         this.promise.then(onCompleted, onFailed);
         return this;
     }

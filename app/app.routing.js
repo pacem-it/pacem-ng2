@@ -10,7 +10,9 @@ var app_pacemCharts_component_1 = require('./app.pacemCharts.component');
 var app_pacemScaffolding_component_1 = require('./app.pacemScaffolding.component');
 var app_pacem3D_component_1 = require('./app.pacem3D.component');
 var app_pacemBind_component_1 = require('./app.pacemBind.component');
+var app_pacemNet_component_1 = require('./app.pacemNet.component');
 exports.pages = [
+    { label: 'networking', component: app_pacemNet_component_1.PacemNetComponent },
     { label: 'map (leafletJS)', component: app_pacemMap_component_1.PacemMapComponent },
     { label: 'infinite scroll', component: app_pacemInfiniteScroll_component_1.PacemInfiniteScrollComponent },
     { label: 'lightbox', component: app_pacemLightbox_component_1.PacemLightboxComponent },

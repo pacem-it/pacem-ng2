@@ -6,7 +6,7 @@ export declare class PacemPromise<T> {
     private promise;
     private deferred;
     constructor();
-    then(onCompleted: any, onFailed: any): this;
+    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed?: (v?: any) => void | PromiseLike<void>): this;
     /**
      * Occurs whenever the promise concludes (either after completion or error).
      * @param {Function } callback

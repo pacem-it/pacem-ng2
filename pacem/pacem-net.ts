@@ -111,6 +111,39 @@ export class PacemHub {
     private proxy: SignalR.Hub.Proxy;
     private connection: SignalR.Hub.Connection;
     private _disconnectCallbacks = [];
+    private _url: string;
+    private _name: string;
+
+    set url(v: string) {
+        if (v == this._url) return;
+        this._url = v;
+        this.reset();
+    }
+    get url() {
+        return this._url;
+    }
+
+    set name(v: string) {
+        if (v == this._name) return;
+        this._name = v;
+        this.reset();
+    }
+    get name() {
+        return this._name;
+    }
+
+    private reset() {
+        var _me = this;
+        if (_me.connection) {
+            _me.connection.stop();
+            _me.connection = null;
+        }
+        if (!this._url || !this._name) return;
+        //
+        _me.connection = $.hubConnection();
+        _me.connection.url = this._url;
+        _me.proxy = _me.connection.createHubProxy(this._name);
+    }
 
     /**
      * Starts a new connection with a SignalR hub.
@@ -118,12 +151,9 @@ export class PacemHub {
      * @param hubName hub name
      * @param options connection options
      */
-    start(url:string, hubName:string, options?) {
+    start(options?) {
         var _me = this;
-        _me.connection = $.hubConnection();
-        _me.connection.url = url;
-        _me.proxy = _me.connection.createHubProxy(hubName);
-        var _me = this;
+        let hubName = _me._name;
         var deferred = PacemPromise.defer();
         _me.connection.start(options).done(function (conn) {
             console.info('connected to ' + hubName + ' (id: ' + _me.connection.id + ').');
@@ -153,15 +183,13 @@ export class PacemHub {
     stop() {
         var _me = this;
         _me.connection.stop(true, true);
-        _me.connection = null;
-        _me.proxy = null;
     }
 
     /**
      * Invokes a server hub method with the given arguments.
      * @param methodName method name
      */
-    invoke(methodName, ...args:any[]) {
+    invoke(methodName:string, ...args:any[]) {
         var _me = this;
         var deferred = PacemPromise.defer();
         _me.proxy.invoke.apply(_me.proxy, $.makeArray(arguments))

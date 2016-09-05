@@ -33,13 +33,18 @@ export declare class PacemHub {
     private proxy;
     private connection;
     private _disconnectCallbacks;
+    private _url;
+    private _name;
+    url: string;
+    name: string;
+    private reset();
     /**
      * Starts a new connection with a SignalR hub.
      * @param url hub url
      * @param hubName hub name
      * @param options connection options
      */
-    start(url: string, hubName: string, options?: any): PacemPromise<{}>;
+    start(options?: any): PacemPromise<{}>;
     /**
      * Stops the listening connection.
      */
@@ -48,7 +53,7 @@ export declare class PacemHub {
      * Invokes a server hub method with the given arguments.
      * @param methodName method name
      */
-    invoke(methodName: any, ...args: any[]): PacemPromise<{}>;
+    invoke(methodName: string, ...args: any[]): PacemPromise<{}>;
     /**
      * Sets the handler for a given event name.
      * @param eventName message identifier

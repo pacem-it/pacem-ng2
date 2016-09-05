@@ -1,0 +1,7 @@
+﻿[
+  {
+    "prop": "message",
+    "type": "text",
+    "display": { "name":  "Send", "watermark":  "type..." }
+  }
+]

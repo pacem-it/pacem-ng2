@@ -111,18 +111,54 @@ var PacemHub = (function () {
     function PacemHub() {
         this._disconnectCallbacks = [];
     }
+    Object.defineProperty(PacemHub.prototype, "url", {
+        get: function () {
+            return this._url;
+        },
+        set: function (v) {
+            if (v == this._url)
+                return;
+            this._url = v;
+            this.reset();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemHub.prototype, "name", {
+        get: function () {
+            return this._name;
+        },
+        set: function (v) {
+            if (v == this._name)
+                return;
+            this._name = v;
+            this.reset();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemHub.prototype.reset = function () {
+        var _me = this;
+        if (_me.connection) {
+            _me.connection.stop();
+            _me.connection = null;
+        }
+        if (!this._url || !this._name)
+            return;
+        //
+        _me.connection = $.hubConnection();
+        _me.connection.url = this._url;
+        _me.proxy = _me.connection.createHubProxy(this._name);
+    };
     /**
      * Starts a new connection with a SignalR hub.
      * @param url hub url
      * @param hubName hub name
      * @param options connection options
      */
-    PacemHub.prototype.start = function (url, hubName, options) {
+    PacemHub.prototype.start = function (options) {
         var _me = this;
-        _me.connection = $.hubConnection();
-        _me.connection.url = url;
-        _me.proxy = _me.connection.createHubProxy(hubName);
-        var _me = this;
+        var hubName = _me._name;
         var deferred = pacem_core_1.PacemPromise.defer();
         _me.connection.start(options).done(function (conn) {
             console.info('connected to ' + hubName + ' (id: ' + _me.connection.id + ').');
@@ -148,8 +184,6 @@ var PacemHub = (function () {
     PacemHub.prototype.stop = function () {
         var _me = this;
         _me.connection.stop(true, true);
-        _me.connection = null;
-        _me.proxy = null;
     };
     /**
      * Invokes a server hub method with the given arguments.

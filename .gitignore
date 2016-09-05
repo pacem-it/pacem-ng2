@@ -301,3 +301,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Project-specific
+# =========================
+typings
+Scripts
+App_Data
+*.tgz

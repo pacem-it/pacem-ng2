@@ -1,6 +1,6 @@
 {
   "name": "pacem-ng2",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pacem-it/pacem-ng2.git"
@@ -68,7 +68,6 @@
     "@angular/router": "3.0.0-rc.2",
     "@angular/upgrade": "2.0.0-rc.6",
 
-
     "systemjs": "0.19.37",
     "core-js": "^2.4.1",
     "reflect-metadata": "^0.1.8",
@@ -76,6 +75,7 @@
     "zone.js": "^0.6.17",
 
     "three": "^0.80.1",
+    "signalr": "^2.2.1",
     "angular2-in-memory-web-api": "0.0.18"
   },
   "devDependencies": {
