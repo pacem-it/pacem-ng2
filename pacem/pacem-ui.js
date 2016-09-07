@@ -1,4 +1,9 @@
 "use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -323,6 +328,454 @@ var PacemLightbox = (function () {
     return PacemLightbox;
 }());
 exports.PacemLightbox = PacemLightbox;
+var PacemCarouselAdapter = (function () {
+    function PacemCarouselAdapter() {
+        this._index = -1;
+        this.subscription = null;
+        this.onIndexChange = new core_1.EventEmitter();
+    }
+    Object.defineProperty(PacemCarouselAdapter.prototype, "index", {
+        get: function () {
+            return this._index;
+        },
+        set: function (v) {
+            if (v == this._index)
+                return;
+            var prev = this._index;
+            this._index = v;
+            this.onIndexChange.emit({ current: this._index, previous: prev });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemCarouselAdapter.prototype, "items", {
+        set: function (v) {
+            var _this = this;
+            if (this._items != null)
+                throw "Items have already been set for this " + PacemCarouselAdapter.name + ".";
+            var items = this._items = v;
+            this.subscription = items.changes.subscribe(function () { return _this.adjustFocusIndex(); });
+            this.adjustFocusIndex();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemCarouselAdapter.prototype.destroy = function () {
+        this.subscription.unsubscribe();
+        this._items = null;
+    };
+    PacemCarouselAdapter.prototype.adjustFocusIndex = function () {
+        var items = this._items;
+        var index = this.index;
+        var length = items && items.length;
+        this.index = length ? Math.max(0, Math.min(length - 1, index)) : -1;
+    };
+    /**
+     * Returns whether the provided index is close (adjacent or equal) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    PacemCarouselAdapter.prototype.isClose = function (ndx) {
+        var _this = this;
+        var items = _this._items;
+        var index = _this.index;
+        var length = items && items.length;
+        if (!length)
+            return false;
+        return ndx == index
+            || (ndx + 1) % length == index
+            || (ndx - 1 + length) % length == index;
+    };
+    /**
+     * Returns whether the provided index is adjacent (previous on the list) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    PacemCarouselAdapter.prototype.isPrevious = function (ndx) {
+        var _this = this;
+        var items = _this._items;
+        var index = _this.index;
+        var length = items && items.length;
+        if (!length)
+            return false;
+        return ((ndx + 1) % length) == index;
+    };
+    /**
+     * Returns whether the provided index is adjacent (next on the list) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    PacemCarouselAdapter.prototype.isNext = function (ndx) {
+        var _this = this;
+        var items = _this._items;
+        var index = _this.index;
+        var length = items && items.length;
+        if (!length)
+            return false;
+        return ((ndx - 1 + length) % length) == index;
+    };
+    PacemCarouselAdapter.prototype.previous = function () {
+        var _this = this;
+        var items = _this._items;
+        var index = _this.index;
+        var length = items && items.length;
+        if (!length)
+            return;
+        _this.index = (index - 1 + length) % length;
+    };
+    PacemCarouselAdapter.prototype.next = function () {
+        var _this = this;
+        var items = _this._items;
+        var index = _this.index;
+        var length = items && items.length;
+        if (!length)
+            return;
+        _this.index = (index + 1) % length;
+    };
+    PacemCarouselAdapter = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [])
+    ], PacemCarouselAdapter);
+    return PacemCarouselAdapter;
+}());
+exports.PacemCarouselAdapter = PacemCarouselAdapter;
+var PacemCarouselBase = (function () {
+    function PacemCarouselBase(adapter) {
+        this.adapter = adapter;
+        this.onindex = new core_1.EventEmitter();
+        this.onindexchanged = new core_1.EventEmitter();
+    }
+    Object.defineProperty(PacemCarouselBase.prototype, "index", {
+        get: function () {
+            return this.adapter.index;
+        },
+        set: function (v) {
+            this.adapter.index = v;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemCarouselBase.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        this._subscription = this.adapter.onIndexChange
+            .subscribe(function (ndx) {
+            _this.onindex.emit(ndx.current);
+            _this.onindexchanged.emit(ndx);
+        });
+        this.adapter.items = this.getItems();
+    };
+    PacemCarouselBase.prototype.ngOnDestroy = function () {
+        this._subscription.unsubscribe();
+        this.adapter.destroy();
+    };
+    PacemCarouselBase.prototype.previous = function () {
+        this.adapter.previous();
+    };
+    PacemCarouselBase.prototype.next = function () {
+        this.adapter.next();
+    };
+    __decorate([
+        core_1.Output('indexChange'), 
+        __metadata('design:type', Object)
+    ], PacemCarouselBase.prototype, "onindex", void 0);
+    __decorate([
+        core_1.Output('indexChanged'), 
+        __metadata('design:type', Object)
+    ], PacemCarouselBase.prototype, "onindexchanged", void 0);
+    return PacemCarouselBase;
+}());
+exports.PacemCarouselBase = PacemCarouselBase;
+/**
+ * PacemCarouselItem Directive
+ */
+var PacemCarouselItem = (function () {
+    function PacemCarouselItem(elementRef) {
+        this.elementRef = elementRef;
+        this._isCloseToActive = false;
+        this._isPrevious = false;
+        this._isNext = false;
+        this._isActive = false;
+    }
+    Object.defineProperty(PacemCarouselItem.prototype, "active", {
+        /**
+         * Gets whether the current item is the active one.
+         */
+        get: function () {
+            return this._isActive;
+        },
+        /** @internal */
+        set: function (v) {
+            if (v != this._isActive) {
+                this._isActive = v;
+                if (v)
+                    pacem_core_1.PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-active");
+                else
+                    pacem_core_1.PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-active");
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemCarouselItem.prototype, "near", {
+        /**
+         * Gets whether the current item is adjacent (or equal) to the active one.
+         */
+        get: function () {
+            return this._isCloseToActive;
+        },
+        /** @internal */
+        set: function (v) {
+            if (v == this._isCloseToActive)
+                return;
+            this._isCloseToActive = v;
+            if (v)
+                pacem_core_1.PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item-near");
+            else
+                pacem_core_1.PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item-near");
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemCarouselItem.prototype, "previous", {
+        /**
+         * Gets whether the current item is adjacent to the active one on the left.
+         */
+        get: function () {
+            return this._isPrevious;
+        },
+        /** @internal */
+        set: function (v) {
+            if (v == this._isPrevious)
+                return;
+            this._isPrevious = v;
+            if (v)
+                pacem_core_1.PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item-previous");
+            else
+                pacem_core_1.PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item-previous");
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemCarouselItem.prototype, "next", {
+        /**
+         * Gets whether the current item is adjacent to the active one on the right.
+         */
+        get: function () {
+            return this._isNext;
+        },
+        /** @internal */
+        set: function (v) {
+            if (v == this._isNext)
+                return;
+            this._isNext = v;
+            if (v)
+                pacem_core_1.PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item-next");
+            else
+                pacem_core_1.PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item-next");
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemCarouselItem.prototype.ngOnInit = function () {
+        pacem_core_1.PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item");
+    };
+    PacemCarouselItem.prototype.ngOnDestroy = function () {
+        pacem_core_1.PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item pacem-carousel-item-previous pacem-carousel-item-next pacem-carousel-item-near");
+    };
+    PacemCarouselItem = __decorate([
+        core_1.Directive({
+            selector: '[pacemCarouselItem]',
+            exportAs: 'pacemCarouselItem'
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef])
+    ], PacemCarouselItem);
+    return PacemCarouselItem;
+}());
+exports.PacemCarouselItem = PacemCarouselItem;
+/**
+ * PacemCarousel Directive
+ */
+var PacemCarousel = (function (_super) {
+    __extends(PacemCarousel, _super);
+    function PacemCarousel(compiler, adapter, viewContainerRef, differs) {
+        _super.call(this, adapter);
+        this.compiler = compiler;
+        this.viewContainerRef = viewContainerRef;
+        this.differs = differs;
+        this.configuration = {};
+    }
+    Object.defineProperty(PacemCarousel.prototype, "element", {
+        get: function () {
+            return this.viewContainerRef.element.nativeElement;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemCarousel.prototype.getItems = function () {
+        return this.items;
+    };
+    PacemCarousel.prototype.ngDoCheck = function () {
+        var _this = this;
+        var changes = this.differer.diff(this.configuration);
+        //console.log(`changes detected (balloon): ${changes}`);
+        if (changes)
+            this.reset();
+        else if (this.items && !this.subscription2 || this.subscription2.closed)
+            this.subscription2 = this.items.changes.subscribe(function (c) {
+                if (_this.dashboard)
+                    _this.dashboard.refresh();
+            });
+    };
+    PacemCarousel.prototype.ngOnInit = function () {
+        var _this = this;
+        this.differer = this.differs.find({}).create(null);
+        pacem_core_1.PacemUtils.addClass(this.viewContainerRef.element.nativeElement, "pacem-carousel");
+        this.subscription = this.onindex
+            .asObservable()
+            .debounceTime(20)
+            .subscribe(function (ndx) {
+            _this.items.forEach(function (item, k) {
+                item.active = k === ndx;
+                item.previous = _this.adapter.isPrevious(k);
+                item.next = _this.adapter.isNext(k);
+                item.near = item.active || item.previous || item.next /*this.adapter.isClose(k)*/;
+            });
+        });
+        this.reset();
+    };
+    /** @internal */ PacemCarousel.prototype.setIndex = function (v) {
+        var _this = this;
+        clearTimeout(this.timer);
+        this.index = v;
+        this.timer = window.setTimeout(function () { _this.next(); }, this.timeout);
+    };
+    PacemCarousel.prototype.next = function () {
+        var _this = this;
+        clearTimeout(this.timer);
+        _super.prototype.next.call(this);
+        this.timer = window.setTimeout(function () { _this.next(); }, this.timeout);
+    };
+    PacemCarousel.prototype.previous = function () {
+        var _this = this;
+        clearTimeout(this.timer);
+        _super.prototype.previous.call(this);
+        this.timer = window.setTimeout(function () { _this.next(); }, this.timeout);
+    };
+    PacemCarousel.prototype.reset = function () {
+        var _this = this;
+        this.dispose();
+        //
+        var config = pacem_core_1.PacemUtils.extend({}, pacem_core_1.PacemUtils.clone(PacemCarousel.defaults), this.configuration || {});
+        this.timeout = config.interval;
+        //
+        this.timer = window.setTimeout(function () {
+            _this.next();
+        }, this.timeout);
+        //
+        if (config.interactive) {
+            var factory = this.compiler.compileModuleAndAllComponentsSync(PacemUIModule);
+            var cmp = this.viewContainerRef.createComponent(factory.componentFactories.find(function (cmp) { return cmp.componentType == PacemCarouselDashboard; }), 0);
+            var dashboard = this.dashboard = cmp.instance;
+            dashboard.carousel = this;
+        }
+    };
+    PacemCarousel.prototype.dispose = function () {
+        clearInterval(this.timer);
+        this.viewContainerRef.clear();
+    };
+    PacemCarousel.prototype.ngOnDestroy = function () {
+        this.dispose();
+        this.differer.onDestroy();
+        if (this.subscription2)
+            this.subscription2.unsubscribe();
+        this.subscription.unsubscribe();
+        pacem_core_1.PacemUtils.removeClass(this.viewContainerRef.element.nativeElement, "pacem-carousel");
+        _super.prototype.ngOnDestroy.call(this);
+    };
+    PacemCarousel.defaults = { interactive: false, interval: 5000 };
+    __decorate([
+        core_1.ContentChildren(PacemCarouselItem), 
+        __metadata('design:type', core_1.QueryList)
+    ], PacemCarousel.prototype, "items", void 0);
+    __decorate([
+        core_1.Input('pacemCarousel'), 
+        __metadata('design:type', Object)
+    ], PacemCarousel.prototype, "configuration", void 0);
+    PacemCarousel = __decorate([
+        core_1.Directive({
+            selector: '[pacemCarousel]',
+            providers: [PacemCarouselAdapter],
+            exportAs: 'pacemCarousel'
+        }), 
+        __metadata('design:paramtypes', [core_1.Compiler, PacemCarouselAdapter, core_1.ViewContainerRef, core_1.KeyValueDiffers])
+    ], PacemCarousel);
+    return PacemCarousel;
+}(PacemCarouselBase));
+exports.PacemCarousel = PacemCarousel;
+/**
+ * PacemCarouselDashboard Component
+ */
+var PacemCarouselDashboard = (function () {
+    function PacemCarouselDashboard(changer, elementRef) {
+        var _this = this;
+        this.changer = changer;
+        this.elementRef = elementRef;
+        this.resize = function (evt) {
+            var carousel = _this._carousel;
+            if (!carousel)
+                return;
+            var offset = pacem_core_1.PacemUtils.offset(carousel.element);
+            var element = _this.elementRef.nativeElement;
+            // delegate to CSS:
+            //element.style.position = 'absolute';
+            //element.style.pointerEvents = 'none';
+            element.style.top = carousel.element.offsetTop + 'px';
+            element.style.left = carousel.element.offsetLeft + 'px';
+            element.style.width = carousel.element.offsetWidth + 'px';
+            element.style.height = carousel.element.offsetHeight + 'px';
+        };
+    }
+    Object.defineProperty(PacemCarouselDashboard.prototype, "carousel", {
+        set: function (v) {
+            this._carousel = v;
+            this.resize();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemCarouselDashboard.prototype.ngOnInit = function () {
+        window.addEventListener('resize', this.resize, false);
+    };
+    PacemCarouselDashboard.prototype.ngOnDestroy = function () {
+        window.removeEventListener('resize', this.resize, false);
+    };
+    PacemCarouselDashboard.prototype.refresh = function () {
+        this.changer.detectChanges();
+    };
+    PacemCarouselDashboard.prototype.previous = function (evt) {
+        evt.preventDefault();
+        var c = this._carousel;
+        if (c)
+            c.previous();
+    };
+    PacemCarouselDashboard.prototype.next = function (evt) {
+        evt.preventDefault();
+        var c = this._carousel;
+        if (c)
+            c.next();
+    };
+    PacemCarouselDashboard.prototype.page = function (ndx, evt) {
+        evt.preventDefault();
+        var c = this._carousel;
+        if (c)
+            c.setIndex(ndx);
+    };
+    PacemCarouselDashboard = __decorate([
+        core_1.Component({
+            selector: 'pacem-carousel-dashboard',
+            template: "\n    <div class=\"pacem-carousel-previous\" (click)=\"previous($event)\" *ngIf=\"_carousel?.items?.length > 1\">&lt;</div>\n    <div class=\"pacem-carousel-next\" (click)=\"next($event)\" *ngIf=\"_carousel?.items?.length > 1\">&gt;</div>\n    <ol class=\"pacem-carousel-dashboard\">\n        <li *ngFor=\"let item of _carousel?.items, let ndx = index\">\n            <div (click)=\"page(ndx, $event)\" class=\"pacem-carousel-page\" [ngClass]=\"{ 'pacem-carousel-active': ndx === _carousel?.index }\">{{ ndx+1 }}</div>\n        </li>\n    <ol>"
+        }), 
+        __metadata('design:paramtypes', [core_1.ChangeDetectorRef, core_1.ElementRef])
+    ], PacemCarouselDashboard);
+    return PacemCarouselDashboard;
+}());
 /**
  * PacemGalleryItem Directive
  */
@@ -349,13 +802,19 @@ exports.PacemGalleryItem = PacemGalleryItem;
 /**
  * PacemGallery Component
  */
-var PacemGallery = (function () {
-    function PacemGallery() {
-        this.subscription = null;
+var PacemGallery = (function (_super) {
+    __extends(PacemGallery, _super);
+    function PacemGallery(adapter) {
+        _super.call(this, adapter);
         this.onclose = new core_1.EventEmitter();
         this.hide = true;
-        this.focusIndex = -1;
     }
+    PacemGallery.prototype.getItems = function () {
+        return this.items;
+    };
+    PacemGallery.prototype.isNear = function (ndx) {
+        return this.adapter.isClose(ndx);
+    };
     Object.defineProperty(PacemGallery.prototype, "show", {
         set: function (v) {
             this.hide = !v;
@@ -365,7 +824,7 @@ var PacemGallery = (function () {
     });
     Object.defineProperty(PacemGallery.prototype, "startIndex", {
         set: function (v) {
-            this.focusIndex = v;
+            this.adapter.index = v;
         },
         enumerable: true,
         configurable: true
@@ -373,37 +832,6 @@ var PacemGallery = (function () {
     PacemGallery.prototype.close = function (_) {
         this.hide = true;
         this.onclose.emit(_);
-    };
-    PacemGallery.prototype.ngAfterContentInit = function () {
-        var _this = this;
-        this.subscription = this.items.changes.subscribe(function () { return _this.adjustFocusIndex(); });
-        this.adjustFocusIndex();
-    };
-    PacemGallery.prototype.ngOnDestroy = function () {
-        this.subscription.unsubscribe();
-    };
-    PacemGallery.prototype.adjustFocusIndex = function () {
-        this.focusIndex = this.items && this.items.length ? Math.max(0, Math.min(this.items.length - 1, this.focusIndex)) : -1;
-    };
-    PacemGallery.prototype.isNear = function (ndx) {
-        var Gallery = this;
-        if (!(Gallery.items && Gallery.items.length))
-            return false;
-        return ndx == Gallery.focusIndex
-            || (ndx + 1) % Gallery.items.length == Gallery.focusIndex
-            || (ndx - 1 + Gallery.items.length) % Gallery.items.length == Gallery.focusIndex;
-    };
-    PacemGallery.prototype.previous = function () {
-        var Gallery = this;
-        if (!(Gallery.items && Gallery.items.length))
-            return;
-        Gallery.focusIndex = (Gallery.focusIndex - 1 + Gallery.items.length) % Gallery.items.length;
-    };
-    PacemGallery.prototype.next = function () {
-        var Gallery = this;
-        if (!(Gallery.items && Gallery.items.length))
-            return;
-        Gallery.focusIndex = (Gallery.focusIndex + 1) % Gallery.items.length;
     };
     __decorate([
         core_1.ContentChildren(PacemGalleryItem), 
@@ -426,13 +854,14 @@ var PacemGallery = (function () {
     PacemGallery = __decorate([
         core_1.Component({
             selector: 'pacem-gallery',
-            template: "<pacem-lightbox class=\"pacem-gallery\" [show]=\"!hide\" (close)=\"close($event)\">\n    <ol class=\"pacem-gallery-list\">\n        <template ngFor \n            [ngForOf]=\"items\" \n            let-pic=\"$implicit\" \n            let-ndx=\"index\">\n        <li *ngIf=\"isNear(ndx)\"\n        [ngClass]=\"{ 'pacem-gallery-active': ndx === focusIndex }\" \n        [ngStyle]=\"{ 'background-image': 'url('+pic.url+')' }\">\n            <div class=\"pacem-gallery-caption\" [innerHTML]=\"pic.caption\"></div>\n        </li></template>\n    </ol>\n    <div class=\"pacem-gallery-close\" (click)=\"close($event)\">X</div>\n    <div class=\"pacem-gallery-previous\" (click)=\"previous($event)\" *ngIf=\"items.length > 1\">&lt;</div>\n    <div class=\"pacem-gallery-next\" (click)=\"next($event)\" *ngIf=\"items.length > 1\">&gt;</div>\n</pacem-lightbox>",
-            entryComponents: [PacemLightbox]
+            template: "<pacem-lightbox class=\"pacem-gallery\" [show]=\"!hide\" (close)=\"close($event)\">\n    <ol class=\"pacem-gallery-list\">\n        <template ngFor \n            [ngForOf]=\"items\" \n            let-pic=\"$implicit\" \n            let-ndx=\"index\">\n        <li *ngIf=\"isNear(ndx)\"\n        [ngClass]=\"{ 'pacem-gallery-active': ndx === index }\" \n        [ngStyle]=\"{ 'background-image': 'url('+pic.url+')' }\">\n            <div class=\"pacem-gallery-caption\" [innerHTML]=\"pic.caption\"></div>\n        </li></template>\n    </ol>\n    <div class=\"pacem-gallery-close\" (click)=\"close($event)\">X</div>\n    <div class=\"pacem-gallery-previous\" (click)=\"previous($event)\" *ngIf=\"items.length > 1\">&lt;</div>\n    <div class=\"pacem-gallery-next\" (click)=\"next($event)\" *ngIf=\"items.length > 1\">&gt;</div>\n</pacem-lightbox>",
+            entryComponents: [PacemLightbox],
+            providers: [PacemCarouselAdapter]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [PacemCarouselAdapter])
     ], PacemGallery);
     return PacemGallery;
-}());
+}(PacemCarouselBase));
 exports.PacemGallery = PacemGallery;
 /**
  * PacemBalloon Directive
@@ -2048,10 +2477,10 @@ var PacemUIModule = (function () {
             imports: [common_1.CommonModule],
             declarations: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
                 PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
-                PacemToast, PacemUploader],
+                PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem, PacemCarouselDashboard],
             exports: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
                 PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
-                PacemToast, PacemUploader],
+                PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem],
             providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
         }), 
         __metadata('design:paramtypes', [])

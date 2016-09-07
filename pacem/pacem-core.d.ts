@@ -45,6 +45,7 @@ export declare class PacemUtils {
     };
     static isEmpty(obj: any): boolean;
     static extend(target: any, ...sources: any[]): any;
+    static clone(obj: any): any;
 }
 export declare class PacemProfile {
     private getStorage(persistent?);

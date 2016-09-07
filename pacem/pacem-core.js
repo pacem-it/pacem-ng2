@@ -110,13 +110,13 @@ var PacemUtils = (function () {
     };
     PacemUtils.addClass = function (el, className) {
         if (el.classList)
-            el.classList.add(className);
+            DOMTokenList.prototype.add.apply(el.classList, className.split(' '));
         else
             el.className += ' ' + className;
     };
     PacemUtils.removeClass = function (el, className) {
         if (el.classList)
-            el.classList.remove.apply(el.classList, className.split(' '));
+            DOMTokenList.prototype.remove.apply(el.classList, className.split(' '));
         else
             el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
     };
@@ -178,6 +178,11 @@ var PacemUtils = (function () {
                 Object.assign(target, source);
         }
         return target;
+    };
+    PacemUtils.clone = function (obj) {
+        if (obj === undefined)
+            return undefined;
+        return JSON.parse(JSON.stringify(obj));
     };
     PacemUtils = __decorate([
         core_1.Injectable(), 

@@ -1,7 +1,7 @@
 ﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 import { QueryList, Pipe, PipeTransform, Directive, Component, Input, Output, OnChanges, Renderer,
     SimpleChanges, SimpleChange, ElementRef, ViewContainerRef, NgModule,
-    EventEmitter, AfterContentInit, AfterViewInit, Injectable,
+    EventEmitter, AfterContentInit, AfterViewInit, Injectable, Compiler,
     OnInit, OnDestroy, ViewChild, ContentChildren, KeyValueDiffers, KeyValueDiffer, DoCheck, ChangeDetectorRef } from '@angular/core';
 import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
 import { Location, CommonModule } from '@angular/common';
@@ -264,6 +264,423 @@ export class PacemLightbox implements OnInit, OnChanges, OnDestroy {
     }
 }
 
+@Injectable()
+export class PacemCarouselAdapter<TItem>{
+
+    private _items: QueryList<TItem>;
+    private _index: number = -1;
+    private subscription: Subscription = null;
+
+    onIndexChange = new EventEmitter<{ previous: number, current: number }>();
+
+    set index(v: number) {
+        if (v == this._index) return;
+        let prev = this._index;
+        this._index = v;
+        this.onIndexChange.emit({ current: this._index, previous: prev });
+    }
+    get index(): number {
+        return this._index;
+    }
+
+    set items(v: QueryList<TItem>) {
+        if (this._items != null) throw `Items have already been set for this ${PacemCarouselAdapter.name}.`;
+        let items = this._items = v;
+        this.subscription = items.changes.subscribe(() => this.adjustFocusIndex());
+        this.adjustFocusIndex();
+    }
+
+    destroy() {
+        this.subscription.unsubscribe();
+        this._items = null;
+    }
+
+    private adjustFocusIndex() {
+        let items = this._items;
+        const index = this.index;
+        const length = items && items.length;
+        this.index = length ? Math.max(0, Math.min(length - 1, index)) : -1;
+    }
+
+    /**
+     * Returns whether the provided index is close (adjacent or equal) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    isClose(ndx: number): boolean {
+        var _this = this;
+        let items = _this._items;
+        const index = _this.index;
+        const length = items && items.length;
+        if (!length) return false;
+        return ndx == index
+            || (ndx + 1) % length == index
+            || (ndx - 1 + length) % length == index;
+    }
+
+    /**
+     * Returns whether the provided index is adjacent (previous on the list) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    isPrevious(ndx: number): boolean {
+        var _this = this;
+        let items = _this._items;
+        const index = _this.index;
+        const length = items && items.length;
+        if (!length) return false;
+        return ((ndx + 1) % length) == index;
+    }
+
+    /**
+     * Returns whether the provided index is adjacent (next on the list) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    isNext(ndx: number): boolean {
+        var _this = this;
+        let items = _this._items;
+        const index = _this.index;
+        const length = items && items.length;
+        if (!length) return false;
+        return ((ndx - 1 + length) % length) == index;
+    }
+
+    previous() {
+        var _this = this;
+        let items = _this._items;
+        const index = _this.index;
+        const length = items && items.length;
+        if (!length) return;
+        _this.index = (index - 1 + length) % length;
+    }
+
+    next() {
+        var _this = this;
+        let items = _this._items;
+        const index = _this.index;
+        const length = items && items.length;
+        if (!length) return;
+        _this.index = (index + 1) % length;
+    }
+
+}
+
+export abstract class PacemCarouselBase<TItem> implements AfterContentInit, OnDestroy {
+
+    @Output('indexChange') onindex = new EventEmitter<number>();
+    @Output('indexChanged') onindexchanged = new EventEmitter<{ previous: number, current: number }>();
+
+    private _subscription: Subscription;
+
+    constructor(protected adapter: PacemCarouselAdapter<TItem>) {
+    }
+
+    set index(v: number) {
+        this.adapter.index = v;
+    }
+
+    get index() {
+        return this.adapter.index;
+    }
+
+    protected abstract getItems(): QueryList<TItem>;
+
+    ngAfterContentInit() {
+        this._subscription = this.adapter.onIndexChange
+            .subscribe((ndx: { previous: number, current: number }) => {
+                this.onindex.emit(ndx.current);
+                this.onindexchanged.emit(ndx);
+            });
+        this.adapter.items = this.getItems();
+    }
+
+    ngOnDestroy() {
+        this._subscription.unsubscribe();
+        this.adapter.destroy();
+    }
+
+    previous() {
+        this.adapter.previous();
+    }
+    next() {
+        this.adapter.next();
+    }
+}
+
+/**
+ * PacemCarouselItem Directive
+ */
+@Directive({
+    selector: '[pacemCarouselItem]',
+    exportAs: 'pacemCarouselItem'
+})
+export class PacemCarouselItem implements OnInit, OnDestroy {
+
+    constructor(private elementRef: ElementRef) { }
+
+    private _isCloseToActive: boolean = false;
+    private _isPrevious: boolean = false;
+    private _isNext: boolean = false;
+    private _isActive: boolean = false;
+
+    /** @internal */
+    set active(v: boolean) {
+        if (v != this._isActive) {
+            this._isActive = v;
+            if (v) PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-active");
+            else PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-active");
+        }
+    }
+    /**
+     * Gets whether the current item is the active one.
+     */
+    get active() {
+        return this._isActive;
+    }
+
+    /** @internal */
+    set near(v: boolean) {
+        if (v == this._isCloseToActive) return;
+        this._isCloseToActive = v;
+        if (v) PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item-near");
+        else PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item-near");
+    }
+    /**
+     * Gets whether the current item is adjacent (or equal) to the active one.
+     */
+    get near() {
+        return this._isCloseToActive;
+    }
+
+    /** @internal */
+    set previous(v: boolean) {
+        if (v == this._isPrevious) return;
+        this._isPrevious = v;
+        if (v) PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item-previous");
+        else PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item-previous");
+    }
+    /**
+     * Gets whether the current item is adjacent to the active one on the left.
+     */
+    get previous() {
+        return this._isPrevious;
+    }
+
+    /** @internal */
+    set next(v: boolean) {
+        if (v == this._isNext) return;
+        this._isNext = v;
+        if (v) PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item-next");
+        else PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item-next");
+    }
+    /**
+     * Gets whether the current item is adjacent to the active one on the right.
+     */
+    get next() {
+        return this._isNext;
+    }
+
+    ngOnInit() {
+        PacemUtils.addClass(this.elementRef.nativeElement, "pacem-carousel-item");
+    }
+
+    ngOnDestroy() {
+        PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item pacem-carousel-item-previous pacem-carousel-item-next pacem-carousel-item-near");
+    }
+
+}
+
+export declare type pacemCarouselConfiguration = {
+    interval?: number,
+    interactive?: boolean
+}
+
+/**
+ * PacemCarousel Directive
+ */
+@Directive({
+    selector: '[pacemCarousel]',
+    providers: [PacemCarouselAdapter],
+    exportAs: 'pacemCarousel'
+})
+export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implements OnInit, OnDestroy, DoCheck {
+
+    @ContentChildren(PacemCarouselItem) items: QueryList<PacemCarouselItem>;
+    private subscription: Subscription;
+    private subscription2: Subscription;
+    private timer: number;
+    private timeout: number;
+    private dashboard: PacemCarouselDashboard;
+    private differer: KeyValueDiffer;
+
+    constructor(
+        private compiler: Compiler,
+        adapter: PacemCarouselAdapter<PacemCarouselItem>,
+        private viewContainerRef: ViewContainerRef,
+        private differs: KeyValueDiffers) {
+        super(adapter);
+    }
+
+    private static defaults: pacemCarouselConfiguration = { interactive: false, interval: 5000 };
+    @Input('pacemCarousel') configuration: pacemCarouselConfiguration = {}
+
+    get element(): HTMLElement {
+        return this.viewContainerRef.element.nativeElement;
+    }
+
+    protected getItems() {
+        return this.items;
+    }
+
+    ngDoCheck() {
+        var changes = this.differer.diff(this.configuration)
+        //console.log(`changes detected (balloon): ${changes}`);
+        if (changes) this.reset();
+        else if (this.items && !this.subscription2 || this.subscription2.closed)
+            this.subscription2 = this.items.changes.subscribe((c) => {
+                if (this.dashboard)
+                    this.dashboard.refresh();
+            });
+    }
+
+    ngOnInit() {
+        this.differer = this.differs.find({}).create(null);
+        PacemUtils.addClass(this.viewContainerRef.element.nativeElement, "pacem-carousel");
+        this.subscription = this.onindex
+            .asObservable()
+            .debounceTime(20)
+            .subscribe(ndx => {
+                this.items.forEach((item, k) => {
+                    item.active = k === ndx;
+                    item.previous = this.adapter.isPrevious(k);
+                    item.next = this.adapter.isNext(k);
+                    item.near = item.active || item.previous || item.next /*this.adapter.isClose(k)*/;
+                });
+            });
+        this.reset();
+    }
+
+    /** @internal */ setIndex(v: number) {
+        clearTimeout(this.timer);
+        this.index = v;
+        this.timer = window.setTimeout(() => { this.next(); }, this.timeout);
+    }
+
+    next() {
+        clearTimeout(this.timer);
+        super.next();
+        this.timer = window.setTimeout(() => { this.next(); }, this.timeout);
+    }
+
+    previous() {
+        clearTimeout(this.timer);
+        super.previous();
+        this.timer = window.setTimeout(() => { this.next(); }, this.timeout);
+    }
+
+    private reset() {
+        this.dispose();
+        //
+        const config = <pacemCarouselConfiguration>PacemUtils.extend({}, PacemUtils.clone(PacemCarousel.defaults), this.configuration || {});
+        this.timeout = config.interval;
+        //
+        this.timer = window.setTimeout(() => {
+            this.next();
+        }, this.timeout);
+        //
+        if (config.interactive) {
+            let factory = this.compiler.compileModuleAndAllComponentsSync(PacemUIModule)
+            let cmp = this.viewContainerRef.createComponent(factory.componentFactories.find((cmp) => cmp.componentType == PacemCarouselDashboard), 0);
+            let dashboard = this.dashboard = <PacemCarouselDashboard>cmp.instance;
+            dashboard.carousel = this;
+        }
+    }
+
+    private dispose() {
+        clearInterval(this.timer);
+        this.viewContainerRef.clear();
+    }
+
+    ngOnDestroy() {
+        this.dispose();
+        this.differer.onDestroy();
+        if (this.subscription2)
+            this.subscription2.unsubscribe();
+        this.subscription.unsubscribe();
+        PacemUtils.removeClass(this.viewContainerRef.element.nativeElement, "pacem-carousel");
+        super.ngOnDestroy();
+    }
+}
+
+/**
+ * PacemCarouselDashboard Component
+ */
+@Component({
+    selector: 'pacem-carousel-dashboard',
+    template: `
+    <div class="pacem-carousel-previous" (click)="previous($event)" *ngIf="_carousel?.items?.length > 1">&lt;</div>
+    <div class="pacem-carousel-next" (click)="next($event)" *ngIf="_carousel?.items?.length > 1">&gt;</div>
+    <ol class="pacem-carousel-dashboard">
+        <li *ngFor="let item of _carousel?.items, let ndx = index">
+            <div (click)="page(ndx, $event)" class="pacem-carousel-page" [ngClass]="{ 'pacem-carousel-active': ndx === _carousel?.index }">{{ ndx+1 }}</div>
+        </li>
+    <ol>`
+})
+class PacemCarouselDashboard implements OnInit, OnDestroy {
+
+    constructor(private changer: ChangeDetectorRef, private elementRef : ElementRef) { }
+
+    private _carousel: PacemCarousel;
+
+    set carousel(v: PacemCarousel) {
+        this._carousel = v;
+        this.resize();
+    }
+
+    ngOnInit() {
+        window.addEventListener('resize', this.resize, false);
+    }
+
+    ngOnDestroy() {
+        window.removeEventListener('resize', this.resize, false);
+    }
+
+    refresh() {
+        this.changer.detectChanges();
+    }
+
+    resize = (evt?:Event) => {
+        let carousel = this._carousel;
+        if (!carousel) return;
+        let offset = PacemUtils.offset(carousel.element);
+        let element = <HTMLElement>this.elementRef.nativeElement;
+        // delegate to CSS:
+        //element.style.position = 'absolute';
+        //element.style.pointerEvents = 'none';
+        element.style.top = carousel.element.offsetTop+'px';
+        element.style.left = carousel.element.offsetLeft + 'px';
+        element.style.width = carousel.element.offsetWidth + 'px';
+        element.style.height = carousel.element.offsetHeight + 'px';
+    }
+
+    private previous(evt: Event) {
+        evt.preventDefault();
+        let c = this._carousel;
+        if (c)
+            c.previous();
+    }
+    private next(evt: Event) {
+        evt.preventDefault();
+        let c = this._carousel;
+        if (c)
+            c.next();
+    }
+    private page(ndx: number, evt: Event) {
+        evt.preventDefault();
+        let c = this._carousel;
+        if (c)
+            c.setIndex(ndx);
+    }
+}
+
 /**
  * PacemGalleryItem Directive
  */
@@ -287,7 +704,7 @@ export class PacemGalleryItem {
             let-pic="$implicit" 
             let-ndx="index">
         <li *ngIf="isNear(ndx)"
-        [ngClass]="{ 'pacem-gallery-active': ndx === focusIndex }" 
+        [ngClass]="{ 'pacem-gallery-active': ndx === index }" 
         [ngStyle]="{ 'background-image': 'url('+pic.url+')' }">
             <div class="pacem-gallery-caption" [innerHTML]="pic.caption"></div>
         </li></template>
@@ -296,59 +713,39 @@ export class PacemGalleryItem {
     <div class="pacem-gallery-previous" (click)="previous($event)" *ngIf="items.length > 1">&lt;</div>
     <div class="pacem-gallery-next" (click)="next($event)" *ngIf="items.length > 1">&gt;</div>
 </pacem-lightbox>`,
-    entryComponents: [PacemLightbox]
+    entryComponents: [PacemLightbox],
+    providers: [PacemCarouselAdapter]
 })
-export class PacemGallery implements AfterContentInit, OnDestroy {
+export class PacemGallery extends PacemCarouselBase<PacemGalleryItem> {
 
-    private subscription: Subscription = null;
     @ContentChildren(PacemGalleryItem) items: QueryList<PacemGalleryItem>;
+
+    constructor(adapter: PacemCarouselAdapter<PacemGalleryItem>) {
+        super(adapter)
+    }
+
+    protected getItems() {
+        return this.items;
+    }
 
     @Output('close') onclose = new EventEmitter();
 
+    private isNear(ndx) {
+        return this.adapter.isClose(ndx);
+    }
+
     private hide: boolean = true;
-    private focusIndex: number = -1;
     @Input() set show(v: boolean) {
         this.hide = !v;
     }
 
     @Input() set startIndex(v: number) {
-        this.focusIndex = v;
+        this.adapter.index = v;
     }
 
     private close(_) {
         this.hide = true;
         this.onclose.emit(_);
-    }
-
-    ngAfterContentInit() {
-        this.subscription = this.items.changes.subscribe(() => this.adjustFocusIndex());
-        this.adjustFocusIndex();
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
-
-    private adjustFocusIndex() {
-        this.focusIndex = this.items && this.items.length ? Math.max(0, Math.min(this.items.length - 1, this.focusIndex)) : -1;
-    }
-
-    private isNear(ndx) {
-        var Gallery = this;
-        if (!(Gallery.items && Gallery.items.length)) return false;
-        return ndx == Gallery.focusIndex
-            || (ndx + 1) % Gallery.items.length == Gallery.focusIndex
-            || (ndx - 1 + Gallery.items.length) % Gallery.items.length == Gallery.focusIndex;
-    }
-    private previous() {
-        var Gallery = this;
-        if (!(Gallery.items && Gallery.items.length)) return;
-        Gallery.focusIndex = (Gallery.focusIndex - 1 + Gallery.items.length) % Gallery.items.length;
-    }
-    private next() {
-        var Gallery = this;
-        if (!(Gallery.items && Gallery.items.length)) return;
-        Gallery.focusIndex = (Gallery.focusIndex + 1) % Gallery.items.length;
     }
 }
 
@@ -1954,10 +2351,10 @@ export class PacemHamburgerMenu {
     imports: [CommonModule],
     declarations: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
         PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
-        PacemToast, PacemUploader],
+        PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem, PacemCarouselDashboard],
     exports: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
         PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
-        PacemToast, PacemUploader],
+        PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem],
     providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
 })
 export class PacemUIModule { }

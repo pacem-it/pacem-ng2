@@ -106,14 +106,14 @@ export class PacemUtils {
 
     static addClass(el: HTMLElement, className: string) {
         if (el.classList)
-            el.classList.add(className);
+            DOMTokenList.prototype.add.apply(el.classList, className.split(' '));
         else
             el.className += ' ' + className;
     }
 
     static removeClass(el: HTMLElement, className: string) {
         if (el.classList)
-            el.classList.remove.apply(el.classList, className.split(' '));
+            DOMTokenList.prototype.remove.apply(el.classList, className.split(' '));
         else
             el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
     }
@@ -169,6 +169,11 @@ export class PacemUtils {
             else Object.assign(target, source);
         }
         return target;
+    }
+
+    static clone(obj: any) {
+        if (obj === undefined) return undefined;
+        return JSON.parse(JSON.stringify(obj));
     }
 }
 

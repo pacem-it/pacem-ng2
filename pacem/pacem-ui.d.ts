@@ -1,4 +1,4 @@
-import { QueryList, PipeTransform, OnChanges, Renderer, SimpleChanges, ElementRef, EventEmitter, AfterContentInit, AfterViewInit, OnInit, OnDestroy, KeyValueDiffers, DoCheck, ChangeDetectorRef } from '@angular/core';
+import { QueryList, PipeTransform, OnChanges, Renderer, SimpleChanges, ElementRef, ViewContainerRef, EventEmitter, AfterContentInit, AfterViewInit, Compiler, OnInit, OnDestroy, KeyValueDiffers, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { Pacem3DObject } from './pacem-3d';
@@ -60,6 +60,117 @@ export declare class PacemLightbox implements OnInit, OnChanges, OnDestroy {
     private reset();
     private resize(evt?);
 }
+export declare class PacemCarouselAdapter<TItem> {
+    private _items;
+    private _index;
+    private subscription;
+    onIndexChange: EventEmitter<{
+        previous: number;
+        current: number;
+    }>;
+    index: number;
+    items: QueryList<TItem>;
+    destroy(): void;
+    private adjustFocusIndex();
+    /**
+     * Returns whether the provided index is close (adjacent or equal) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    isClose(ndx: number): boolean;
+    /**
+     * Returns whether the provided index is adjacent (previous on the list) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    isPrevious(ndx: number): boolean;
+    /**
+     * Returns whether the provided index is adjacent (next on the list) to the current one in focus.
+     * @param ndx index to be checked
+     */
+    isNext(ndx: number): boolean;
+    previous(): void;
+    next(): void;
+}
+export declare abstract class PacemCarouselBase<TItem> implements AfterContentInit, OnDestroy {
+    protected adapter: PacemCarouselAdapter<TItem>;
+    onindex: EventEmitter<number>;
+    onindexchanged: EventEmitter<{
+        previous: number;
+        current: number;
+    }>;
+    private _subscription;
+    constructor(adapter: PacemCarouselAdapter<TItem>);
+    index: number;
+    protected abstract getItems(): QueryList<TItem>;
+    ngAfterContentInit(): void;
+    ngOnDestroy(): void;
+    previous(): void;
+    next(): void;
+}
+/**
+ * PacemCarouselItem Directive
+ */
+export declare class PacemCarouselItem implements OnInit, OnDestroy {
+    private elementRef;
+    constructor(elementRef: ElementRef);
+    private _isCloseToActive;
+    private _isPrevious;
+    private _isNext;
+    private _isActive;
+    /**
+     * Gets whether the current item is the active one.
+     */
+    /** @internal */
+    active: boolean;
+    /**
+     * Gets whether the current item is adjacent (or equal) to the active one.
+     */
+    /** @internal */
+    near: boolean;
+    /**
+     * Gets whether the current item is adjacent to the active one on the left.
+     */
+    /** @internal */
+    previous: boolean;
+    /**
+     * Gets whether the current item is adjacent to the active one on the right.
+     */
+    /** @internal */
+    next: boolean;
+    ngOnInit(): void;
+    ngOnDestroy(): void;
+}
+export declare type pacemCarouselConfiguration = {
+    interval?: number;
+    interactive?: boolean;
+};
+/**
+ * PacemCarousel Directive
+ */
+export declare class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implements OnInit, OnDestroy, DoCheck {
+    private compiler;
+    private viewContainerRef;
+    private differs;
+    items: QueryList<PacemCarouselItem>;
+    private subscription;
+    private subscription2;
+    private timer;
+    private timeout;
+    private dashboard;
+    private differer;
+    constructor(compiler: Compiler, adapter: PacemCarouselAdapter<PacemCarouselItem>, viewContainerRef: ViewContainerRef, differs: KeyValueDiffers);
+    private static defaults;
+    configuration: pacemCarouselConfiguration;
+    element: HTMLElement;
+    protected getItems(): QueryList<PacemCarouselItem>;
+    ngDoCheck(): void;
+    ngOnInit(): void;
+    /** @internal */ setIndex(v: number): void;
+    next(): void;
+    previous(): void;
+    private reset();
+    private dispose();
+    ngOnDestroy(): void;
+}
 /**
  * PacemGalleryItem Directive
  */
@@ -70,21 +181,16 @@ export declare class PacemGalleryItem {
 /**
  * PacemGallery Component
  */
-export declare class PacemGallery implements AfterContentInit, OnDestroy {
-    private subscription;
+export declare class PacemGallery extends PacemCarouselBase<PacemGalleryItem> {
     items: QueryList<PacemGalleryItem>;
+    constructor(adapter: PacemCarouselAdapter<PacemGalleryItem>);
+    protected getItems(): QueryList<PacemGalleryItem>;
     onclose: EventEmitter<{}>;
+    private isNear(ndx);
     private hide;
-    private focusIndex;
     show: boolean;
     startIndex: number;
     private close(_);
-    ngAfterContentInit(): void;
-    ngOnDestroy(): void;
-    private adjustFocusIndex();
-    private isNear(ndx);
-    private previous();
-    private next();
 }
 /**
  * PacemBalloon Directive

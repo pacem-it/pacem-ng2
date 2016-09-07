@@ -103,7 +103,7 @@ pacem-toast {
 
 /*#endregion*/
 
-/* #region GALLERY LIGHTBOX */
+/* #region GALLERY */
 
 .pacem-gallery .pacem-lightbox-wrapper {
     background: #000;
@@ -200,16 +200,162 @@ pacem-toast {
             top: 50%;
             margin-top: -38px;
             left: 0;
-            background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTUuNDEgMTYuMDlsLTQuNTgtNC41OSA0LjU4LTQuNTlMMTQgNS41bC02IDYgNiA2eiIgLz4NCiAgICA8cGF0aCBkPSJNMC0uNWgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz4NCjwvc3ZnPg==') /*../images/chevron_left.svg*/;
         }
 
         > .pacem-gallery-next {
             top: 50%;
             margin-top: -38px;
             right: 0;
-            background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNOC41OSAxNi4zNGw0LjU4LTQuNTktNC41OC00LjU5TDEwIDUuNzVsNiA2LTYgNnoiIC8+DQogICAgPHBhdGggZD0iTTAtLjI1aDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KPC9zdmc+') /*../images/chevron_right.svg*/;
         }
     }
+}
+
+/* #endregion */
+
+/* #region CAROUSEL */
+
+.pacem-carousel {
+    position: relative;
+    overflow: hidden;
+
+    > .pacem-carousel-item {
+        height: 100%;
+        width: 100%;
+        transition: transform .75s cubic-bezier(0.075, 0.82, 0.165, 1), opacity .25s linear;
+        //
+        //opacity: 0;
+        position: absolute;
+        top: 0; left: 0;
+
+        &.pacem-carousel-item-previous{
+            transform: translateX(-100%);
+        }
+
+        &.pacem-carousel-item-next{
+            transform: translateX(100%);
+        }
+
+        &.pacem-carousel-active {
+            z-index: 2;
+            //opacity: 1;
+            transform: translateX(0);
+        }
+    }
+}
+
+pacem-carousel-dashboard {
+
+    position: absolute;
+    pointer-events: painted;
+
+    .pacem-carousel-next,
+    .pacem-carousel-previous {
+        @_size: @grid_spacing;
+        width: @_size;
+        height: @_size;
+        cursor: pointer;
+        position: absolute;
+        z-index: 3;
+        color: #fff;
+        line-height: @_size;
+        text-align: center;
+        border: none;
+        font-size: 0;
+        background-color: transparent;
+        background-position: center center;
+        background-repeat: no-repeat;
+        font-size: 0;
+        background-size: contain;
+        top: 50%;
+        margin-top: -@_size * .5;
+
+        &:hover {
+            background-color: rgba(255,255,255,0.25);
+        }
+    }
+
+    .pacem-carousel-previous {
+        left: 0;
+    }
+
+    .pacem-carousel-next {
+        right: 0;
+    }
+
+    .pacem-carousel-dashboard {
+        display: flex;
+        width: 100%;
+        @_height: @grid_spacing * .75;
+        height: @_height;
+        position: absolute;
+        bottom: -@_height * 1.25;
+        left: 0;
+        justify-content: center;
+        list-style-type: none;
+        flex-direction: row;
+
+        > li {
+            flex-grow: 0;
+            flex-shrink: 0;
+            width: @_height * 1.125;
+            font-size: 0;
+            display: inline-block;
+        }
+
+        .pacem-carousel-page {
+            @_brd: 2px;
+            @_size: @_height - 2 * @_brd;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            padding: 0;
+            width: @_size;
+            height: @_size;
+            border: @_brd solid @color_light;
+            border-radius: 50%;
+            display: block;
+            background: transparent;
+            position: relative;
+            z-index: 3;
+            font-size: 0;
+
+            &:before {
+                @_pad: 1px;
+                @_sz: @_size - 2 * @_pad;
+                position: absolute;
+                top: @_pad;
+                left: @_pad;
+                width: @_sz;
+                height: @_sz;
+                display: block;
+                border-radius: 50%;
+                content: '';
+                background-color: @color_light;
+                transition: transform .2s ease-in;
+                transform-origin: @_sz * .5 @_sz * .5;
+                transform: scale(0);
+                z-index: -3;
+            }
+
+            &.pacem-carousel-active:before {
+                transform: scale(1);
+            }
+        }
+    }
+}
+
+/* #endregion */
+
+/* #region CAROUSEL + GALLERY (shared) */
+
+.pacem-gallery .pacem-lightbox-wrapper .pacem-lightbox > .pacem-gallery-previous,
+.pacem-carousel-previous {
+    background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTUuNDEgMTYuMDlsLTQuNTgtNC41OSA0LjU4LTQuNTlMMTQgNS41bC02IDYgNiA2eiIgLz4NCiAgICA8cGF0aCBkPSJNMC0uNWgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz4NCjwvc3ZnPg==') /*../images/chevron_left.svg*/;
+}
+
+.pacem-gallery .pacem-lightbox-wrapper .pacem-lightbox > .pacem-gallery-next,
+.pacem-carousel-next {
+    background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNOC41OSAxNi4zNGw0LjU4LTQuNTktNC41OC00LjU5TDEwIDUuNzVsNiA2LTYgNnoiIC8+DQogICAgPHBhdGggZD0iTTAtLjI1aDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KPC9zdmc+') /*../images/chevron_right.svg*/;
 }
 
 /* #endregion */
