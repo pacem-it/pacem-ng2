@@ -1,7 +1,7 @@
 ﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
 import { QueryList, Pipe, PipeTransform, Directive, Component, Input, Output, OnChanges, Renderer,
     SimpleChanges, SimpleChange, ElementRef, ViewContainerRef, NgModule,
-    EventEmitter, AfterContentInit, AfterViewInit, Injectable, Compiler,
+    EventEmitter, AfterContentInit, AfterViewInit, Injectable, Compiler, ChangeDetectionStrategy,
     OnInit, OnDestroy, ViewChild, ContentChildren, KeyValueDiffers, KeyValueDiffer, DoCheck, ChangeDetectorRef } from '@angular/core';
 import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
 import { Location, CommonModule } from '@angular/common';
@@ -535,7 +535,8 @@ export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implemen
         //console.log(`changes detected (balloon): ${changes}`);
         if (changes) this.reset();
         else if (this.items && !this.subscription2 || this.subscription2.closed)
-            this.subscription2 = this.items.changes.subscribe((c) => {
+            this.subscription2 = this.items.changes
+                .subscribe((c) => {
                 if (this.dashboard)
                     this.dashboard.refresh();
             });
@@ -555,7 +556,7 @@ export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implemen
                     item.near = item.active || item.previous || item.next /*this.adapter.isClose(k)*/;
                 });
             });
-        this.reset();
+        //this.reset();
     }
 
     /** @internal */ setIndex(v: number) {
@@ -589,8 +590,9 @@ export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implemen
         if (config.interactive) {
             let factory = this.compiler.compileModuleAndAllComponentsSync(PacemUIModule)
             let cmp = this.viewContainerRef.createComponent(factory.componentFactories.find((cmp) => cmp.componentType == PacemCarouselDashboard), 0);
-            let dashboard = this.dashboard = <PacemCarouselDashboard>cmp.instance;
+            let dashboard = <PacemCarouselDashboard>cmp.instance;
             dashboard.carousel = this;
+            this.dashboard = dashboard;
         }
     }
 
@@ -618,11 +620,11 @@ export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implemen
     template: `
     <div class="pacem-carousel-previous" (click)="previous($event)" *ngIf="_carousel?.items?.length > 1">&lt;</div>
     <div class="pacem-carousel-next" (click)="next($event)" *ngIf="_carousel?.items?.length > 1">&gt;</div>
-    <ol class="pacem-carousel-dashboard">
+    <ol class="pacem-carousel-dashboard" *ngIf="_carousel?.items?.length > 1">
         <li *ngFor="let item of _carousel?.items, let ndx = index">
             <div (click)="page(ndx, $event)" class="pacem-carousel-page" [ngClass]="{ 'pacem-carousel-active': ndx === _carousel?.index }">{{ ndx+1 }}</div>
         </li>
-    <ol>`
+    <ol>`, changeDetection: ChangeDetectionStrategy.Default
 })
 class PacemCarouselDashboard implements OnInit, OnDestroy {
 
@@ -645,20 +647,23 @@ class PacemCarouselDashboard implements OnInit, OnDestroy {
 
     refresh() {
         this.changer.detectChanges();
+        this.resize();
     }
 
-    resize = (evt?:Event) => {
-        let carousel = this._carousel;
-        if (!carousel) return;
-        let offset = PacemUtils.offset(carousel.element);
-        let element = <HTMLElement>this.elementRef.nativeElement;
-        // delegate to CSS:
-        //element.style.position = 'absolute';
-        //element.style.pointerEvents = 'none';
-        element.style.top = carousel.element.offsetTop+'px';
-        element.style.left = carousel.element.offsetLeft + 'px';
-        element.style.width = carousel.element.offsetWidth + 'px';
-        element.style.height = carousel.element.offsetHeight + 'px';
+    resize = (evt?: Event) => {
+        requestAnimationFrame(() => {
+            let carousel = this._carousel;
+            if (!carousel) return;
+            let offset = PacemUtils.offset(carousel.element);
+            let element = <HTMLElement>this.elementRef.nativeElement;
+            // delegate to CSS:
+            //element.style.position = 'absolute';
+            //element.style.pointerEvents = 'none';
+            element.style.top = carousel.element.offsetTop + 'px';
+            element.style.left = carousel.element.offsetLeft + 'px';
+            element.style.width = carousel.element.offsetWidth + 'px';
+            element.style.height = carousel.element.offsetHeight + 'px';
+        });
     }
 
     private previous(evt: Event) {

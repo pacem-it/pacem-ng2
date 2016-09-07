@@ -618,7 +618,8 @@ var PacemCarousel = (function (_super) {
         if (changes)
             this.reset();
         else if (this.items && !this.subscription2 || this.subscription2.closed)
-            this.subscription2 = this.items.changes.subscribe(function (c) {
+            this.subscription2 = this.items.changes
+                .subscribe(function (c) {
                 if (_this.dashboard)
                     _this.dashboard.refresh();
             });
@@ -638,7 +639,7 @@ var PacemCarousel = (function (_super) {
                 item.near = item.active || item.previous || item.next /*this.adapter.isClose(k)*/;
             });
         });
-        this.reset();
+        //this.reset();
     };
     /** @internal */ PacemCarousel.prototype.setIndex = function (v) {
         var _this = this;
@@ -672,8 +673,9 @@ var PacemCarousel = (function (_super) {
         if (config.interactive) {
             var factory = this.compiler.compileModuleAndAllComponentsSync(PacemUIModule);
             var cmp = this.viewContainerRef.createComponent(factory.componentFactories.find(function (cmp) { return cmp.componentType == PacemCarouselDashboard; }), 0);
-            var dashboard = this.dashboard = cmp.instance;
+            var dashboard = cmp.instance;
             dashboard.carousel = this;
+            this.dashboard = dashboard;
         }
     };
     PacemCarousel.prototype.dispose = function () {
@@ -718,18 +720,20 @@ var PacemCarouselDashboard = (function () {
         this.changer = changer;
         this.elementRef = elementRef;
         this.resize = function (evt) {
-            var carousel = _this._carousel;
-            if (!carousel)
-                return;
-            var offset = pacem_core_1.PacemUtils.offset(carousel.element);
-            var element = _this.elementRef.nativeElement;
-            // delegate to CSS:
-            //element.style.position = 'absolute';
-            //element.style.pointerEvents = 'none';
-            element.style.top = carousel.element.offsetTop + 'px';
-            element.style.left = carousel.element.offsetLeft + 'px';
-            element.style.width = carousel.element.offsetWidth + 'px';
-            element.style.height = carousel.element.offsetHeight + 'px';
+            requestAnimationFrame(function () {
+                var carousel = _this._carousel;
+                if (!carousel)
+                    return;
+                var offset = pacem_core_1.PacemUtils.offset(carousel.element);
+                var element = _this.elementRef.nativeElement;
+                // delegate to CSS:
+                //element.style.position = 'absolute';
+                //element.style.pointerEvents = 'none';
+                element.style.top = carousel.element.offsetTop + 'px';
+                element.style.left = carousel.element.offsetLeft + 'px';
+                element.style.width = carousel.element.offsetWidth + 'px';
+                element.style.height = carousel.element.offsetHeight + 'px';
+            });
         };
     }
     Object.defineProperty(PacemCarouselDashboard.prototype, "carousel", {
@@ -748,6 +752,7 @@ var PacemCarouselDashboard = (function () {
     };
     PacemCarouselDashboard.prototype.refresh = function () {
         this.changer.detectChanges();
+        this.resize();
     };
     PacemCarouselDashboard.prototype.previous = function (evt) {
         evt.preventDefault();
@@ -770,7 +775,7 @@ var PacemCarouselDashboard = (function () {
     PacemCarouselDashboard = __decorate([
         core_1.Component({
             selector: 'pacem-carousel-dashboard',
-            template: "\n    <div class=\"pacem-carousel-previous\" (click)=\"previous($event)\" *ngIf=\"_carousel?.items?.length > 1\">&lt;</div>\n    <div class=\"pacem-carousel-next\" (click)=\"next($event)\" *ngIf=\"_carousel?.items?.length > 1\">&gt;</div>\n    <ol class=\"pacem-carousel-dashboard\">\n        <li *ngFor=\"let item of _carousel?.items, let ndx = index\">\n            <div (click)=\"page(ndx, $event)\" class=\"pacem-carousel-page\" [ngClass]=\"{ 'pacem-carousel-active': ndx === _carousel?.index }\">{{ ndx+1 }}</div>\n        </li>\n    <ol>"
+            template: "\n    <div class=\"pacem-carousel-previous\" (click)=\"previous($event)\" *ngIf=\"_carousel?.items?.length > 1\">&lt;</div>\n    <div class=\"pacem-carousel-next\" (click)=\"next($event)\" *ngIf=\"_carousel?.items?.length > 1\">&gt;</div>\n    <ol class=\"pacem-carousel-dashboard\" *ngIf=\"_carousel?.items?.length > 1\">\n        <li *ngFor=\"let item of _carousel?.items, let ndx = index\">\n            <div (click)=\"page(ndx, $event)\" class=\"pacem-carousel-page\" [ngClass]=\"{ 'pacem-carousel-active': ndx === _carousel?.index }\">{{ ndx+1 }}</div>\n        </li>\n    <ol>", changeDetection: core_1.ChangeDetectionStrategy.Default
         }), 
         __metadata('design:paramtypes', [core_1.ChangeDetectorRef, core_1.ElementRef])
     ], PacemCarouselDashboard);
