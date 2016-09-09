@@ -11,6 +11,7 @@ export declare class PacemScaffoldingComponent implements AfterViewInit {
     entity: {
         Name: string;
         Resume: string;
+        Birthdate: string;
         FavFood: string;
     };
 }

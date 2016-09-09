@@ -18,7 +18,7 @@ var PacemScaffoldingComponent = (function () {
         this.http = http;
         this.meta = [];
         this.entity = {
-            Name: 'Cristian', Resume: 'Your <b>CV</b> here...',
+            Name: 'Cristian', Resume: 'Your <b>CV</b> here...', Birthdate: '2015-07-08T09:58:00.000Z',
             FavFood: "ice cream",
         };
     }

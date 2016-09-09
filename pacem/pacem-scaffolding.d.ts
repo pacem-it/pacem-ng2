@@ -80,6 +80,7 @@ export declare class PacemDatetimePicker extends BaseValueAccessor implements On
     private years;
     private datesAssembler;
     private subscription;
+    private subscription2;
     private _year;
     private year;
     private _month;

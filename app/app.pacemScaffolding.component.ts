@@ -39,7 +39,7 @@ export class PacemScaffoldingComponent implements AfterViewInit {
 
     meta = [];
     entity = {
-        Name: 'Cristian', Resume: 'Your <b>CV</b> here...',
+        Name: 'Cristian', Resume: 'Your <b>CV</b> here...', Birthdate: '2015-07-08T09:58:00.000Z',
         FavFood: "ice cream", //FavFoods: [{ ID: 4 }]
     };
 

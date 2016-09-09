@@ -371,7 +371,7 @@ var PacemDatetimePicker = (function (_super) {
     }
     Object.defineProperty(PacemDatetimePicker.prototype, "dateValue", {
         get: function () {
-            return this.value;
+            return this._dateValue;
         },
         set: function (v) {
             var date = pacem_core_1.PacemUtils.parseDate(v);
@@ -515,8 +515,13 @@ var PacemDatetimePicker = (function (_super) {
             else
                 _this.buildup();
         });
+        this.subscription2 = this.model.valueChanges.subscribe(function (c) {
+            if (!(c instanceof Date) || c.valueOf() !== (_this._dateValue && _this._dateValue.valueOf()))
+                _this.dateValue = c;
+        });
     };
     PacemDatetimePicker.prototype.ngOnDestroy = function () {
+        this.subscription2.unsubscribe();
         this.subscription.unsubscribe();
     };
     PacemDatetimePicker.prototype.ngOnChanges = function (changes) {
@@ -602,7 +607,7 @@ var PacemDatetimePicker = (function (_super) {
     PacemDatetimePicker = __decorate([
         core_1.Component({
             selector: 'pacem-datetime-picker',
-            template: "<div class=\"pacem-datetime-picker\">\n    <div class=\"pacem-datetime-picker-year\">\n    <select class=\"pacem-select\" [(ngModel)]=\"year\" #yearel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let yr of years\" [value]=\"yr\">{{ yr }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-month\">\n    <select class=\"pacem-select\" [(ngModel)]=\"month\" #monthel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let mth of months\" [value]=\"mth.value\">{{ mth.date | date: 'MMM' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-date\">\n    <select class=\"pacem-select\" [(ngModel)]=\"date\" [disabled]=\"(yearel.value === '' || monthel.value === '')\">\n        <option value=\"\">...</option>\n        <option *ngFor=\"let dt of dates\" [value]=\"dt.value\" [disabled]=\"dt.date > _maxDate || dt.date < _minDate\">{{ dt.date | date: 'EEE dd' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-hour\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"hours\">\n        <option *ngFor=\"let hr of a24\" [value]=\"hr\">{{ hr | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-minute\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"minutes\">\n        <option *ngFor=\"let min of a60\" [value]=\"min\">{{ min | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-second\" *ngIf=\"precision == 'second'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"seconds\">\n        <option *ngFor=\"let sec of a60\" [value]=\"sec\">{{ sec | number:'2.0-0' }}</option>\n    </select></div>\n    <dl class=\"pacem-datetime-picker-preview\" [pacemHidden]=\"!value\">\n        <dt>local:</dt><dd>{{ value | date:'medium' }}</dd>\n        <dt>iso:</dt><dd>{{ value?.toISOString() }}</dd>\n    </dl>\n</div>", providers: [forms_1.NgModel]
+            template: "<div class=\"pacem-datetime-picker\">\n    <div class=\"pacem-datetime-picker-year\">\n    <select class=\"pacem-select\" [(ngModel)]=\"year\" #yearel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let yr of years\" [value]=\"yr\">{{ yr }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-month\">\n    <select class=\"pacem-select\" [(ngModel)]=\"month\" #monthel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let mth of months\" [value]=\"mth.value\">{{ mth.date | date: 'MMM' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-date\">\n    <select class=\"pacem-select\" [(ngModel)]=\"date\" [disabled]=\"(yearel.value === '' || monthel.value === '')\">\n        <option value=\"\">...</option>\n        <option *ngFor=\"let dt of dates\" [value]=\"dt.value\" [disabled]=\"dt.date > _maxDate || dt.date < _minDate\">{{ dt.date | date: 'EEE dd' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-hour\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"hours\">\n        <option *ngFor=\"let hr of a24\" [value]=\"hr\">{{ hr | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-minute\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"minutes\">\n        <option *ngFor=\"let min of a60\" [value]=\"min\">{{ min | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-second\" *ngIf=\"precision == 'second'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"seconds\">\n        <option *ngFor=\"let sec of a60\" [value]=\"sec\">{{ sec | number:'2.0-0' }}</option>\n    </select></div>\n    <dl class=\"pacem-datetime-picker-preview\" [pacemHidden]=\"!value\">\n        <dt>local:</dt><dd>{{ dateValue | date:'medium' }}</dd>\n        <dt>iso:</dt><dd>{{ dateValue?.toISOString() }}</dd>\n    </dl>\n</div>", providers: [forms_1.NgModel]
         }), 
         __metadata('design:paramtypes', [forms_1.NgModel])
     ], PacemDatetimePicker);

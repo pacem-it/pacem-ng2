@@ -382,8 +382,8 @@ const keys = {
         <option *ngFor="let sec of a60" [value]="sec">{{ sec | number:'2.0-0' }}</option>
     </select></div>
     <dl class="pacem-datetime-picker-preview" [pacemHidden]="!value">
-        <dt>local:</dt><dd>{{ value | date:'medium' }}</dd>
-        <dt>iso:</dt><dd>{{ value?.toISOString() }}</dd>
+        <dt>local:</dt><dd>{{ dateValue | date:'medium' }}</dd>
+        <dt>iso:</dt><dd>{{ dateValue?.toISOString() }}</dd>
     </dl>
 </div>`, providers: [NgModel]
 })
@@ -393,7 +393,7 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
 
     private _dateValue: Date;
     get dateValue() {
-        return this.value;
+        return this._dateValue;
     }
     @Input() set dateValue(v: Date | string) {
         let date = PacemUtils.parseDate(v);
@@ -439,6 +439,7 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
     private years: number[] = [];
     private datesAssembler = new Subject<any[]>();
     private subscription: Subscription;
+    private subscription2: Subscription;
 
     //#region date properties
     private _year: number | string;
@@ -549,9 +550,14 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
                 else
                     this.buildup();
             });
+        this.subscription2 = this.model.valueChanges.subscribe(c => {
+            if (!(c instanceof Date) || c.valueOf() !== (this._dateValue && this._dateValue.valueOf()))
+                this.dateValue = c;
+        });
     }
 
     ngOnDestroy() {
+        this.subscription2.unsubscribe();
         this.subscription.unsubscribe();
     }
 
