@@ -1122,7 +1122,7 @@ svg.pacem-bind path {
   display: inline-block;
   vertical-align: middle;
 }
-.pacem-datetime-picker .pacem-datetime-picker-hour {
+.pacem-datetime-picker .pacem-datetime-picker-hours {
   padding-left: 18px;
   background-position: left center;
   background-repeat: no-repeat;
@@ -1175,6 +1175,11 @@ svg.pacem-bind path {
   border: 0;
   border-bottom: 2px solid #262b3e;
   min-width: 56px;
+}
+.pacem-input-container .pacem-datetime-picker .pacem-datetime-picker-hours .pacem-select,
+.pacem-input-container .pacem-datetime-picker .pacem-datetime-picker-minutes .pacem-select,
+.pacem-input-container .pacem-datetime-picker .pacem-datetime-picker-seconds .pacem-select {
+  min-width: 0;
 }
 .pacem-field .pacem-input-container pacem-datetime-picker.ng-pristine.ng-invalid .pacem-select {
   border-color: rgba(255, 0, 90, 0.2);

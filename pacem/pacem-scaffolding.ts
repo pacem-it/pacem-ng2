@@ -369,15 +369,15 @@ const keys = {
         <option value="">...</option>
         <option *ngFor="let dt of dates" [value]="dt.value" [disabled]="dt.date > _maxDate || dt.date < _minDate">{{ dt.date | date: 'EEE dd' }}</option>
     </select></div>
-    <div class="pacem-datetime-picker-hour" *ngIf="precision != 'day'">
+    <div class="pacem-datetime-picker-hours" *ngIf="precision != 'day'">
     <select class="pacem-select" [(ngModel)]="hours">
         <option *ngFor="let hr of a24" [value]="hr">{{ hr | number:'2.0-0' }}</option>
     </select></div>
-    <div class="pacem-datetime-picker-minute" *ngIf="precision != 'day'">
+    <div class="pacem-datetime-picker-minutes" *ngIf="precision != 'day'">
     <select class="pacem-select" [(ngModel)]="minutes">
         <option *ngFor="let min of a60" [value]="min">{{ min | number:'2.0-0' }}</option>
     </select></div>
-    <div class="pacem-datetime-picker-second" *ngIf="precision == 'second'">
+    <div class="pacem-datetime-picker-seconds" *ngIf="precision == 'second'">
     <select class="pacem-select" [(ngModel)]="seconds">
         <option *ngFor="let sec of a60" [value]="sec">{{ sec | number:'2.0-0' }}</option>
     </select></div>

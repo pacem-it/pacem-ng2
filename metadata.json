@@ -86,11 +86,7 @@
   },
   {
     "prop": "Birthdate",
-    "type": "date",
-    "display": {
-      "watermark": "when did you see the light?...",
-      "format": "{0:D}"
-    },
+    "type": "datetime",
     "validators": [
       {
         "type": "range",

@@ -370,7 +370,7 @@
         vertical-align: middle;
     }
 
-    .pacem-datetime-picker-hour {
+    .pacem-datetime-picker-hours {
 
         @_sz: @grid_spacing * .75;
 
@@ -433,10 +433,21 @@
     }
 }
 
-.pacem-input-container .pacem-datetime-picker .pacem-select {
-    border: 0;
-    border-bottom: 2px solid @color_lightblue;
-    min-width: 56px;
+.pacem-input-container .pacem-datetime-picker {
+    .pacem-select {
+        border: 0;
+        border-bottom: 2px solid @color_lightblue;
+        min-width: 56px;
+    }
+
+    .pacem-datetime-picker-hours,
+    .pacem-datetime-picker-minutes,
+    .pacem-datetime-picker-seconds {
+
+        .pacem-select {
+            min-width: 0;
+        }
+    }
 }
 
 .pacem-field {
