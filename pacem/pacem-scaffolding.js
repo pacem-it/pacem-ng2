@@ -383,7 +383,7 @@ var PacemDatetimePicker = (function (_super) {
                 if (date)
                     this.buildupDates();
                 this.onchange.emit(date);
-                this.value = date;
+                this.value = v; // keep same type (Date or string equivalent)
             }
         },
         enumerable: true,
@@ -516,8 +516,7 @@ var PacemDatetimePicker = (function (_super) {
                 _this.buildup();
         });
         this.subscription2 = this.model.valueChanges.subscribe(function (c) {
-            if (!(c instanceof Date) || c.valueOf() !== (_this._dateValue && _this._dateValue.valueOf()))
-                _this.dateValue = c;
+            _this.dateValue = c;
         });
     };
     PacemDatetimePicker.prototype.ngOnDestroy = function () {

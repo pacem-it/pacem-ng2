@@ -397,7 +397,6 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
     }
     @Input() set dateValue(v: Date | string) {
         let date = PacemUtils.parseDate(v);
-
         let former = this._dateValue && this._dateValue.valueOf();
         let current = date && date.valueOf();
         if (former !== current) {
@@ -406,7 +405,7 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
             if (date)
                 this.buildupDates();
             this.onchange.emit(date);
-            this.value = date;
+            this.value = v; // keep same type (Date or string equivalent)
         }
     }
 
@@ -551,8 +550,7 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
                     this.buildup();
             });
         this.subscription2 = this.model.valueChanges.subscribe(c => {
-            if (!(c instanceof Date) || c.valueOf() !== (this._dateValue && this._dateValue.valueOf()))
-                this.dateValue = c;
+            this.dateValue = c;
         });
     }
 

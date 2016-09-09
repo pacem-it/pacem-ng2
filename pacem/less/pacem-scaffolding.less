@@ -434,50 +434,49 @@
 }
 
 .pacem-input-container .pacem-datetime-picker .pacem-select {
+    border: 0;
+    border-bottom: 2px solid @color_lightblue;
     min-width: 56px;
 }
 
-.pacem-field .pacem-input-container pacem-datetime-picker {
-    border: 0;
-    border-bottom: 2px solid @color_lightblue;
+.pacem-field {
 
-    .pacem-select {
-        border: 0;
-        border-bottom: 2px solid @color_lightblue;
-    }
+    .pacem-input-container pacem-datetime-picker {
+        &.ng-pristine {
+            &.ng-invalid {
 
-    &.ng-pristine {
-        &.ng-invalid {
-
-            .pacem-select {
-                border-color: fade(@color_red, 20);
-            }
-        }
-    }
-
-    &.ng-dirty {
-        &.ng-invalid {
-            .pacem-select {
-                border-color: @color_red;
-            }
-        }
-
-        &.ng-valid {
-        }
-    }
-
-    &.has-value {
-        &.ng-valid {
-
-            &.ng-dirty {
                 .pacem-select {
-                    border-color: fade( @color_tech, 100);
+                    border-color: fade(@color_red, 20);
+                }
+            }
+        }
+
+        &.ng-dirty {
+            &.ng-invalid {
+                .pacem-select {
+                    border-color: @color_red;
                 }
             }
 
-            &.ng-pristine {
-                .pacem-select {
-                    border-color: fade(fade( @color_tech, 100), 20);
+            &.ng-valid {
+            }
+        }
+    }
+
+    &.pacem-has-value {
+        .pacem-input-container pacem-datetime-picker {
+            &.ng-valid {
+
+                &.ng-dirty {
+                    .pacem-select {
+                        border-color: fade( @color_tech, 100);
+                    }
+                }
+
+                &.ng-pristine {
+                    .pacem-select {
+                        border-color: fade(fade( @color_tech, 100), 20);
+                    }
                 }
             }
         }

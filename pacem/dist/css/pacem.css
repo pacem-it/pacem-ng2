@@ -1172,15 +1172,9 @@ svg.pacem-bind path {
   transform: none;
 }
 .pacem-input-container .pacem-datetime-picker .pacem-select {
+  border: 0;
+  border-bottom: 2px solid #262b3e;
   min-width: 56px;
-}
-.pacem-field .pacem-input-container pacem-datetime-picker {
-  border: 0;
-  border-bottom: 2px solid #262b3e;
-}
-.pacem-field .pacem-input-container pacem-datetime-picker .pacem-select {
-  border: 0;
-  border-bottom: 2px solid #262b3e;
 }
 .pacem-field .pacem-input-container pacem-datetime-picker.ng-pristine.ng-invalid .pacem-select {
   border-color: rgba(255, 0, 90, 0.2);
@@ -1188,10 +1182,10 @@ svg.pacem-bind path {
 .pacem-field .pacem-input-container pacem-datetime-picker.ng-dirty.ng-invalid .pacem-select {
   border-color: #ff005a;
 }
-.pacem-field .pacem-input-container pacem-datetime-picker.has-value.ng-valid.ng-dirty .pacem-select {
+.pacem-field.pacem-has-value .pacem-input-container pacem-datetime-picker.ng-valid.ng-dirty .pacem-select {
   border-color: #a7f8ab;
 }
-.pacem-field .pacem-input-container pacem-datetime-picker.has-value.ng-valid.ng-pristine .pacem-select {
+.pacem-field.pacem-has-value .pacem-input-container pacem-datetime-picker.ng-valid.ng-pristine .pacem-select {
   border-color: rgba(167, 248, 171, 0.2);
 }
 .pacem-map-polyline-info,
