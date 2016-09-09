@@ -12,67 +12,12 @@ pacem.localization = {
     }
 };
 
-@Pipe({ name: 'pacemDate' })
-export class PacemDate {
-    transform(d) {
-        if (!d) return d;
-        if (typeof d == 'string' && JSON_DATE_PATTERN.test(d))
-            d = parseInt(d.substring(6));
-        return new Date(d);
-    }
-}
-
-@Injectable()
-export class PacemPromise<T> {
-
-    private promise: Promise<T>;
-    private deferred: {
-        'resolve': (v?: T) => void | PromiseLike<void>,
-        'reject': (v?: any) => void | PromiseLike<void>,
-        'promise': PacemPromise<T>
-    } = null;
-
-    constructor() {
-        var me = this;
-        me.promise = new Promise<T>(function (resolve, reject) {
-            me.deferred = { 'resolve': resolve, 'reject': reject, 'promise': me };
-        });
-    }
-
-    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed? : (v?: any) => void | PromiseLike<void>) {
-        this.promise.then(onCompleted, onFailed);
-        return this;
-    }
-
-    /**
-     * Occurs whenever the promise concludes (either after completion or error).
-     * @param {Function } callback
-     */
-    finally(callback: (v?: T | any) => void | PromiseLike<void>) {
-        this.promise.then(callback, callback);
-        return this;
-    }
-
-    success(callback: (v?: T) => void | PromiseLike<void>) {
-        this.promise.then(callback, null);
-        return this;
-    }
-
-    error(callback: (v?: any) => void | PromiseLike<void>) {
-        this.promise.then(null, callback);
-        return this;
-    }
-
-    static defer<T>() {
-        var q = new PacemPromise<T>();
-        return q.deferred;
-    }
-}
-
 @Injectable()
 export class PacemUtils {
 
     static get core() { return pacem; }
+
+    // #region GENERAL
 
     static uniqueCode() {
         var seed = pacem.__currentSeed || new Date().valueOf();
@@ -87,6 +32,22 @@ export class PacemUtils {
         }
         return sb;
     }
+
+    static parseDate(input: string | Date): Date {
+        let d: any;
+        if (typeof input === 'string') {
+            if (JSON_DATE_PATTERN.test(input))
+                d = parseInt(d.substring(6));
+            else
+                d = Date.parse(input);
+            return new Date(d);
+        } else
+            return input as Date;
+    }
+
+    // #endregion
+
+    // #region DOM
 
     static is(el: any, selector: string): boolean {
         return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector)
@@ -174,6 +135,62 @@ export class PacemUtils {
     static clone(obj: any) {
         if (obj === undefined) return undefined;
         return JSON.parse(JSON.stringify(obj));
+    }
+
+    // #endregion
+}
+
+@Pipe({ name: 'pacemDate' })
+export class PacemDate {
+    transform(d) {
+        return PacemUtils.parseDate(d);
+    }
+}
+
+@Injectable()
+export class PacemPromise<T> {
+
+    private promise: Promise<T>;
+    private deferred: {
+        'resolve': (v?: T) => void | PromiseLike<void>,
+        'reject': (v?: any) => void | PromiseLike<void>,
+        'promise': PacemPromise<T>
+    } = null;
+
+    constructor() {
+        var me = this;
+        me.promise = new Promise<T>(function (resolve, reject) {
+            me.deferred = { 'resolve': resolve, 'reject': reject, 'promise': me };
+        });
+    }
+
+    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed?: (v?: any) => void | PromiseLike<void>) {
+        this.promise.then(onCompleted, onFailed);
+        return this;
+    }
+
+    /**
+     * Occurs whenever the promise concludes (either after completion or error).
+     * @param {Function } callback
+     */
+    finally(callback: (v?: T | any) => void | PromiseLike<void>) {
+        this.promise.then(callback, callback);
+        return this;
+    }
+
+    success(callback: (v?: T) => void | PromiseLike<void>) {
+        this.promise.then(callback, null);
+        return this;
+    }
+
+    error(callback: (v?: any) => void | PromiseLike<void>) {
+        this.promise.then(null, callback);
+        return this;
+    }
+
+    static defer<T>() {
+        var q = new PacemPromise<T>();
+        return q.deferred;
     }
 }
 

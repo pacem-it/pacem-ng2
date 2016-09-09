@@ -18,62 +18,6 @@ exports.pacem.localization = {
         'errors': { 'NOT_EXPLOITABLE': '%s feature not exploitable on this browser!', 'NETWORK': 'Network error occurred.', 'NOT_ARRAY': '%s is not an array', 'KEY_DUPLICATE': '%s is already a registered key' }
     }
 };
-var PacemDate = (function () {
-    function PacemDate() {
-    }
-    PacemDate.prototype.transform = function (d) {
-        if (!d)
-            return d;
-        if (typeof d == 'string' && JSON_DATE_PATTERN.test(d))
-            d = parseInt(d.substring(6));
-        return new Date(d);
-    };
-    PacemDate = __decorate([
-        core_1.Pipe({ name: 'pacemDate' }), 
-        __metadata('design:paramtypes', [])
-    ], PacemDate);
-    return PacemDate;
-}());
-exports.PacemDate = PacemDate;
-var PacemPromise = (function () {
-    function PacemPromise() {
-        this.deferred = null;
-        var me = this;
-        me.promise = new Promise(function (resolve, reject) {
-            me.deferred = { 'resolve': resolve, 'reject': reject, 'promise': me };
-        });
-    }
-    PacemPromise.prototype.then = function (onCompleted, onFailed) {
-        this.promise.then(onCompleted, onFailed);
-        return this;
-    };
-    /**
-     * Occurs whenever the promise concludes (either after completion or error).
-     * @param {Function } callback
-     */
-    PacemPromise.prototype.finally = function (callback) {
-        this.promise.then(callback, callback);
-        return this;
-    };
-    PacemPromise.prototype.success = function (callback) {
-        this.promise.then(callback, null);
-        return this;
-    };
-    PacemPromise.prototype.error = function (callback) {
-        this.promise.then(null, callback);
-        return this;
-    };
-    PacemPromise.defer = function () {
-        var q = new PacemPromise();
-        return q.deferred;
-    };
-    PacemPromise = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemPromise);
-    return PacemPromise;
-}());
-exports.PacemPromise = PacemPromise;
 var PacemUtils = (function () {
     function PacemUtils() {
     }
@@ -82,6 +26,7 @@ var PacemUtils = (function () {
         enumerable: true,
         configurable: true
     });
+    // #region GENERAL
     PacemUtils.uniqueCode = function () {
         var seed = exports.pacem.__currentSeed || new Date().valueOf();
         exports.pacem.__currentSeed = ++seed;
@@ -95,6 +40,20 @@ var PacemUtils = (function () {
         }
         return sb;
     };
+    PacemUtils.parseDate = function (input) {
+        var d;
+        if (typeof input === 'string') {
+            if (JSON_DATE_PATTERN.test(input))
+                d = parseInt(d.substring(6));
+            else
+                d = Date.parse(input);
+            return new Date(d);
+        }
+        else
+            return input;
+    };
+    // #endregion
+    // #region DOM
     PacemUtils.is = function (el, selector) {
         return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector)
             .call(el, selector);
@@ -191,6 +150,58 @@ var PacemUtils = (function () {
     return PacemUtils;
 }());
 exports.PacemUtils = PacemUtils;
+var PacemDate = (function () {
+    function PacemDate() {
+    }
+    PacemDate.prototype.transform = function (d) {
+        return PacemUtils.parseDate(d);
+    };
+    PacemDate = __decorate([
+        core_1.Pipe({ name: 'pacemDate' }), 
+        __metadata('design:paramtypes', [])
+    ], PacemDate);
+    return PacemDate;
+}());
+exports.PacemDate = PacemDate;
+var PacemPromise = (function () {
+    function PacemPromise() {
+        this.deferred = null;
+        var me = this;
+        me.promise = new Promise(function (resolve, reject) {
+            me.deferred = { 'resolve': resolve, 'reject': reject, 'promise': me };
+        });
+    }
+    PacemPromise.prototype.then = function (onCompleted, onFailed) {
+        this.promise.then(onCompleted, onFailed);
+        return this;
+    };
+    /**
+     * Occurs whenever the promise concludes (either after completion or error).
+     * @param {Function } callback
+     */
+    PacemPromise.prototype.finally = function (callback) {
+        this.promise.then(callback, callback);
+        return this;
+    };
+    PacemPromise.prototype.success = function (callback) {
+        this.promise.then(callback, null);
+        return this;
+    };
+    PacemPromise.prototype.error = function (callback) {
+        this.promise.then(null, callback);
+        return this;
+    };
+    PacemPromise.defer = function () {
+        var q = new PacemPromise();
+        return q.deferred;
+    };
+    PacemPromise = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [])
+    ], PacemPromise);
+    return PacemPromise;
+}());
+exports.PacemPromise = PacemPromise;
 var PacemProfile = (function () {
     function PacemProfile() {
     }

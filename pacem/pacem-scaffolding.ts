@@ -395,34 +395,30 @@ export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges,
     get dateValue() {
         return this.value;
     }
-    @Input() set dateValue(v: Date) {
+    @Input() set dateValue(v: Date | string) {
+        let date = PacemUtils.parseDate(v);
+
         let former = this._dateValue && this._dateValue.valueOf();
-        let current = v && v.valueOf();
+        let current = date && date.valueOf();
         if (former !== current) {
-            this._dateValue = v;
-            this.disassembleDate(v);
-            if (v)
+            this._dateValue = date;
+            this.disassembleDate(date);
+            if (date)
                 this.buildupDates();
-            this.onchange.emit(v);
-            this.value = v;
+            this.onchange.emit(date);
+            this.value = date;
         }
     }
 
     private _minDate: Date;
     @Input('min') set minDate(v: string | Date) {
         if (!v) return;
-        if (v instanceof Date)
-            this._minDate = v;
-        else
-            this._minDate = new Date(Date.parse(v));
+        this._minDate = PacemUtils.parseDate(v);
     }
     private _maxDate: Date;
     @Input('max') set maxDate(v: string | Date) {
         if (!v) return;
-        if (v instanceof Date)
-            this._maxDate = v;
-        else
-            this._maxDate = new Date(Date.parse(v));
+        this._maxDate = PacemUtils.parseDate(v);
     }
     @Input() precision: 'day' | 'minute' | 'second' = 'day';
 

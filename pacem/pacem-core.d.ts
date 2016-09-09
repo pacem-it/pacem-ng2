@@ -1,28 +1,8 @@
 export declare var pacem: any;
-export declare class PacemDate {
-    transform(d: any): any;
-}
-export declare class PacemPromise<T> {
-    private promise;
-    private deferred;
-    constructor();
-    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed?: (v?: any) => void | PromiseLike<void>): this;
-    /**
-     * Occurs whenever the promise concludes (either after completion or error).
-     * @param {Function } callback
-     */
-    finally(callback: (v?: T | any) => void | PromiseLike<void>): this;
-    success(callback: (v?: T) => void | PromiseLike<void>): this;
-    error(callback: (v?: any) => void | PromiseLike<void>): this;
-    static defer<T>(): {
-        'resolve': (v?: T) => void | PromiseLike<void>;
-        'reject': (v?: any) => void | PromiseLike<void>;
-        'promise': PacemPromise<T>;
-    };
-}
 export declare class PacemUtils {
     static core: any;
     static uniqueCode(): string;
+    static parseDate(input: string | Date): Date;
     static is(el: any, selector: string): boolean;
     static hasClass(el: HTMLElement, className: string): boolean;
     static isVisible(el: HTMLElement): boolean;
@@ -46,6 +26,27 @@ export declare class PacemUtils {
     static isEmpty(obj: any): boolean;
     static extend(target: any, ...sources: any[]): any;
     static clone(obj: any): any;
+}
+export declare class PacemDate {
+    transform(d: any): Date;
+}
+export declare class PacemPromise<T> {
+    private promise;
+    private deferred;
+    constructor();
+    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed?: (v?: any) => void | PromiseLike<void>): this;
+    /**
+     * Occurs whenever the promise concludes (either after completion or error).
+     * @param {Function } callback
+     */
+    finally(callback: (v?: T | any) => void | PromiseLike<void>): this;
+    success(callback: (v?: T) => void | PromiseLike<void>): this;
+    error(callback: (v?: any) => void | PromiseLike<void>): this;
+    static defer<T>(): {
+        'resolve': (v?: T) => void | PromiseLike<void>;
+        'reject': (v?: any) => void | PromiseLike<void>;
+        'promise': PacemPromise<T>;
+    };
 }
 export declare class PacemProfile {
     private getStorage(persistent?);

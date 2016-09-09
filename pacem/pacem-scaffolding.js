@@ -374,15 +374,16 @@ var PacemDatetimePicker = (function (_super) {
             return this.value;
         },
         set: function (v) {
+            var date = pacem_core_1.PacemUtils.parseDate(v);
             var former = this._dateValue && this._dateValue.valueOf();
-            var current = v && v.valueOf();
+            var current = date && date.valueOf();
             if (former !== current) {
-                this._dateValue = v;
-                this.disassembleDate(v);
-                if (v)
+                this._dateValue = date;
+                this.disassembleDate(date);
+                if (date)
                     this.buildupDates();
-                this.onchange.emit(v);
-                this.value = v;
+                this.onchange.emit(date);
+                this.value = date;
             }
         },
         enumerable: true,
@@ -392,10 +393,7 @@ var PacemDatetimePicker = (function (_super) {
         set: function (v) {
             if (!v)
                 return;
-            if (v instanceof Date)
-                this._minDate = v;
-            else
-                this._minDate = new Date(Date.parse(v));
+            this._minDate = pacem_core_1.PacemUtils.parseDate(v);
         },
         enumerable: true,
         configurable: true
@@ -404,10 +402,7 @@ var PacemDatetimePicker = (function (_super) {
         set: function (v) {
             if (!v)
                 return;
-            if (v instanceof Date)
-                this._maxDate = v;
-            else
-                this._maxDate = new Date(Date.parse(v));
+            this._maxDate = pacem_core_1.PacemUtils.parseDate(v);
         },
         enumerable: true,
         configurable: true

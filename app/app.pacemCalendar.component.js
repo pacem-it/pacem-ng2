@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var PacemCalendarComponent = (function () {
     function PacemCalendarComponent() {
+        this.value0 = "1975-02-15T15:35:00.000Z"; //new Date(1975, 1, 15, 16, 35, 0, 0);
         this.now = new Date();
         this.min0 = new Date(-76, 1, 1);
     }

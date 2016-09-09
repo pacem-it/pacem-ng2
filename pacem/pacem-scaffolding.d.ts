@@ -66,7 +66,7 @@ export declare class PacemDatetimePicker extends BaseValueAccessor implements On
     private model;
     onchange: EventEmitter<Date>;
     private _dateValue;
-    dateValue: Date;
+    dateValue: Date | string;
     private _minDate;
     minDate: string | Date;
     private _maxDate;

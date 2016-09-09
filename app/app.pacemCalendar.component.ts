@@ -25,7 +25,7 @@ Standard version:</p>
 })
 export class PacemCalendarComponent {
     
-    value0:Date;
+    value0: Date | string = "1975-02-15T15:35:00.000Z"; //new Date(1975, 1, 15, 16, 35, 0, 0);
     value: Date;
 
     private now = new Date();
