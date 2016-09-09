@@ -1004,21 +1004,21 @@ svg.pacem-bind path {
 }
 .pacem-field .pacem-input-container pacem-select-many,
 .pacem-field .pacem-input-container .pacem-contenteditable,
-.pacem-field .pacem-input-container .pacem-select,
+.pacem-field .pacem-input-container > .pacem-select,
 .pacem-field .pacem-input-container .pacem-input {
+  min-width: 175px;
   border: 0;
   border-bottom: 2px solid #262b3e;
-  min-width: 175px;
 }
 .pacem-field .pacem-input-container pacem-select-many.ng-pristine.ng-invalid,
 .pacem-field .pacem-input-container .pacem-contenteditable.ng-pristine.ng-invalid,
-.pacem-field .pacem-input-container .pacem-select.ng-pristine.ng-invalid,
+.pacem-field .pacem-input-container > .pacem-select.ng-pristine.ng-invalid,
 .pacem-field .pacem-input-container .pacem-input.ng-pristine.ng-invalid {
   border-color: rgba(255, 0, 90, 0.2);
 }
 .pacem-field .pacem-input-container pacem-select-many.ng-dirty.ng-invalid,
 .pacem-field .pacem-input-container .pacem-contenteditable.ng-dirty.ng-invalid,
-.pacem-field .pacem-input-container .pacem-select.ng-dirty.ng-invalid,
+.pacem-field .pacem-input-container > .pacem-select.ng-dirty.ng-invalid,
 .pacem-field .pacem-input-container .pacem-input.ng-dirty.ng-invalid {
   border-color: #ff005a;
 }
@@ -1104,19 +1104,95 @@ svg.pacem-bind path {
 }
 .pacem-field.pacem-has-value .pacem-input-container pacem-select-many.ng-valid.ng-dirty,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-contenteditable.ng-valid.ng-dirty,
-.pacem-field.pacem-has-value .pacem-input-container .pacem-select.ng-valid.ng-dirty,
+.pacem-field.pacem-has-value .pacem-input-container > .pacem-select.ng-valid.ng-dirty,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-input.ng-valid.ng-dirty {
   border-color: #a7f8ab;
 }
 .pacem-field.pacem-has-value .pacem-input-container pacem-select-many.ng-valid.ng-pristine,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-contenteditable.ng-valid.ng-pristine,
-.pacem-field.pacem-has-value .pacem-input-container .pacem-select.ng-valid.ng-pristine,
+.pacem-field.pacem-has-value .pacem-input-container > .pacem-select.ng-valid.ng-pristine,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-input.ng-valid.ng-pristine {
   border-color: rgba(167, 248, 171, 0.2);
 }
 .pacem-field.pacem-fetching label.pacem-label:before {
   content: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTcuNjUgNi4zNUMxNi4yIDQuOSAxNC4yMSA0IDEyIDRjLTQuNDIgMC03Ljk5IDMuNTgtNy45OSA4czMuNTcgOCA3Ljk5IDhjMy43MyAwIDYuODQtMi41NSA3LjczLTZoLTIuMDhjLS44MiAyLjMzLTMuMDQgNC01LjY1IDQtMy4zMSAwLTYtMi42OS02LTZzMi42OS02IDYtNmMxLjY2IDAgMy4xNC42OSA0LjIyIDEuNzhMMTMgMTFoN1Y0bC0yLjM1IDIuMzV6IiAvPg0KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+DQo8L3N2Zz4=') /*../images/refresh.svg*/;
   animation: pacem-rotate-anim 0.67s linear infinite;
+}
+.pacem-datetime-picker > div {
+  display: inline-block;
+  vertical-align: middle;
+}
+.pacem-datetime-picker .pacem-datetime-picker-hour {
+  padding-left: 18px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTEuOTkgMkM2LjQ3IDIgMiA2LjQ4IDIgMTJzNC40NyAxMCA5Ljk5IDEwQzE3LjUyIDIyIDIyIDE3LjUyIDIyIDEyUzE3LjUyIDIgMTEuOTkgMnpNMTIgMjBjLTQuNDIgMC04LTMuNTgtOC04czMuNTgtOCA4LTggOCAzLjU4IDggOC0zLjU4IDgtOCA4eiIgLz4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0xMi41IDdIMTF2Nmw1LjI1IDMuMTUuNzUtMS4yMy00LjUtMi42N3oiIC8+DQo8L3N2Zz4=') /*../images/clock.svg*/;
+  background-size: 18px;
+}
+.pacem-datetime-picker dl {
+  padding: 4px 0;
+  overflow: hidden;
+  height: 31.9992px;
+}
+.pacem-datetime-picker dl dt,
+.pacem-datetime-picker dl dd {
+  line-height: 15.9996px;
+  height: 15.9996px;
+}
+.pacem-datetime-picker dl dt {
+  float: left;
+  vertical-align: middle;
+  width: 24px;
+  background: center center no-repeat;
+  background-size: contain;
+  font-size: 0;
+}
+.pacem-datetime-picker dl dt:nth-of-type(2) {
+  background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0xMS45OSAyQzYuNDcgMiAyIDYuNDggMiAxMnM0LjQ3IDEwIDkuOTkgMTBDMTcuNTIgMjIgMjIgMTcuNTIgMjIgMTJTMTcuNTIgMiAxMS45OSAyem02LjkzIDZoLTIuOTVjLS4zMi0xLjI1LS43OC0yLjQ1LTEuMzgtMy41NiAxLjg0LjYzIDMuMzcgMS45MSA0LjMzIDMuNTZ6TTEyIDQuMDRjLjgzIDEuMiAxLjQ4IDIuNTMgMS45MSAzLjk2aC0zLjgyYy40My0xLjQzIDEuMDgtMi43NiAxLjkxLTMuOTZ6TTQuMjYgMTRDNC4xIDEzLjM2IDQgMTIuNjkgNCAxMnMuMS0xLjM2LjI2LTJoMy4zOGMtLjA4LjY2LS4xNCAxLjMyLS4xNCAyIDAgLjY4LjA2IDEuMzQuMTQgMkg0LjI2em0uODIgMmgyLjk1Yy4zMiAxLjI1Ljc4IDIuNDUgMS4zOCAzLjU2LTEuODQtLjYzLTMuMzctMS45LTQuMzMtMy41NnptMi45NS04SDUuMDhjLjk2LTEuNjYgMi40OS0yLjkzIDQuMzMtMy41NkM4LjgxIDUuNTUgOC4zNSA2Ljc1IDguMDMgOHpNMTIgMTkuOTZjLS44My0xLjItMS40OC0yLjUzLTEuOTEtMy45NmgzLjgyYy0uNDMgMS40My0xLjA4IDIuNzYtMS45MSAzLjk2ek0xNC4zNCAxNEg5LjY2Yy0uMDktLjY2LS4xNi0xLjMyLS4xNi0yIDAtLjY4LjA3LTEuMzUuMTYtMmg0LjY4Yy4wOS42NS4xNiAxLjMyLjE2IDIgMCAuNjgtLjA3IDEuMzQtLjE2IDJ6bS4yNSA1LjU2Yy42LTEuMTEgMS4wNi0yLjMxIDEuMzgtMy41NmgyLjk1Yy0uOTYgMS42NS0yLjQ5IDIuOTMtNC4zMyAzLjU2ek0xNi4zNiAxNGMuMDgtLjY2LjE0LTEuMzIuMTQtMiAwLS42OC0uMDYtMS4zNC0uMTQtMmgzLjM4Yy4xNi42NC4yNiAxLjMxLjI2IDJzLS4xIDEuMzYtLjI2IDJoLTMuMzh6IiAvPg0KPC9zdmc+') /*../images/global.svg*/;
+}
+.pacem-datetime-picker dl dt:nth-of-type(1) {
+  background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6IiAvPg0KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+DQo8L3N2Zz4=') /*../images/location.svg*/;
+}
+.pacem-datetime-picker dl dd {
+  clear: right;
+  margin-left: 24px;
+  font-size: .8em;
+  font-family: 'Share Tech Mono', Monotype;
+}
+.pacem-datetime-picker dl dd:nth-of-type(2) {
+  color: #a7f8ab;
+}
+.pacem-datetime-picker dl.pacem-hidden {
+  transition: all .3s;
+  transform: none;
+  height: 0;
+}
+.pacem-datetime-picker dl.pacem-shown {
+  transition: all 0.3s /*cubic-bezier(0.23, 1, 0.32, 1)*/ 0.1s;
+  transform: none;
+}
+.pacem-input-container .pacem-datetime-picker .pacem-select {
+  min-width: 56px;
+}
+.pacem-field .pacem-input-container pacem-datetime-picker {
+  border: 0;
+  border-bottom: 2px solid #262b3e;
+}
+.pacem-field .pacem-input-container pacem-datetime-picker .pacem-select {
+  border: 0;
+  border-bottom: 2px solid #262b3e;
+}
+.pacem-field .pacem-input-container pacem-datetime-picker.ng-pristine.ng-invalid .pacem-select {
+  border-color: rgba(255, 0, 90, 0.2);
+}
+.pacem-field .pacem-input-container pacem-datetime-picker.ng-dirty.ng-invalid .pacem-select {
+  border-color: #ff005a;
+}
+.pacem-field .pacem-input-container pacem-datetime-picker.has-value.ng-valid.ng-dirty .pacem-select {
+  border-color: #a7f8ab;
+}
+.pacem-field .pacem-input-container pacem-datetime-picker.has-value.ng-valid.ng-pristine .pacem-select {
+  border-color: rgba(167, 248, 171, 0.2);
 }
 .pacem-map-polyline-info,
 .pacem-map-circle-info,

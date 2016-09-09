@@ -100,6 +100,21 @@
     ]
   },
   {
+    "prop": "Graduation",
+    "type": "date",
+    "display": {
+      "watermark": "when did you see the light?...",
+      "format": "{0:D}"
+    },
+    "validators": [
+      {
+        "type": "compare",
+        "errorMessage": "value must be more recent than Birthdate.",
+        "params": { "to": "Birthdate", "operator":  "greater" }
+      }
+    ]
+  },
+  {
     "prop": "State",
     "type": "text",
     "display": {

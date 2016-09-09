@@ -10,6 +10,7 @@ import { PacemScaffoldingComponent } from './app.pacemScaffolding.component';
 import { Pacem3DComponent } from './app.pacem3D.component';
 import { PacemBindComponent } from './app.pacemBind.component';
 import { PacemNetComponent } from './app.pacemNet.component';
+import { PacemCalendarComponent } from './app.pacemCalendar.component';
 import { Type, ModuleWithProviders } from '@angular/core';
 
 export const pages: { label: string, component: Type<any> }[] = [
@@ -20,6 +21,7 @@ export const pages: { label: string, component: Type<any> }[] = [
     { label: 'balloon', component: PacemBalloonComponent },
     { label: 'uploader', component: PacemUploaderComponent },
     { label: 'charts', component: PacemChartsComponent },
+    { label: 'calendar', component: PacemCalendarComponent },
     { label: 'scaffolding', component: PacemScaffoldingComponent },
     { label: '3D', component: Pacem3DComponent },
     { label: 'binds', component: PacemBindComponent }

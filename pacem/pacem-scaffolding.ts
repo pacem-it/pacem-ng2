@@ -24,12 +24,6 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 
-const resolvedPromise = Promise.resolve(null);
-export const formControlBinding: any = {
-    provide: NgControl,
-    useExisting: forwardRef(() => NgModel)
-};
-
 interface IFetchData {
     sourceUrl: string;
     verb?: string;
@@ -194,6 +188,12 @@ function MakeValidatorProvider(type: any) {
     };
 }
 
+const emptyVal = '';
+
+function isNullOrEmpty(v: any) {
+    return v === null || v === undefined || v === '' || v === emptyVal;
+}
+
 //#region VALIDATORS integration
 
 @Directive({
@@ -256,16 +256,18 @@ class CompareValidator implements Validator {
     constructor( @Attribute('operator') operator: compareOperators) {
         this._validator = (control: AbstractControl): { [key: string]: any } => {
             this._ctrl = control;
-            //if (Validators.required(control) /* != null && != undefined */) return null;
+            if (Validators.required(control) /* != null && != undefined */) return null;
             let v = control.value,
                 bm = this._benchmark;
             if (v == null) v = '';
             if (bm == null) bm = '';
             //
-            let result = ((v > bm && operator != 'greater' && operator != 'greaterOrEqual')
-                || (v < bm && operator != 'less' && operator != 'lessOrEqual')
-                || ((v == bm) && operator != 'equal' && operator != 'lessOrEqual' && operator != 'greaterOrEqual')
-                || (v != bm && operator == 'equal'))
+            let result = !isNullOrEmpty(v) && (
+                ((v > bm && operator != 'greater' && operator != 'greaterOrEqual')
+                    || (v < bm && operator != 'less' && operator != 'lessOrEqual')
+                    || ((v == bm) && operator != 'equal' && operator != 'lessOrEqual' && operator != 'greaterOrEqual')
+                    || (v != bm && operator == 'equal'))
+            )
                 ?
                 { 'compare': { 'compare': bm, 'actualValue': v } } :
                 null;
@@ -344,6 +346,280 @@ const keys = {
     TAB: 9,
     ENTER: 13
 };
+
+/**
+ * PacemDatetimePicker Component
+   TODO: add timezone selection/set (local is currently assumed)
+ */
+@Component({
+    selector: 'pacem-datetime-picker',
+    template: `<div class="pacem-datetime-picker">
+    <div class="pacem-datetime-picker-year">
+    <select class="pacem-select" [(ngModel)]="year" #yearel>
+        <option value="">...</option>
+        <option *ngFor="let yr of years" [value]="yr">{{ yr }}</option>
+    </select></div>
+    <div class="pacem-datetime-picker-month">
+    <select class="pacem-select" [(ngModel)]="month" #monthel>
+        <option value="">...</option>
+        <option *ngFor="let mth of months" [value]="mth.value">{{ mth.date | date: 'MMM' }}</option>
+    </select></div>
+    <div class="pacem-datetime-picker-date">
+    <select class="pacem-select" [(ngModel)]="date" [disabled]="(yearel.value === '' || monthel.value === '')">
+        <option value="">...</option>
+        <option *ngFor="let dt of dates" [value]="dt.value" [disabled]="dt.date > _maxDate || dt.date < _minDate">{{ dt.date | date: 'EEE dd' }}</option>
+    </select></div>
+    <div class="pacem-datetime-picker-hour" *ngIf="precision != 'day'">
+    <select class="pacem-select" [(ngModel)]="hours">
+        <option *ngFor="let hr of a24" [value]="hr">{{ hr | number:'2.0-0' }}</option>
+    </select></div>
+    <div class="pacem-datetime-picker-minute" *ngIf="precision != 'day'">
+    <select class="pacem-select" [(ngModel)]="minutes">
+        <option *ngFor="let min of a60" [value]="min">{{ min | number:'2.0-0' }}</option>
+    </select></div>
+    <div class="pacem-datetime-picker-second" *ngIf="precision == 'second'">
+    <select class="pacem-select" [(ngModel)]="seconds">
+        <option *ngFor="let sec of a60" [value]="sec">{{ sec | number:'2.0-0' }}</option>
+    </select></div>
+    <dl class="pacem-datetime-picker-preview" [pacemHidden]="!value">
+        <dt>local:</dt><dd>{{ value | date:'medium' }}</dd>
+        <dt>iso:</dt><dd>{{ value?.toISOString() }}</dd>
+    </dl>
+</div>`, providers: [NgModel]
+})
+export class PacemDatetimePicker extends BaseValueAccessor implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+
+    @Output('dateValueChange') onchange = new EventEmitter<Date>();
+
+    private _dateValue: Date;
+    get dateValue() {
+        return this.value;
+    }
+    @Input() set dateValue(v: Date) {
+        let former = this._dateValue && this._dateValue.valueOf();
+        let current = v && v.valueOf();
+        if (former !== current) {
+            this._dateValue = v;
+            this.disassembleDate(v);
+            if (v)
+                this.buildupDates();
+            this.onchange.emit(v);
+            this.value = v;
+        }
+    }
+
+    private _minDate: Date;
+    @Input('min') set minDate(v: string | Date) {
+        if (!v) return;
+        if (v instanceof Date)
+            this._minDate = v;
+        else
+            this._minDate = new Date(Date.parse(v));
+    }
+    private _maxDate: Date;
+    @Input('max') set maxDate(v: string | Date) {
+        if (!v) return;
+        if (v instanceof Date)
+            this._maxDate = v;
+        else
+            this._maxDate = new Date(Date.parse(v));
+    }
+    @Input() precision: 'day' | 'minute' | 'second' = 'day';
+
+    private disassembleDate(v: Date) {
+        if (!v) return;
+        this._year = v.getFullYear();
+        this._month = v.getMonth();
+        this._date = v.getDate();
+        this._hours = v.getHours();
+        this._minutes = v.getMinutes();
+        this._seconds = v.getSeconds();
+    }
+
+    private months: { value: number, date: Date }[] = [];
+    private dates: { value: number, date: Date }[] = [];
+    private a24: number[] = [];
+    private a60: number[] = [];
+    private years: number[] = [];
+    private datesAssembler = new Subject<any[]>();
+    private subscription: Subscription;
+
+    //#region date properties
+    private _year: number | string;
+    private get year() {
+        return this._year;
+    }
+    private set year(v: number | string) {
+        if (this._year != v) {
+            this._year = isNullOrEmpty(v) ? emptyVal : +v;
+            this.buildupDates();
+        }
+    }
+    private _month: number | string;
+    private get month() {
+        return this._month;
+    }
+    private set month(v: number | string) {
+        if (this._month != v) {
+            this._month = isNullOrEmpty(v) ? emptyVal : +v;
+            this.buildupDates();
+        }
+    }
+    private _date: number | string;
+    private get date() {
+        return this._date;
+    }
+    private set date(v: number | string) {
+        if (this._date != v) {
+            this._date = isNullOrEmpty(v) ? emptyVal : +v;
+            this.buildup();
+        }
+    }
+    private _hours: number = 0;
+    private get hours() {
+        return this._hours;
+    }
+    private set hours(v: number) {
+        if (this._hours != v) {
+            this._hours = +v;
+            this.buildup();
+        }
+    }
+    private _minutes: number = 0;
+    private get minutes() {
+        return this._minutes;
+    }
+    private set minutes(v: number) {
+        if (this._minutes != v) {
+            this._minutes = +v;
+            this.buildup();
+        }
+    }
+    private _seconds: number = 0;
+    private get seconds() {
+        return this._seconds;
+    }
+    private set seconds(v: number) {
+        if (this._seconds != v) {
+            this._seconds = +v;
+            this.buildup();
+        }
+    }
+    //#endregion
+
+    constructor(private model: NgModel) {
+        super(model);
+        const today = new Date();
+        let year = this.year = today.getFullYear();
+        this.minDate = new Date(year - 100, 0, 1);
+        this.maxDate = new Date(year + 10, 11, 31);
+        this.month = today.getMonth();
+        //
+        let months = [], hours = [], minutes = [];
+        // months
+        for (let i = 0; i < 12; i++) {
+            months.push({ value: i, date: new Date(year, i, 1) });
+        }
+        this.months = months;
+        // hours
+        for (let i = 0; i < 24; i++) {
+            hours.push(i);
+        }
+        this.a24 = hours;
+        // minutes/secs
+        for (let i = 0; i < 60; i++) {
+            minutes.push(i);
+        }
+        this.a60 = minutes;
+    }
+
+    private setupYears() {
+        let years = [];
+        for (let i = this._minDate.getFullYear(); i <= this._maxDate.getFullYear(); i++) {
+            years.push(i);
+        }
+        this.years = years;
+    }
+
+    ngOnInit() {
+        this.setupYears();
+        this.subscription = this.datesAssembler.asObservable()
+            .debounceTime(20)
+            .subscribe((dates: any[]) => {
+                this.dates = dates;
+                let adjusted = dates.length ? Math.min(<number>this.date, dates[dates.length - 1].value) : null;
+                if (adjusted != this.date)
+                    this.date = adjusted;
+                else
+                    this.buildup();
+            });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['minDate'] || changes['maxDate'])
+            this.setupYears();
+    }
+
+    ngAfterViewInit() {
+        this.buildupDates();
+    }
+
+    private buildupDates(evt?: Event) {
+        if (evt) evt.stopPropagation();
+        const v = this;
+        if (!isNullOrEmpty(v.year) && !isNullOrEmpty(v.month)) {
+            let day = 1,
+                dates = [],
+                isDate = (k: number) => {
+                    try {
+                        let monthvalue = +v.month, parsed = new Date(+v.year, +v.month, k);
+                        return parsed.getMonth() == monthvalue;
+                    } catch (e) {
+                        return false;
+                    }
+                };
+            do {
+                dates.push({ value: day, date: new Date(+v.year, +v.month, day) });
+            } while (isDate(++day));
+
+            this.datesAssembler.next(dates);
+        } else
+            this.datesAssembler.next([]);
+    }
+
+    private buildup(evt?: Event) {
+        if (evt) evt.stopPropagation();
+        //
+        const v = this;
+        let year = '', month = '', date = '';
+        if (isNullOrEmpty(v.year) || isNullOrEmpty(v.month) || isNullOrEmpty(v.date))
+            this.dateValue = null;
+        else
+            //
+            try {
+
+                let value = new Date();
+                value.setFullYear(+v.year);
+                value.setMonth(+v.month);
+                value.setDate(+v.date);
+                value.setHours(v.hours);
+                value.setMinutes(v.minutes);
+                value.setSeconds(v.seconds);
+                value.setMilliseconds(0);
+                if (!Number.isNaN(value.valueOf())) {
+                    this.dateValue = value;
+                }
+                else
+                    this.dateValue = null;
+            } catch (e) {
+                this.dateValue = null;
+            }
+    }
+}
 
 @Component({
     selector: 'pacem-autocomplete',
@@ -691,9 +967,9 @@ class PacemDefaultSelectOption implements DoCheck {
 
 @NgModule({
     imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule],
-    declarations: [CompareValidator, MinValidator, MaxValidator,
+    declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
         PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
-    exports: [CompareValidator, MinValidator, MaxValidator,
+    exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
         PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
     providers: [PacemExecCommand, DatasourceFetcher]
 })
@@ -804,7 +1080,7 @@ export class PacemFieldBuilder {
         };
 
         @NgModule({
-            imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule], 
+            imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule],
             declarations: [PacemFieldDynamicField],
             exports: [PacemFieldDynamicField]
         })
@@ -923,6 +1199,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                 tagName = 'pacem-select-many';
                 attrs['[datasource]'] = 'datasource';
                 delete attrs['class'];
+                delete attrs['placeholder'];
                 fetchData = field.extra;
                 detailTmpl = `<pacem-select-many [ngModel]="entity.${field.prop}" [datasource]="datasource" [readonly]="true"></pacem-select-many>`;
                 break;
@@ -952,12 +1229,17 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                         attrs['type'] = 'time';
                         break;
                     case "datetime":
-                        attrs['type'] = 'datetime'; // TODO: add datePicker
-                        detailTmpl = `<span class="pacem-readonly">{{ entity.${field.prop} | pacemDate | date:${getDateFormats((field.display && field.display.format) || 'D')} }}</span>`;
+                        tagName = 'pacem-datetime-picker';
+                        delete attrs['placeholder'];
+                        delete attrs['class'];
+                        attrs['precision'] = 'minute';
+                        detailTmpl = `<span class="pacem-readonly">{{ entity.${field.prop} | pacemDate | date:${getDateFormats((field.display && field.display.format) || 'medium')} }}</span>`;
                         break;
                     case "date":
-                        attrs['type'] = 'date'; // TODO: add datePicker
-                        detailTmpl = `<span class="pacem-readonly">{{ entity.${field.prop} | pacemDate | date:${getDateFormats((field.display && field.display.format) || 'D')} }}</span>`;
+                        tagName = 'pacem-datetime-picker';
+                        delete attrs['placeholder'];
+                        delete attrs['class'];
+                        detailTmpl = `<span class="pacem-readonly">{{ entity.${field.prop} | pacemDate | date:${getDateFormats((field.display && field.display.format) || 'medium')} }}</span>`;
                         break;
                     case "url":
                         attrs['type'] = 'url';
@@ -1046,8 +1328,21 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                         validatorsTmpl += `<li *ngIf="${formReference}.errors" [hidden]="!${formReference}.errors.pattern">${validator.errorMessage}</li>`;
                         break;
                     case 'compare':
-                        attrs['[compare]'] = `entity.${validator.params['to']}`;
-                        attrs['operator'] = validator.params['operator'] || 'equal';
+                        let comparedTo = attrs['[compare]'] = `entity.${validator.params['to']}`;
+                        let operator = attrs['operator'] = validator.params['operator'] || 'equal';
+                        // In case of `date(time)` try to add some interaction with `datetime-picker`'s min/max props.
+                        if (tagName === 'pacem-datetime-picker') {
+                            switch (operator) {
+                                case 'lessOrEqual':
+                                case 'less': // approximation: edge value won't be allowed but will result enabled on the `datetime-picker`
+                                    attrs['[max]'] = comparedTo;
+                                    break;
+                                case 'greaterOrEqual':
+                                case 'greater': // approximation: edge value won't be allowed but will result enabled on the `datetime-picker`
+                                    attrs['[min]'] = comparedTo;
+                                    break;
+                            }
+                        }
                         validatorsTmpl += `<li *ngIf="${formReference}.errors" [hidden]="!${formReference}.errors.compare">${validator.errorMessage}</li>`;
                 }
             });
@@ -1111,7 +1406,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
 @NgModule({
     imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule],
     declarations: [PacemField],
-    exports: [PacemField],
+    exports: [PacemField, PacemDatetimePicker],
     providers: [PacemExecCommand]
 })
 export class PacemScaffoldingModule { }

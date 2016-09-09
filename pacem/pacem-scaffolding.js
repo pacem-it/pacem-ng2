@@ -34,11 +34,6 @@ require('rxjs/add/operator/catch');
 require('rxjs/add/operator/distinctUntilChanged');
 require('rxjs/add/operator/debounceTime');
 require('rxjs/add/operator/map');
-var resolvedPromise = Promise.resolve(null);
-exports.formControlBinding = {
-    provide: forms_1.NgControl,
-    useExisting: core_1.forwardRef(function () { return forms_1.NgModel; })
-};
 var DatasourceFetcher = (function () {
     function DatasourceFetcher(http) {
         this.http = http;
@@ -162,6 +157,10 @@ function MakeValidatorProvider(type) {
         multi: true
     };
 }
+var emptyVal = '';
+function isNullOrEmpty(v) {
+    return v === null || v === undefined || v === '' || v === emptyVal;
+}
 //#region VALIDATORS integration
 var MinValidator = (function () {
     function MinValidator(min) {
@@ -212,17 +211,18 @@ var CompareValidator = (function () {
         var _this = this;
         this._validator = function (control) {
             _this._ctrl = control;
-            //if (Validators.required(control) /* != null && != undefined */) return null;
+            if (forms_1.Validators.required(control) /* != null && != undefined */)
+                return null;
             var v = control.value, bm = _this._benchmark;
             if (v == null)
                 v = '';
             if (bm == null)
                 bm = '';
             //
-            var result = ((v > bm && operator != 'greater' && operator != 'greaterOrEqual')
+            var result = !isNullOrEmpty(v) && (((v > bm && operator != 'greater' && operator != 'greaterOrEqual')
                 || (v < bm && operator != 'less' && operator != 'lessOrEqual')
                 || ((v == bm) && operator != 'equal' && operator != 'lessOrEqual' && operator != 'greaterOrEqual')
-                || (v != bm && operator == 'equal'))
+                || (v != bm && operator == 'equal')))
                 ?
                     { 'compare': { 'compare': bm, 'actualValue': v } } :
                 null;
@@ -325,6 +325,295 @@ var keys = {
     TAB: 9,
     ENTER: 13
 };
+/**
+ * PacemDatetimePicker Component
+   TODO: add timezone selection/set (local is currently assumed)
+ */
+var PacemDatetimePicker = (function (_super) {
+    __extends(PacemDatetimePicker, _super);
+    //#endregion
+    function PacemDatetimePicker(model) {
+        _super.call(this, model);
+        this.model = model;
+        this.onchange = new core_1.EventEmitter();
+        this.precision = 'day';
+        this.months = [];
+        this.dates = [];
+        this.a24 = [];
+        this.a60 = [];
+        this.years = [];
+        this.datesAssembler = new Subject_1.Subject();
+        this._hours = 0;
+        this._minutes = 0;
+        this._seconds = 0;
+        var today = new Date();
+        var year = this.year = today.getFullYear();
+        this.minDate = new Date(year - 100, 0, 1);
+        this.maxDate = new Date(year + 10, 11, 31);
+        this.month = today.getMonth();
+        //
+        var months = [], hours = [], minutes = [];
+        // months
+        for (var i = 0; i < 12; i++) {
+            months.push({ value: i, date: new Date(year, i, 1) });
+        }
+        this.months = months;
+        // hours
+        for (var i = 0; i < 24; i++) {
+            hours.push(i);
+        }
+        this.a24 = hours;
+        // minutes/secs
+        for (var i = 0; i < 60; i++) {
+            minutes.push(i);
+        }
+        this.a60 = minutes;
+    }
+    Object.defineProperty(PacemDatetimePicker.prototype, "dateValue", {
+        get: function () {
+            return this.value;
+        },
+        set: function (v) {
+            var former = this._dateValue && this._dateValue.valueOf();
+            var current = v && v.valueOf();
+            if (former !== current) {
+                this._dateValue = v;
+                this.disassembleDate(v);
+                if (v)
+                    this.buildupDates();
+                this.onchange.emit(v);
+                this.value = v;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "minDate", {
+        set: function (v) {
+            if (!v)
+                return;
+            if (v instanceof Date)
+                this._minDate = v;
+            else
+                this._minDate = new Date(Date.parse(v));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "maxDate", {
+        set: function (v) {
+            if (!v)
+                return;
+            if (v instanceof Date)
+                this._maxDate = v;
+            else
+                this._maxDate = new Date(Date.parse(v));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemDatetimePicker.prototype.disassembleDate = function (v) {
+        if (!v)
+            return;
+        this._year = v.getFullYear();
+        this._month = v.getMonth();
+        this._date = v.getDate();
+        this._hours = v.getHours();
+        this._minutes = v.getMinutes();
+        this._seconds = v.getSeconds();
+    };
+    Object.defineProperty(PacemDatetimePicker.prototype, "year", {
+        get: function () {
+            return this._year;
+        },
+        set: function (v) {
+            if (this._year != v) {
+                this._year = isNullOrEmpty(v) ? emptyVal : +v;
+                this.buildupDates();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "month", {
+        get: function () {
+            return this._month;
+        },
+        set: function (v) {
+            if (this._month != v) {
+                this._month = isNullOrEmpty(v) ? emptyVal : +v;
+                this.buildupDates();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "date", {
+        get: function () {
+            return this._date;
+        },
+        set: function (v) {
+            if (this._date != v) {
+                this._date = isNullOrEmpty(v) ? emptyVal : +v;
+                this.buildup();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "hours", {
+        get: function () {
+            return this._hours;
+        },
+        set: function (v) {
+            if (this._hours != v) {
+                this._hours = +v;
+                this.buildup();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "minutes", {
+        get: function () {
+            return this._minutes;
+        },
+        set: function (v) {
+            if (this._minutes != v) {
+                this._minutes = +v;
+                this.buildup();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemDatetimePicker.prototype, "seconds", {
+        get: function () {
+            return this._seconds;
+        },
+        set: function (v) {
+            if (this._seconds != v) {
+                this._seconds = +v;
+                this.buildup();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemDatetimePicker.prototype.setupYears = function () {
+        var years = [];
+        for (var i = this._minDate.getFullYear(); i <= this._maxDate.getFullYear(); i++) {
+            years.push(i);
+        }
+        this.years = years;
+    };
+    PacemDatetimePicker.prototype.ngOnInit = function () {
+        var _this = this;
+        this.setupYears();
+        this.subscription = this.datesAssembler.asObservable()
+            .debounceTime(20)
+            .subscribe(function (dates) {
+            _this.dates = dates;
+            var adjusted = dates.length ? Math.min(_this.date, dates[dates.length - 1].value) : null;
+            if (adjusted != _this.date)
+                _this.date = adjusted;
+            else
+                _this.buildup();
+        });
+    };
+    PacemDatetimePicker.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
+    PacemDatetimePicker.prototype.ngOnChanges = function (changes) {
+        if (changes['minDate'] || changes['maxDate'])
+            this.setupYears();
+    };
+    PacemDatetimePicker.prototype.ngAfterViewInit = function () {
+        this.buildupDates();
+    };
+    PacemDatetimePicker.prototype.buildupDates = function (evt) {
+        if (evt)
+            evt.stopPropagation();
+        var v = this;
+        if (!isNullOrEmpty(v.year) && !isNullOrEmpty(v.month)) {
+            var day = 1, dates = [], isDate = function (k) {
+                try {
+                    var monthvalue = +v.month, parsed = new Date(+v.year, +v.month, k);
+                    return parsed.getMonth() == monthvalue;
+                }
+                catch (e) {
+                    return false;
+                }
+            };
+            do {
+                dates.push({ value: day, date: new Date(+v.year, +v.month, day) });
+            } while (isDate(++day));
+            this.datesAssembler.next(dates);
+        }
+        else
+            this.datesAssembler.next([]);
+    };
+    PacemDatetimePicker.prototype.buildup = function (evt) {
+        if (evt)
+            evt.stopPropagation();
+        //
+        var v = this;
+        var year = '', month = '', date = '';
+        if (isNullOrEmpty(v.year) || isNullOrEmpty(v.month) || isNullOrEmpty(v.date))
+            this.dateValue = null;
+        else
+            //
+            try {
+                var value = new Date();
+                value.setFullYear(+v.year);
+                value.setMonth(+v.month);
+                value.setDate(+v.date);
+                value.setHours(v.hours);
+                value.setMinutes(v.minutes);
+                value.setSeconds(v.seconds);
+                value.setMilliseconds(0);
+                if (!Number.isNaN(value.valueOf())) {
+                    this.dateValue = value;
+                }
+                else
+                    this.dateValue = null;
+            }
+            catch (e) {
+                this.dateValue = null;
+            }
+    };
+    __decorate([
+        core_1.Output('dateValueChange'), 
+        __metadata('design:type', Object)
+    ], PacemDatetimePicker.prototype, "onchange", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], PacemDatetimePicker.prototype, "dateValue", null);
+    __decorate([
+        core_1.Input('min'), 
+        __metadata('design:type', Object), 
+        __metadata('design:paramtypes', [Object])
+    ], PacemDatetimePicker.prototype, "minDate", null);
+    __decorate([
+        core_1.Input('max'), 
+        __metadata('design:type', Object), 
+        __metadata('design:paramtypes', [Object])
+    ], PacemDatetimePicker.prototype, "maxDate", null);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], PacemDatetimePicker.prototype, "precision", void 0);
+    PacemDatetimePicker = __decorate([
+        core_1.Component({
+            selector: 'pacem-datetime-picker',
+            template: "<div class=\"pacem-datetime-picker\">\n    <div class=\"pacem-datetime-picker-year\">\n    <select class=\"pacem-select\" [(ngModel)]=\"year\" #yearel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let yr of years\" [value]=\"yr\">{{ yr }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-month\">\n    <select class=\"pacem-select\" [(ngModel)]=\"month\" #monthel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let mth of months\" [value]=\"mth.value\">{{ mth.date | date: 'MMM' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-date\">\n    <select class=\"pacem-select\" [(ngModel)]=\"date\" [disabled]=\"(yearel.value === '' || monthel.value === '')\">\n        <option value=\"\">...</option>\n        <option *ngFor=\"let dt of dates\" [value]=\"dt.value\" [disabled]=\"dt.date > _maxDate || dt.date < _minDate\">{{ dt.date | date: 'EEE dd' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-hour\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"hours\">\n        <option *ngFor=\"let hr of a24\" [value]=\"hr\">{{ hr | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-minute\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"minutes\">\n        <option *ngFor=\"let min of a60\" [value]=\"min\">{{ min | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-second\" *ngIf=\"precision == 'second'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"seconds\">\n        <option *ngFor=\"let sec of a60\" [value]=\"sec\">{{ sec | number:'2.0-0' }}</option>\n    </select></div>\n    <dl class=\"pacem-datetime-picker-preview\" [pacemHidden]=\"!value\">\n        <dt>local:</dt><dd>{{ value | date:'medium' }}</dd>\n        <dt>iso:</dt><dd>{{ value?.toISOString() }}</dd>\n    </dl>\n</div>", providers: [forms_1.NgModel]
+        }), 
+        __metadata('design:paramtypes', [forms_1.NgModel])
+    ], PacemDatetimePicker);
+    return PacemDatetimePicker;
+}(BaseValueAccessor));
+exports.PacemDatetimePicker = PacemDatetimePicker;
 var PacemAutocomplete = (function (_super) {
     __extends(PacemAutocomplete, _super);
     function PacemAutocomplete(model, root) {
@@ -655,9 +944,9 @@ var PacemScaffoldingInternalModule = (function () {
     PacemScaffoldingInternalModule = __decorate([
         core_1.NgModule({
             imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule],
-            declarations: [CompareValidator, MinValidator, MaxValidator,
+            declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
                 PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
-            exports: [CompareValidator, MinValidator, MaxValidator,
+            exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
                 PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
             providers: [PacemExecCommand, DatasourceFetcher]
         }), 
@@ -867,6 +1156,7 @@ var PacemField = (function () {
                 tagName = 'pacem-select-many';
                 attrs['[datasource]'] = 'datasource';
                 delete attrs['class'];
+                delete attrs['placeholder'];
                 fetchData = field.extra;
                 detailTmpl = "<pacem-select-many [ngModel]=\"entity." + field.prop + "\" [datasource]=\"datasource\" [readonly]=\"true\"></pacem-select-many>";
                 break;
@@ -896,12 +1186,17 @@ var PacemField = (function () {
                         attrs['type'] = 'time';
                         break;
                     case "datetime":
-                        attrs['type'] = 'datetime'; // TODO: add datePicker
-                        detailTmpl = "<span class=\"pacem-readonly\">{{ entity." + field.prop + " | pacemDate | date:" + getDateFormats((field.display && field.display.format) || 'D') + " }}</span>";
+                        tagName = 'pacem-datetime-picker';
+                        delete attrs['placeholder'];
+                        delete attrs['class'];
+                        attrs['precision'] = 'minute';
+                        detailTmpl = "<span class=\"pacem-readonly\">{{ entity." + field.prop + " | pacemDate | date:" + getDateFormats((field.display && field.display.format) || 'medium') + " }}</span>";
                         break;
                     case "date":
-                        attrs['type'] = 'date'; // TODO: add datePicker
-                        detailTmpl = "<span class=\"pacem-readonly\">{{ entity." + field.prop + " | pacemDate | date:" + getDateFormats((field.display && field.display.format) || 'D') + " }}</span>";
+                        tagName = 'pacem-datetime-picker';
+                        delete attrs['placeholder'];
+                        delete attrs['class'];
+                        detailTmpl = "<span class=\"pacem-readonly\">{{ entity." + field.prop + " | pacemDate | date:" + getDateFormats((field.display && field.display.format) || 'medium') + " }}</span>";
                         break;
                     case "url":
                         attrs['type'] = 'url';
@@ -988,8 +1283,21 @@ var PacemField = (function () {
                         validatorsTmpl += "<li *ngIf=\"" + formReference + ".errors\" [hidden]=\"!" + formReference + ".errors.pattern\">" + validator.errorMessage + "</li>";
                         break;
                     case 'compare':
-                        attrs['[compare]'] = "entity." + validator.params['to'];
-                        attrs['operator'] = validator.params['operator'] || 'equal';
+                        var comparedTo = attrs['[compare]'] = "entity." + validator.params['to'];
+                        var operator = attrs['operator'] = validator.params['operator'] || 'equal';
+                        // In case of `date(time)` try to add some interaction with `datetime-picker`'s min/max props.
+                        if (tagName === 'pacem-datetime-picker') {
+                            switch (operator) {
+                                case 'lessOrEqual':
+                                case 'less':
+                                    attrs['[max]'] = comparedTo;
+                                    break;
+                                case 'greaterOrEqual':
+                                case 'greater':
+                                    attrs['[min]'] = comparedTo;
+                                    break;
+                            }
+                        }
                         validatorsTmpl += "<li *ngIf=\"" + formReference + ".errors\" [hidden]=\"!" + formReference + ".errors.compare\">" + validator.errorMessage + "</li>";
                 }
             });
@@ -1082,7 +1390,7 @@ var PacemScaffoldingModule = (function () {
         core_1.NgModule({
             imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
             declarations: [PacemField],
-            exports: [PacemField],
+            exports: [PacemField, PacemDatetimePicker],
             providers: [PacemExecCommand]
         }), 
         __metadata('design:paramtypes', [])

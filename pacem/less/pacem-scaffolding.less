@@ -8,11 +8,12 @@
     font-size: .86em;
 }
 
-@keyframes pacem-rotate-anim{
-    0%{
+@keyframes pacem-rotate-anim {
+    0% {
         transform: rotate(0);
     }
-    100%{
+
+    100% {
         transform: rotate(360deg);
     }
 }
@@ -210,11 +211,11 @@
 
         pacem-select-many,
         .pacem-contenteditable,
-        .pacem-select,
+        > .pacem-select,
         .pacem-input {
+            min-width: 175px;
             border: 0;
             border-bottom: 2px solid @color_lightblue;
-            min-width: 175px;
 
             &.ng-pristine {
                 &.ng-invalid {
@@ -338,7 +339,7 @@
 
             pacem-select-many,
             .pacem-contenteditable,
-            .pacem-select,
+            > .pacem-select,
             .pacem-input {
                 &.ng-valid {
 
@@ -358,6 +359,127 @@
         label.pacem-label:before {
             content: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTcuNjUgNi4zNUMxNi4yIDQuOSAxNC4yMSA0IDEyIDRjLTQuNDIgMC03Ljk5IDMuNTgtNy45OSA4czMuNTcgOCA3Ljk5IDhjMy43MyAwIDYuODQtMi41NSA3LjczLTZoLTIuMDhjLS44MiAyLjMzLTMuMDQgNC01LjY1IDQtMy4zMSAwLTYtMi42OS02LTZzMi42OS02IDYtNmMxLjY2IDAgMy4xNC42OSA0LjIyIDEuNzhMMTMgMTFoN1Y0bC0yLjM1IDIuMzV6IiAvPg0KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+DQo8L3N2Zz4=') /*../images/refresh.svg*/;
             animation: pacem-rotate-anim .67s linear infinite;
+        }
+    }
+}
+
+.pacem-datetime-picker {
+
+    > div {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .pacem-datetime-picker-hour {
+
+        @_sz: @grid_spacing * .75;
+
+        padding-left: @_sz;
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTEuOTkgMkM2LjQ3IDIgMiA2LjQ4IDIgMTJzNC40NyAxMCA5Ljk5IDEwQzE3LjUyIDIyIDIyIDE3LjUyIDIyIDEyUzE3LjUyIDIgMTEuOTkgMnpNMTIgMjBjLTQuNDIgMC04LTMuNTgtOC04czMuNTgtOCA4LTggOCAzLjU4IDggOC0zLjU4IDgtOCA4eiIgLz4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0xMi41IDdIMTF2Nmw1LjI1IDMuMTUuNzUtMS4yMy00LjUtMi42N3oiIC8+DQo8L3N2Zz4=') /*../images/clock.svg*/;
+        background-size: @_sz;
+    }
+
+    dl {
+        @_h: @grid_spacing * 1.3333;
+        padding: @grid_spacing/6 0;
+        overflow: hidden;
+        height: @_h;
+
+        dt, dd {
+            line-height: @_h * .5;
+            height: @_h * .5;
+        }
+
+        dt {
+            float: left;
+            vertical-align: middle;
+            width: @grid_spacing;
+            background: center center no-repeat;
+            background-size: contain;
+            font-size: 0;
+
+            &:nth-of-type(2) {
+                background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0xMS45OSAyQzYuNDcgMiAyIDYuNDggMiAxMnM0LjQ3IDEwIDkuOTkgMTBDMTcuNTIgMjIgMjIgMTcuNTIgMjIgMTJTMTcuNTIgMiAxMS45OSAyem02LjkzIDZoLTIuOTVjLS4zMi0xLjI1LS43OC0yLjQ1LTEuMzgtMy41NiAxLjg0LjYzIDMuMzcgMS45MSA0LjMzIDMuNTZ6TTEyIDQuMDRjLjgzIDEuMiAxLjQ4IDIuNTMgMS45MSAzLjk2aC0zLjgyYy40My0xLjQzIDEuMDgtMi43NiAxLjkxLTMuOTZ6TTQuMjYgMTRDNC4xIDEzLjM2IDQgMTIuNjkgNCAxMnMuMS0xLjM2LjI2LTJoMy4zOGMtLjA4LjY2LS4xNCAxLjMyLS4xNCAyIDAgLjY4LjA2IDEuMzQuMTQgMkg0LjI2em0uODIgMmgyLjk1Yy4zMiAxLjI1Ljc4IDIuNDUgMS4zOCAzLjU2LTEuODQtLjYzLTMuMzctMS45LTQuMzMtMy41NnptMi45NS04SDUuMDhjLjk2LTEuNjYgMi40OS0yLjkzIDQuMzMtMy41NkM4LjgxIDUuNTUgOC4zNSA2Ljc1IDguMDMgOHpNMTIgMTkuOTZjLS44My0xLjItMS40OC0yLjUzLTEuOTEtMy45NmgzLjgyYy0uNDMgMS40My0xLjA4IDIuNzYtMS45MSAzLjk2ek0xNC4zNCAxNEg5LjY2Yy0uMDktLjY2LS4xNi0xLjMyLS4xNi0yIDAtLjY4LjA3LTEuMzUuMTYtMmg0LjY4Yy4wOS42NS4xNiAxLjMyLjE2IDIgMCAuNjgtLjA3IDEuMzQtLjE2IDJ6bS4yNSA1LjU2Yy42LTEuMTEgMS4wNi0yLjMxIDEuMzgtMy41NmgyLjk1Yy0uOTYgMS42NS0yLjQ5IDIuOTMtNC4zMyAzLjU2ek0xNi4zNiAxNGMuMDgtLjY2LjE0LTEuMzIuMTQtMiAwLS42OC0uMDYtMS4zNC0uMTQtMmgzLjM4Yy4xNi42NC4yNiAxLjMxLjI2IDJzLS4xIDEuMzYtLjI2IDJoLTMuMzh6IiAvPg0KPC9zdmc+') /*../images/global.svg*/;
+            }
+
+            &:nth-of-type(1) {
+                background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6IiAvPg0KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+DQo8L3N2Zz4=') /*../images/location.svg*/;
+            }
+        }
+
+        dd {
+            clear: right;
+            margin-left: @grid_spacing;
+            font-size: .8em;
+            font-family: @font_tech;
+
+            &:nth-of-type(2) {
+                color: fade(@color_tech, 100);
+            }
+        }
+
+        &.pacem-hidden {
+            transition: all .3s;
+            transform: none;
+            height: 0;
+        }
+
+        &.pacem-shown {
+            transition: all .3s /*cubic-bezier(0.23, 1, 0.32, 1)*/ .1s;
+            transform: none;
+        }
+    }
+}
+
+.pacem-input-container .pacem-datetime-picker .pacem-select {
+    min-width: 56px;
+}
+
+.pacem-field .pacem-input-container pacem-datetime-picker {
+    border: 0;
+    border-bottom: 2px solid @color_lightblue;
+
+    .pacem-select {
+        border: 0;
+        border-bottom: 2px solid @color_lightblue;
+    }
+
+    &.ng-pristine {
+        &.ng-invalid {
+
+            .pacem-select {
+                border-color: fade(@color_red, 20);
+            }
+        }
+    }
+
+    &.ng-dirty {
+        &.ng-invalid {
+            .pacem-select {
+                border-color: @color_red;
+            }
+        }
+
+        &.ng-valid {
+        }
+    }
+
+    &.has-value {
+        &.ng-valid {
+
+            &.ng-dirty {
+                .pacem-select {
+                    border-color: fade( @color_tech, 100);
+                }
+            }
+
+            &.ng-pristine {
+                .pacem-select {
+                    border-color: fade(fade( @color_tech, 100), 20);
+                }
+            }
         }
     }
 }

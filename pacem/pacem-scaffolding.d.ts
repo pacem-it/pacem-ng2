@@ -1,5 +1,5 @@
-import { Compiler, ViewContainerRef, ElementRef, OnDestroy, OnChanges, AfterViewInit, SimpleChanges } from '@angular/core';
-import { NgControl, ControlValueAccessor } from '@angular/forms';
+import { Compiler, EventEmitter, ViewContainerRef, ElementRef, OnDestroy, OnInit, OnChanges, AfterViewInit, SimpleChanges } from '@angular/core';
+import { NgControl, ControlValueAccessor, NgModel } from '@angular/forms';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/toPromise';
@@ -7,7 +7,6 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
-export declare const formControlBinding: any;
 export declare type pacemFieldMetadata = {
     prop: string;
     type: string;
@@ -58,6 +57,49 @@ export declare class PacemExecCommand {
         UNORDEREDLIST: string;
     };
     exec(command: string, arg?: string, target?: any): Promise<{}>;
+}
+/**
+ * PacemDatetimePicker Component
+   TODO: add timezone selection/set (local is currently assumed)
+ */
+export declare class PacemDatetimePicker extends BaseValueAccessor implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+    private model;
+    onchange: EventEmitter<Date>;
+    private _dateValue;
+    dateValue: Date;
+    private _minDate;
+    minDate: string | Date;
+    private _maxDate;
+    maxDate: string | Date;
+    precision: 'day' | 'minute' | 'second';
+    private disassembleDate(v);
+    private months;
+    private dates;
+    private a24;
+    private a60;
+    private years;
+    private datesAssembler;
+    private subscription;
+    private _year;
+    private year;
+    private _month;
+    private month;
+    private _date;
+    private date;
+    private _hours;
+    private hours;
+    private _minutes;
+    private minutes;
+    private _seconds;
+    private seconds;
+    constructor(model: NgModel);
+    private setupYears();
+    ngOnInit(): void;
+    ngOnDestroy(): void;
+    ngOnChanges(changes: SimpleChanges): void;
+    ngAfterViewInit(): void;
+    private buildupDates(evt?);
+    private buildup(evt?);
 }
 export declare class PacemFieldBuilder {
     createComponent(selector: string, template: string, ctrlRef: string, injectDirectives?: any[]): any;

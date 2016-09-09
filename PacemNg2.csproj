@@ -38,6 +38,10 @@
       <DependentUpon>pacem.css</DependentUpon>
     </Content>
     <Content Include="metadata-net.json" />
+    <Content Include="gallery.json" />
+    <Content Include="pacem\images\clock.svg" />
+    <Content Include="pacem\images\global.svg" />
+    <Content Include="pacem\images\location.svg" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -97,6 +101,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="app\app.pacemCalendar.component.ts" />
     <TypeScriptCompile Include="app\app.404.component.ts" />
     <TypeScriptCompile Include="app\app.component.ts" />
     <TypeScriptCompile Include="app\app.module.ts" />

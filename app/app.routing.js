@@ -11,6 +11,7 @@ var app_pacemScaffolding_component_1 = require('./app.pacemScaffolding.component
 var app_pacem3D_component_1 = require('./app.pacem3D.component');
 var app_pacemBind_component_1 = require('./app.pacemBind.component');
 var app_pacemNet_component_1 = require('./app.pacemNet.component');
+var app_pacemCalendar_component_1 = require('./app.pacemCalendar.component');
 exports.pages = [
     { label: 'networking', component: app_pacemNet_component_1.PacemNetComponent },
     { label: 'map (leafletJS)', component: app_pacemMap_component_1.PacemMapComponent },
@@ -19,6 +20,7 @@ exports.pages = [
     { label: 'balloon', component: app_pacemBalloon_component_1.PacemBalloonComponent },
     { label: 'uploader', component: app_pacemUploader_component_1.PacemUploaderComponent },
     { label: 'charts', component: app_pacemCharts_component_1.PacemChartsComponent },
+    { label: 'calendar', component: app_pacemCalendar_component_1.PacemCalendarComponent },
     { label: 'scaffolding', component: app_pacemScaffolding_component_1.PacemScaffoldingComponent },
     { label: '3D', component: app_pacem3D_component_1.Pacem3DComponent },
     { label: 'binds', component: app_pacemBind_component_1.PacemBindComponent }
