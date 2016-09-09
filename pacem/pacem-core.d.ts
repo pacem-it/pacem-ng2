@@ -3,6 +3,8 @@ export declare class PacemUtils {
     static core: any;
     static uniqueCode(): string;
     static parseDate(input: string | Date): Date;
+    static blobToDataURL(blob: Blob): PacemPromise<Blob>;
+    static dataURLToBlob(dataurl: string): Blob;
     static is(el: any, selector: string): boolean;
     static hasClass(el: HTMLElement, className: string): boolean;
     static isVisible(el: HTMLElement): boolean;

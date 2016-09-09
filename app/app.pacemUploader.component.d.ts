@@ -7,7 +7,7 @@ export declare class PacemUploaderComponent implements AfterViewInit {
     private doUrl;
     private undoUrl;
     constructor(renderer: Renderer);
-    private upload(buffer);
+    private upload(dataUrl);
     ngAfterViewInit(): void;
     private complete(evt);
 }

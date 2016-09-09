@@ -1,4 +1,5 @@
-﻿import { PacemUploader, PacemSnapshot } from './../pacem/pacem-ui';
+﻿import { PacemUtils } from './../pacem/pacem-core';
+import { PacemUploader, PacemSnapshot } from './../pacem/pacem-ui';
 import { Component, Input, ViewChild, Renderer, AfterViewInit, ElementRef } from '@angular/core';
 
 const baseUrl: string = 'uploader.ashx';
@@ -44,7 +45,8 @@ export class PacemUploaderComponent implements AfterViewInit {
     constructor(private renderer: Renderer) {
     }
 
-    private upload(buffer:Blob) {
+    private upload(dataUrl: string) {
+        const buffer = PacemUtils.dataURLToBlob(dataUrl);
         let f = new File([buffer], 'snapshot.jpg');
         this.uploader.upload(f);
     }

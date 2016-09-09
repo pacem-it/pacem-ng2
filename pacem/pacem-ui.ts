@@ -1177,27 +1177,6 @@ export class PacemInViewport implements OnDestroy, OnInit {
     }
 }
 
-function base64toBlob(b64Data: string, contentType: string, sliceSize: number = 512): Blob {
-    const byteCharacters = atob(b64Data);
-    const byteArrays = [];
-
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-
-        byteArrays.push(byteArray);
-    }
-
-    const blob = new Blob(byteArrays, { type: contentType });
-    return blob;
-}
-
 /**
  * PacemUploader Component
  */
@@ -1508,7 +1487,7 @@ export class PacemSnapshot {
     @ViewChild('stage') canvas: ElementRef;
     @ViewChild('player') video: ElementRef;
     @ViewChild('root') root: ElementRef;
-    @Output('select') onselect = new EventEmitter<Blob>();
+    @Output('select') onselect = new EventEmitter<string>();
 
     private _status: string = 'start';
     private previousStatuses: string[] = [];
@@ -1549,7 +1528,7 @@ export class PacemSnapshot {
         evt.preventDefault();
         evt.stopPropagation();
         this.onselect.emit(
-            base64toBlob(this.buffer, 'image/jpeg')
+            'data:image/jpeg;base64,'+this.buffer
         );
         this.previousStatuses.splice(0);
         this._status = 'start';

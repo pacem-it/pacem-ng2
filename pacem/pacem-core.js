@@ -52,6 +52,23 @@ var PacemUtils = (function () {
         else
             return input;
     };
+    // #region blob/files...
+    // thanks to @cuixiping: http://stackoverflow.com/questions/23150333
+    PacemUtils.blobToDataURL = function (blob) {
+        var deferred = PacemPromise.defer();
+        var a = new FileReader();
+        a.onload = function (e) { deferred.resolve(e.target['result']); };
+        a.readAsDataURL(blob);
+        return deferred.promise;
+    };
+    PacemUtils.dataURLToBlob = function (dataurl) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    };
+    // #endregion
     // #endregion
     // #region DOM
     PacemUtils.is = function (el, selector) {

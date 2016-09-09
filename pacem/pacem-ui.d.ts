@@ -286,7 +286,7 @@ export declare class PacemSnapshot {
     canvas: ElementRef;
     video: ElementRef;
     root: ElementRef;
-    onselect: EventEmitter<Blob>;
+    onselect: EventEmitter<string>;
     private _status;
     private previousStatuses;
     private status;

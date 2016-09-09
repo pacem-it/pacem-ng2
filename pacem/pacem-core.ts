@@ -45,6 +45,26 @@ export class PacemUtils {
             return input as Date;
     }
 
+    // #region blob/files...
+    // thanks to @cuixiping: http://stackoverflow.com/questions/23150333
+    static blobToDataURL(blob: Blob) {
+        var deferred = PacemPromise.defer<Blob>();
+        var a = new FileReader();
+        a.onload = function (e) { deferred.resolve(e.target['result']); }
+        a.readAsDataURL(blob);
+        return deferred.promise;
+    }
+
+    static dataURLToBlob(dataurl: string) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+    // #endregion
+
     // #endregion
 
     // #region DOM

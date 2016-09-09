@@ -1292,22 +1292,6 @@ var PacemInViewport = (function () {
     return PacemInViewport;
 }());
 exports.PacemInViewport = PacemInViewport;
-function base64toBlob(b64Data, contentType, sliceSize) {
-    if (sliceSize === void 0) { sliceSize = 512; }
-    var byteCharacters = atob(b64Data);
-    var byteArrays = [];
-    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        var slice = byteCharacters.slice(offset, offset + sliceSize);
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-        var byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-    }
-    var blob = new Blob(byteArrays, { type: contentType });
-    return blob;
-}
 /**
  * PacemUploader Component
  */
@@ -1660,7 +1644,7 @@ var PacemSnapshot = (function () {
     PacemSnapshot.prototype.confirm = function (evt) {
         evt.preventDefault();
         evt.stopPropagation();
-        this.onselect.emit(base64toBlob(this.buffer, 'image/jpeg'));
+        this.onselect.emit('data:image/jpeg;base64,' + this.buffer);
         this.previousStatuses.splice(0);
         this._status = 'start';
         this.cref.detectChanges();

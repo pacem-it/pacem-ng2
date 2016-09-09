@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var pacem_core_1 = require('./../pacem/pacem-core');
 var pacem_ui_1 = require('./../pacem/pacem-ui');
 var core_1 = require('@angular/core');
 var baseUrl = 'uploader.ashx';
@@ -18,7 +19,8 @@ var PacemUploaderComponent = (function () {
         this.doUrl = baseUrl + "?what=do";
         this.undoUrl = baseUrl + "?what=undo";
     }
-    PacemUploaderComponent.prototype.upload = function (buffer) {
+    PacemUploaderComponent.prototype.upload = function (dataUrl) {
+        var buffer = pacem_core_1.PacemUtils.dataURLToBlob(dataUrl);
         var f = new File([buffer], 'snapshot.jpg');
         this.uploader.upload(f);
     };
