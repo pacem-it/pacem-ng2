@@ -68,6 +68,58 @@ var PacemUtils = (function () {
         }
         return new Blob([u8arr], { type: mime });
     };
+    /**
+     * Crops an image having the provided url (might be a dataURL) into another having the provided size
+     * @param url
+     * @param width
+     * @param height
+     * @param ctx
+     */
+    PacemUtils.cropImage = function (url, width, height) {
+        var deferred = PacemPromise.defer();
+        var el = new Image();
+        el.onload = function (ev) {
+            var cnv = document.createElement('canvas');
+            var ctx = cnv.getContext('2d');
+            if (width)
+                ctx.canvas.width = width;
+            if (height)
+                ctx.canvas.height = height;
+            PacemUtils.cropImageOntoCanvas(el, ctx);
+            deferred.resolve(ctx.canvas.toDataURL());
+        };
+        el.src = url;
+        return deferred.promise;
+    };
+    /**
+     * Crops the snapshot of a drawable element onto a provided canvas context. It gets centered in the area anc cropped (`cover`-like behavior).
+     * @param el drawable element
+     * @param ctx canvas context
+     * @param sourceWidth forced source width
+     * @param sourceHeight forced source height
+     */
+    PacemUtils.cropImageOntoCanvas = function (el, ctx, sourceWidth, sourceHeight) {
+        //
+        var tgetW = ctx.canvas.width;
+        var tgetH = ctx.canvas.height;
+        var cnvW = tgetW, cnvH = tgetH;
+        var w = sourceWidth || 1.0 * el.width, h = sourceHeight || 1.0 * el.height;
+        //console.log('img original size: ' + w + 'x' + h);
+        var ratio = w / h;
+        var tgetRatio = tgetW / tgetH;
+        if (tgetRatio > ratio) {
+            // crop vertically
+            var f = tgetW / w;
+            tgetH = f * h;
+            ctx.drawImage(el, 0, .5 * (-tgetH + cnvH), cnvW, tgetH);
+        }
+        else {
+            // crop horizontally
+            var f = tgetH / h;
+            tgetW = f * w;
+            ctx.drawImage(el, -Math.abs(.5 * (-tgetW + cnvW)), 0, tgetW, cnvH);
+        }
+    };
     // #endregion
     // #endregion
     // #region DOM

@@ -5,6 +5,22 @@ export declare class PacemUtils {
     static parseDate(input: string | Date): Date;
     static blobToDataURL(blob: Blob): PacemPromise<Blob>;
     static dataURLToBlob(dataurl: string): Blob;
+    /**
+     * Crops an image having the provided url (might be a dataURL) into another having the provided size
+     * @param url
+     * @param width
+     * @param height
+     * @param ctx
+     */
+    static cropImage(url: string, width?: number, height?: number): PromiseLike<string>;
+    /**
+     * Crops the snapshot of a drawable element onto a provided canvas context. It gets centered in the area anc cropped (`cover`-like behavior).
+     * @param el drawable element
+     * @param ctx canvas context
+     * @param sourceWidth forced source width
+     * @param sourceHeight forced source height
+     */
+    static cropImageOntoCanvas(el: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, ctx: CanvasRenderingContext2D, sourceWidth?: number, sourceHeight?: number): void;
     static is(el: any, selector: string): boolean;
     static hasClass(el: HTMLElement, className: string): boolean;
     static isVisible(el: HTMLElement): boolean;

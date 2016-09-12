@@ -9,7 +9,7 @@ import { Validators, Validator, ValidatorFn, NG_VALIDATORS, AbstractControl, NgC
 import { CommonModule } from '@angular/common';
 import { PacemUtils, PacemDate, PacemCoreModule } from './pacem-core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import { PacemBalloon, PacemHighlight, PacemUIModule } from './pacem-ui';
+import { PacemBalloon, PacemHighlight, PacemUIModule, PacemSnapshot, PacemLightbox } from './pacem-ui';
 import { Http, Response, XHRBackend }     from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -178,6 +178,41 @@ export abstract class BaseValueAccessor implements ControlValueAccessor {
     private onTouched = () => { };
     registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
     registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+}
+
+@Directive({
+    selector:
+    '.pacem-radio-list[ngModel]'
+})
+class RadioControlListValueAccessor extends BaseValueAccessor {
+
+    constructor(model: NgModel) {
+        super(model);
+    }
+}
+
+@Directive({
+    selector:
+    'input.pacem-radio[type=radio][ngModel]',
+    host: { '(change)': 'onChange($event.target.value);changeValue($event.target.value)', '(blur)': 'onTouched()' }
+})
+class RadioControlValueAccessor extends BaseValueAccessor {
+
+    constructor(private _renderer: Renderer, private _elementRef: ElementRef, model: NgModel, private list: RadioControlListValueAccessor) {
+        super(model);
+    }
+
+    writeValue(value: any): void {
+        super.writeValue(value);
+        this._renderer.setElementProperty(this._elementRef.nativeElement, 'checked', value == this._elementRef.nativeElement.value);
+    }
+
+    private changeValue(v: any): void {
+        let list = this.list;
+        if (list)
+            list.value = v;
+    }
+
 }
 
 function MakeValidatorProvider(type: any) {
@@ -877,6 +912,55 @@ class PacemContentEditable extends BaseValueAccessor implements OnInit, OnDestro
 }
 
 @Component({
+    selector: 'pacem-thumbnail[ngModel]',
+    template: `<img [ngStyle]="{ 'width': width+'px', 'height': height+'px' }" class="pacem-thumbnail" [attr.src]="source" (click)="changing=true" />
+<pacem-lightbox #lightbox [show]="changing" (close)="changing=false">
+    <pacem-snapshot (select)="onchange($event)" #snapshot>
+    Webcam access is <b>impossile</b> on this machine!
+    </pacem-snapshot>
+</pacem-lightbox>
+`
+})
+class PacemThumbnail extends BaseValueAccessor {
+
+    @ViewChild('lightbox') lightbox: PacemLightbox;
+    @ViewChild('snapshot') snapshot: PacemSnapshot;
+    @Input() mode: 'url' | 'binary' = 'binary';
+    @Input() width: number;
+    @Input() height: number;
+    private changing: boolean;
+
+    constructor(private model: NgModel) {
+        super(model);
+    }
+
+    private get source(): string {
+        switch (this.mode) {
+            case 'url':
+                return this.value;
+            case 'binary':
+                return 'data:image/png;base64,' + this.value;
+        }
+    }
+
+    private onchange(dataUrl: string) {
+        this.changing = false;
+        PacemUtils.cropImage(dataUrl, this.width, this.height)
+            .then((resizedDataUrl) => {
+                switch (this.mode) {
+                    case 'url':
+                        this.value = resizedDataUrl;
+                        break;
+                    case 'binary':
+                        this.value = resizedDataUrl.substr(resizedDataUrl.indexOf(',') + 1);
+                        break;
+                }
+            });
+    }
+
+}
+
+@Component({
     selector: 'pacem-select-many[ngModel]',
     template: `<ul class="pacem-select-many" *ngIf="!readonly"><li *ngFor="let item of datasource; let ndx=index">
     <input type="checkbox" [value]="item.value" (change)="toggle($event, item)" [checked]="item.selected" [id]="uid+'_'+ndx" />
@@ -967,10 +1051,10 @@ class PacemDefaultSelectOption implements DoCheck {
 
 @NgModule({
     imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule],
-    declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
-        PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
-    exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
-        PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
+    declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
+        PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
+    exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
+        PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
     providers: [PacemExecCommand, DatasourceFetcher]
 })
 class PacemScaffoldingInternalModule { }
@@ -1014,7 +1098,6 @@ export class PacemFieldBuilder {
                     //this.ref.detectChanges();
                 });
             }
-
             datasource: Datasource;
             fetching: boolean;
             hasValue: boolean;
@@ -1170,11 +1253,20 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
         let formReference = (field.prop + PacemUtils.uniqueCode()).toLowerCase();
         attrs['#' + formReference] = 'ngModel';
         switch (field.display && field.display.ui) {
+            // TODO: remove this (use dataType = 'HTML' instead).
             case 'contentEditable':
+                console.warn('`contentEditable` ui hint is deprecated. Lean on `dataType` equal to \'HTML\' instead.');
                 tagName = 'div';
                 attrs['contenteditable'] = 'true';
                 attrs['class'] = 'pacem-contenteditable';
                 detailTmpl = `<div class="pacem-readonly" [innerHTML]="entity.${field.prop}"></div>`;
+                break;
+            case 'snapshot':
+                tagName = 'pacem-thumbnail';
+                let w = attrs['[width]'] = field.extra.width;
+                let h = attrs['[height]'] = field.extra.height;
+                let mode = attrs['mode'] = field.type.toLowerCase() === 'string' ? 'string' : 'binary';
+                detailTmpl = `<img class="pacem-readonly" width="${w}" height="${h}" [attr.src]="'${(mode == "string" ? "" : "data:image/png;base64,")}'+entity.${field.prop}" />`;
                 break;
             case 'oneToMany':
                 // select
@@ -1219,6 +1311,29 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                 break;
             default:
                 switch ((field.dataType || field.type).toLowerCase()) {
+                    case 'html':
+                        tagName = 'div';
+                        attrs['contenteditable'] = 'true';
+                        attrs['class'] = 'pacem-contenteditable';
+                        detailTmpl = `<div class="pacem-readonly" [innerHTML]="entity.${field.prop}"></div>`;
+                        break;
+                    case 'enumeration':
+                        // radiobutton list
+                        tagName = 'ol';
+                        attrs['class'] = 'pacem-radio-list';
+                        innerHtml = '';
+                        detailTmpl = '<span class="pacem-readonly">';
+                        (<Datasource>this.field.extra.enum).forEach((kvp, j) => {
+                            detailTmpl += `<span *ngIf="${kvp.value} == entity.${field.prop}">${kvp.caption}</span>`;
+                            innerHtml +=
+                                `<li><input [(ngModel)]="${attrs['[(ngModel)]']}" type="radio" class="pacem-radio" name="${attrs['name']}" value="${kvp.value}" id="${attrs['id']}_${j}" />
+<label for="${attrs['id']}_${j}">${kvp.caption}</label></li>`;
+                        });
+                        //innerHtml +='';
+                        detailTmpl += '</span>';
+                        delete attrs['type'];
+                        delete attrs['name'];
+                        break;
                     case 'password':
                         attrs['type'] = 'password';
                         break;
@@ -1255,7 +1370,8 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                         switch ((field.type || '').toLowerCase()) {
                             case "boolean":
                                 attrs['type'] = 'checkbox';
-                                detailTmpl = `<span class="pacem-check pacem-readonly" [ngClass]="{ 'pacem-checked' : entity.${field.prop} }"></span>`
+                                attrs['class'] += ' pacem-checkbox';
+                                detailTmpl = `<span class="pacem-checkbox pacem-readonly" [ngClass]="{ 'pacem-checked' : entity.${field.prop} }"></span>`
                                 break;
                             case "byte":
                                 attrs['type'] = 'number';
@@ -1381,7 +1497,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
             + wrapperOpener + elOuterHtml + wrapperCloser
             + validatorsTmpl
             + '</div>' // *ngIf="!readonly"
-            + detailTmpl.replace(/>/, ' *ngIf="readonly">')
+            + detailTmpl.replace(/\/?>/, ' *ngIf="readonly">')
             + '</div>';
 
         const selector = 'pacem-input';

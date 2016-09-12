@@ -150,6 +150,45 @@ var BaseValueAccessor = (function () {
     return BaseValueAccessor;
 }());
 exports.BaseValueAccessor = BaseValueAccessor;
+var RadioControlListValueAccessor = (function (_super) {
+    __extends(RadioControlListValueAccessor, _super);
+    function RadioControlListValueAccessor(model) {
+        _super.call(this, model);
+    }
+    RadioControlListValueAccessor = __decorate([
+        core_1.Directive({
+            selector: '.pacem-radio-list[ngModel]'
+        }), 
+        __metadata('design:paramtypes', [forms_1.NgModel])
+    ], RadioControlListValueAccessor);
+    return RadioControlListValueAccessor;
+}(BaseValueAccessor));
+var RadioControlValueAccessor = (function (_super) {
+    __extends(RadioControlValueAccessor, _super);
+    function RadioControlValueAccessor(_renderer, _elementRef, model, list) {
+        _super.call(this, model);
+        this._renderer = _renderer;
+        this._elementRef = _elementRef;
+        this.list = list;
+    }
+    RadioControlValueAccessor.prototype.writeValue = function (value) {
+        _super.prototype.writeValue.call(this, value);
+        this._renderer.setElementProperty(this._elementRef.nativeElement, 'checked', value == this._elementRef.nativeElement.value);
+    };
+    RadioControlValueAccessor.prototype.changeValue = function (v) {
+        var list = this.list;
+        if (list)
+            list.value = v;
+    };
+    RadioControlValueAccessor = __decorate([
+        core_1.Directive({
+            selector: 'input.pacem-radio[type=radio][ngModel]',
+            host: { '(change)': 'onChange($event.target.value);changeValue($event.target.value)', '(blur)': 'onTouched()' }
+        }), 
+        __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, forms_1.NgModel, RadioControlListValueAccessor])
+    ], RadioControlValueAccessor);
+    return RadioControlValueAccessor;
+}(BaseValueAccessor));
 function MakeValidatorProvider(type) {
     return {
         provide: forms_1.NG_VALIDATORS,
@@ -846,6 +885,69 @@ var PacemContentEditable = (function (_super) {
     ], PacemContentEditable);
     return PacemContentEditable;
 }(BaseValueAccessor));
+var PacemThumbnail = (function (_super) {
+    __extends(PacemThumbnail, _super);
+    function PacemThumbnail(model) {
+        _super.call(this, model);
+        this.model = model;
+        this.mode = 'binary';
+    }
+    Object.defineProperty(PacemThumbnail.prototype, "source", {
+        get: function () {
+            switch (this.mode) {
+                case 'url':
+                    return this.value;
+                case 'binary':
+                    return 'data:image/png;base64,' + this.value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemThumbnail.prototype.onchange = function (dataUrl) {
+        var _this = this;
+        this.changing = false;
+        pacem_core_1.PacemUtils.cropImage(dataUrl, this.width, this.height)
+            .then(function (resizedDataUrl) {
+            switch (_this.mode) {
+                case 'url':
+                    _this.value = resizedDataUrl;
+                    break;
+                case 'binary':
+                    _this.value = resizedDataUrl.substr(resizedDataUrl.indexOf(',') + 1);
+                    break;
+            }
+        });
+    };
+    __decorate([
+        core_1.ViewChild('lightbox'), 
+        __metadata('design:type', pacem_ui_1.PacemLightbox)
+    ], PacemThumbnail.prototype, "lightbox", void 0);
+    __decorate([
+        core_1.ViewChild('snapshot'), 
+        __metadata('design:type', pacem_ui_1.PacemSnapshot)
+    ], PacemThumbnail.prototype, "snapshot", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], PacemThumbnail.prototype, "mode", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], PacemThumbnail.prototype, "width", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Number)
+    ], PacemThumbnail.prototype, "height", void 0);
+    PacemThumbnail = __decorate([
+        core_1.Component({
+            selector: 'pacem-thumbnail[ngModel]',
+            template: "<img [ngStyle]=\"{ 'width': width+'px', 'height': height+'px' }\" class=\"pacem-thumbnail\" [attr.src]=\"source\" (click)=\"changing=true\" />\n<pacem-lightbox #lightbox [show]=\"changing\" (close)=\"changing=false\">\n    <pacem-snapshot (select)=\"onchange($event)\" #snapshot>\n    Webcam access is <b>impossile</b> on this machine!\n    </pacem-snapshot>\n</pacem-lightbox>\n"
+        }), 
+        __metadata('design:paramtypes', [forms_1.NgModel])
+    ], PacemThumbnail);
+    return PacemThumbnail;
+}(BaseValueAccessor));
 var PacemSelectMany = (function (_super) {
     __extends(PacemSelectMany, _super);
     function PacemSelectMany(ref, ctrl) {
@@ -943,10 +1045,10 @@ var PacemScaffoldingInternalModule = (function () {
     PacemScaffoldingInternalModule = __decorate([
         core_1.NgModule({
             imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule],
-            declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
-                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
-            exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker,
-                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable],
+            declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
+                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
+            exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
+                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
             providers: [PacemExecCommand, DatasourceFetcher]
         }), 
         __metadata('design:paramtypes', [])
@@ -1128,11 +1230,20 @@ var PacemField = (function () {
         var formReference = (field.prop + pacem_core_1.PacemUtils.uniqueCode()).toLowerCase();
         attrs['#' + formReference] = 'ngModel';
         switch (field.display && field.display.ui) {
+            // TODO: remove this (use dataType = 'HTML' instead).
             case 'contentEditable':
+                console.warn('`contentEditable` ui hint is deprecated. Lean on `dataType` equal to \'HTML\' instead.');
                 tagName = 'div';
                 attrs['contenteditable'] = 'true';
                 attrs['class'] = 'pacem-contenteditable';
                 detailTmpl = "<div class=\"pacem-readonly\" [innerHTML]=\"entity." + field.prop + "\"></div>";
+                break;
+            case 'snapshot':
+                tagName = 'pacem-thumbnail';
+                var w = attrs['[width]'] = field.extra.width;
+                var h = attrs['[height]'] = field.extra.height;
+                var mode = attrs['mode'] = field.type.toLowerCase() === 'string' ? 'string' : 'binary';
+                detailTmpl = "<img class=\"pacem-readonly\" width=\"" + w + "\" height=\"" + h + "\" [attr.src]=\"'" + (mode == "string" ? "" : "data:image/png;base64,") + "'+entity." + field.prop + "\" />";
                 break;
             case 'oneToMany':
                 // select
@@ -1175,6 +1286,28 @@ var PacemField = (function () {
                 break;
             default:
                 switch ((field.dataType || field.type).toLowerCase()) {
+                    case 'html':
+                        tagName = 'div';
+                        attrs['contenteditable'] = 'true';
+                        attrs['class'] = 'pacem-contenteditable';
+                        detailTmpl = "<div class=\"pacem-readonly\" [innerHTML]=\"entity." + field.prop + "\"></div>";
+                        break;
+                    case 'enumeration':
+                        // radiobutton list
+                        tagName = 'ol';
+                        attrs['class'] = 'pacem-radio-list';
+                        innerHtml = '';
+                        detailTmpl = '<span class="pacem-readonly">';
+                        this.field.extra.enum.forEach(function (kvp, j) {
+                            detailTmpl += "<span *ngIf=\"" + kvp.value + " == entity." + field.prop + "\">" + kvp.caption + "</span>";
+                            innerHtml +=
+                                "<li><input [(ngModel)]=\"" + attrs['[(ngModel)]'] + "\" type=\"radio\" class=\"pacem-radio\" name=\"" + attrs['name'] + "\" value=\"" + kvp.value + "\" id=\"" + attrs['id'] + "_" + j + "\" />\n<label for=\"" + attrs['id'] + "_" + j + "\">" + kvp.caption + "</label></li>";
+                        });
+                        //innerHtml +='';
+                        detailTmpl += '</span>';
+                        delete attrs['type'];
+                        delete attrs['name'];
+                        break;
                     case 'password':
                         attrs['type'] = 'password';
                         break;
@@ -1211,7 +1344,8 @@ var PacemField = (function () {
                         switch ((field.type || '').toLowerCase()) {
                             case "boolean":
                                 attrs['type'] = 'checkbox';
-                                detailTmpl = "<span class=\"pacem-check pacem-readonly\" [ngClass]=\"{ 'pacem-checked' : entity." + field.prop + " }\"></span>";
+                                attrs['class'] += ' pacem-checkbox';
+                                detailTmpl = "<span class=\"pacem-checkbox pacem-readonly\" [ngClass]=\"{ 'pacem-checked' : entity." + field.prop + " }\"></span>";
                                 break;
                             case "byte":
                                 attrs['type'] = 'number';
@@ -1331,7 +1465,7 @@ var PacemField = (function () {
             + wrapperOpener + elOuterHtml + wrapperCloser
             + validatorsTmpl
             + '</div>' // *ngIf="!readonly"
-            + detailTmpl.replace(/>/, ' *ngIf="readonly">')
+            + detailTmpl.replace(/\/?>/, ' *ngIf="readonly">')
             + '</div>';
         var selector = 'pacem-input';
         var input = this.builder.createComponent(selector, tmpl, formReference);

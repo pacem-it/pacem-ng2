@@ -179,6 +179,7 @@ pacem-toast .pacem-toast.pacem-shown {
   max-width: 80vw;
   padding: 1em;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform .25s linear;
 }
 /*#endregion*/
 /* #region GALLERY */
@@ -633,7 +634,7 @@ pacem-carousel-dashboard .pacem-carousel-dashboard .pacem-carousel-page.pacem-ca
   -webkit-animation: brightOut 1s 1 normal;
   animation: brightOut 1s 1 normal;
 }
-.pacem-snapshot {
+pacem-snapshot .pacem-snapshot {
   position: relative;
   height: 76px;
   width: 169.5px;
@@ -646,14 +647,14 @@ pacem-carousel-dashboard .pacem-carousel-dashboard .pacem-carousel-page.pacem-ca
   margin: 0;
   transition: all .3s linear .15s;
 }
-.pacem-snapshot.pacem-ongoing {
+pacem-snapshot .pacem-snapshot.pacem-ongoing {
   width: 246px;
   margin: 38px 38px 38px 0;
   overflow: visible;
   transition: all .2s linear;
   height: 246px;
 }
-.pacem-snapshot button {
+pacem-snapshot .pacem-snapshot button {
   border: 3px solid #fff;
   width: 70px;
   height: 70px;
@@ -664,31 +665,31 @@ pacem-carousel-dashboard .pacem-carousel-dashboard .pacem-carousel-page.pacem-ca
   cursor: pointer;
   border-radius: 50%;
 }
-.pacem-snapshot button.pacem-shown {
+pacem-snapshot .pacem-snapshot button.pacem-shown {
   transition-delay: .4s;
 }
-.pacem-snapshot button.pacem-hidden {
+pacem-snapshot .pacem-snapshot button.pacem-hidden {
   transition-delay: 0s;
   transition-duration: .2s;
 }
-.pacem-snapshot .pacem-browse {
+pacem-snapshot .pacem-snapshot .pacem-browse {
   background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0yMiAxNlY0YzAtMS4xLS45LTItMi0ySDhjLTEuMSAwLTIgLjktMiAydjEyYzAgMS4xLjkgMiAyIDJoMTJjMS4xIDAgMi0uOSAyLTJ6bS0xMS00bDIuMDMgMi43MUwxNiAxMWw0IDVIOGwzLTR6TTIgNnYxNGMwIDEuMS45IDIgMiAyaDE0di0ySDRWNkgyeiIgLz4NCjwvc3ZnPg==') /*../images/gallery.svg*/;
 }
-.pacem-snapshot .pacem-camera {
+pacem-snapshot .pacem-snapshot .pacem-camera {
   background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzLjIiIC8+DQogICAgPHBhdGggZD0iTTkgMkw3LjE3IDRINGMtMS4xIDAtMiAuOS0yIDJ2MTJjMCAxLjEuOSAyIDIgMmgxNmMxLjEgMCAyLS45IDItMlY2YzAtMS4xLS45LTItMi0yaC0zLjE3TDE1IDJIOXptMyAxNWMtMi43NiAwLTUtMi4yNC01LTVzMi4yNC01IDUtNSA1IDIuMjQgNSA1LTIuMjQgNS01IDV6IiAvPg0KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiIC8+DQo8L3N2Zz4=') /*../images/camera.svg*/;
 }
-.pacem-snapshot .pacem-undo {
+pacem-snapshot .pacem-snapshot .pacem-undo {
   background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik0xMi41IDhjLTIuNjUgMC01LjA1Ljk5LTYuOSAyLjZMMiA3djloOWwtMy42Mi0zLjYyYzEuMzktMS4xNiAzLjE2LTEuODggNS4xMi0xLjg4IDMuNTQgMCA2LjU1IDIuMzEgNy42IDUuNWwyLjM3LS43OEMyMS4wOCAxMS4wMyAxNy4xNSA4IDEyLjUgOHoiIC8+DQo8L3N2Zz4=') /*../images/undo.svg*/;
 }
-.pacem-snapshot .pacem-confirm {
+pacem-snapshot .pacem-snapshot .pacem-confirm {
   border-color: #a7f8ab;
   position: absolute;
   right: -32px;
   bottom: -32px;
   background-image: url('data:image/svg+xml;base64,77u/PHN2ZyBmaWxsPSIjZmZmIiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIiAvPg0KICAgIDxwYXRoIGQ9Ik05IDE2LjE3TDQuODMgMTJsLTEuNDIgMS40MUw5IDE5IDIxIDdsLTEuNDEtMS40MXoiIC8+DQo8L3N2Zz4=') /*../images/check.svg*/;
 }
-.pacem-snapshot canvas,
-.pacem-snapshot video {
+pacem-snapshot .pacem-snapshot canvas,
+pacem-snapshot .pacem-snapshot video {
   position: absolute;
   top: 0;
   left: 0;
@@ -698,31 +699,31 @@ pacem-carousel-dashboard .pacem-carousel-dashboard .pacem-carousel-page.pacem-ca
   object-fit: cover;
   border-radius: 1px;
 }
-.pacem-snapshot canvas.pacem-shown,
-.pacem-snapshot video.pacem-shown {
+pacem-snapshot .pacem-snapshot canvas.pacem-shown,
+pacem-snapshot .pacem-snapshot video.pacem-shown {
   transition-delay: .2s;
 }
-.pacem-snapshot video.pacem-taking.pacem-hidden {
+pacem-snapshot .pacem-snapshot video.pacem-taking.pacem-hidden {
   transition-duration: 0s;
   transition-timing-function: linear;
 }
-.pacem-snapshot .pacem-preview {
+pacem-snapshot .pacem-snapshot .pacem-preview {
   border-color: #a7f8ab;
 }
-.pacem-snapshot .pacem-preview.pacem-shown.pacem-taking {
+pacem-snapshot .pacem-snapshot .pacem-preview.pacem-shown.pacem-taking {
   transition-duration: 0s;
   transition-timing-function: linear;
 }
-.pacem-snapshot video {
+pacem-snapshot .pacem-snapshot video {
   cursor: pointer;
 }
-.pacem-snapshot .pacem-undo,
-.pacem-snapshot .pacem-countdown {
+pacem-snapshot .pacem-snapshot .pacem-undo,
+pacem-snapshot .pacem-snapshot .pacem-countdown {
   position: absolute;
   right: -32px;
   top: -32px;
 }
-.pacem-snapshot .pacem-countdown {
+pacem-snapshot .pacem-snapshot .pacem-countdown {
   color: #fff;
   line-height: 70px;
   text-align: center;
@@ -954,13 +955,21 @@ svg.pacem-bind path {
   animation: pacem-input-container-anim 0.3s ease-in 0.2s both;
 }
 .pacem-field .pacem-input-container pacem-select-many,
+.pacem-field .pacem-input-container .pacem-radio-list,
 .pacem-field .pacem-input-container .pacem-contenteditable {
   display: inline-block;
   padding-bottom: 8px;
   margin-bottom: 8px;
 }
+.pacem-field .pacem-input-container .pacem-radio-list {
+  list-style-type: none;
+}
 .pacem-field .pacem-input-container .pacem-contenteditable a {
   color: #ff005a;
+}
+.pacem-field .pacem-input-container .pacem-thumbnail {
+  border: 2px solid #262b3e;
+  margin: 8px 0;
 }
 .pacem-field .pacem-input-container button.pacem-command {
   width: 27.999992px;
@@ -1004,6 +1013,7 @@ svg.pacem-bind path {
 }
 .pacem-field .pacem-input-container pacem-select-many,
 .pacem-field .pacem-input-container .pacem-contenteditable,
+.pacem-field .pacem-input-container .pacem-radio-list,
 .pacem-field .pacem-input-container > .pacem-select,
 .pacem-field .pacem-input-container .pacem-input {
   min-width: 175px;
@@ -1012,12 +1022,14 @@ svg.pacem-bind path {
 }
 .pacem-field .pacem-input-container pacem-select-many.ng-pristine.ng-invalid,
 .pacem-field .pacem-input-container .pacem-contenteditable.ng-pristine.ng-invalid,
+.pacem-field .pacem-input-container .pacem-radio-list.ng-pristine.ng-invalid,
 .pacem-field .pacem-input-container > .pacem-select.ng-pristine.ng-invalid,
 .pacem-field .pacem-input-container .pacem-input.ng-pristine.ng-invalid {
   border-color: rgba(255, 0, 90, 0.2);
 }
 .pacem-field .pacem-input-container pacem-select-many.ng-dirty.ng-invalid,
 .pacem-field .pacem-input-container .pacem-contenteditable.ng-dirty.ng-invalid,
+.pacem-field .pacem-input-container .pacem-radio-list.ng-dirty.ng-invalid,
 .pacem-field .pacem-input-container > .pacem-select.ng-dirty.ng-invalid,
 .pacem-field .pacem-input-container .pacem-input.ng-dirty.ng-invalid {
   border-color: #ff005a;
@@ -1048,6 +1060,10 @@ svg.pacem-bind path {
   margin-left: 20px;
   display: block;
   padding: 4px 0;
+}
+.pacem-field img.pacem-readonly {
+  padding: 0;
+  border: 2px solid #fff;
 }
 .pacem-field pacem-select-many span.pacem-readonly {
   padding-left: 20px;
@@ -1104,12 +1120,14 @@ svg.pacem-bind path {
 }
 .pacem-field.pacem-has-value .pacem-input-container pacem-select-many.ng-valid.ng-dirty,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-contenteditable.ng-valid.ng-dirty,
+.pacem-field.pacem-has-value .pacem-input-container .pacem-radio-list.ng-valid.ng-dirty,
 .pacem-field.pacem-has-value .pacem-input-container > .pacem-select.ng-valid.ng-dirty,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-input.ng-valid.ng-dirty {
   border-color: #a7f8ab;
 }
 .pacem-field.pacem-has-value .pacem-input-container pacem-select-many.ng-valid.ng-pristine,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-contenteditable.ng-valid.ng-pristine,
+.pacem-field.pacem-has-value .pacem-input-container .pacem-radio-list.ng-valid.ng-pristine,
 .pacem-field.pacem-has-value .pacem-input-container > .pacem-select.ng-valid.ng-pristine,
 .pacem-field.pacem-has-value .pacem-input-container .pacem-input.ng-valid.ng-pristine {
   border-color: rgba(167, 248, 171, 0.2);
@@ -1191,6 +1209,30 @@ svg.pacem-bind path {
   border-color: #a7f8ab;
 }
 .pacem-field.pacem-has-value .pacem-input-container pacem-datetime-picker.ng-valid.ng-pristine .pacem-select {
+  border-color: rgba(167, 248, 171, 0.2);
+}
+.pacem-field pacem-thumbnail .pacem-thumbnail {
+  cursor: pointer;
+}
+.pacem-field pacem-thumbnail .pacem-lightbox {
+  background-color: #262b3e;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.pacem-field pacem-thumbnail .pacem-lightbox pacem-snapshot {
+  display: inline-block;
+}
+.pacem-field pacem-thumbnail.ng-pristine.ng-invalid .pacem-thumbnail {
+  border-color: rgba(255, 0, 90, 0.2);
+}
+.pacem-field pacem-thumbnail.ng-dirty.ng-invalid .pacem-thumbnail {
+  border-color: #ff005a;
+}
+.pacem-field.pacem-has-value pacem-thumbnail.ng-valid.ng-dirty .pacem-thumbnail {
+  border-color: #a7f8ab;
+}
+.pacem-field.pacem-has-value pacem-thumbnail.ng-valid.ng-pristine .pacem-thumbnail {
   border-color: rgba(167, 248, 171, 0.2);
 }
 .pacem-map-polyline-info,

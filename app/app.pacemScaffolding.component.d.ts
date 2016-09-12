@@ -12,6 +12,7 @@ export declare class PacemScaffoldingComponent implements AfterViewInit {
         Name: string;
         Resume: string;
         Birthdate: string;
+        Sex: number;
         FavFood: string;
     };
 }

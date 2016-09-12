@@ -22,13 +22,14 @@ export declare class PacemHighlight implements PipeTransform {
 /**
  * PacemInfiniteScroll Directive
  */
-export declare class PacemInfiniteScroll implements OnDestroy {
+export declare class PacemInfiniteScroll implements OnInit, OnDestroy {
     private element;
     pacemInfiniteScrollContainer: string | HTMLElement;
     pacemInfiniteScrollEnabled: boolean;
     pacemInfiniteScrollBottomGap: number;
     pacemInfiniteScroll: EventEmitter<{}>;
     constructor(element: ElementRef);
+    ngOnInit(): void;
     ngOnDestroy(): void;
     private $scrollDelegate;
     private $enabled;
@@ -43,6 +44,22 @@ export declare class PacemInfiniteScroll implements OnDestroy {
     private scroll();
     private doScroll();
     private computeHeight();
+}
+export declare class PacemResize implements OnInit, OnDestroy {
+    private elementRef;
+    constructor(elementRef: ElementRef);
+    private _enabled;
+    private _timer;
+    enabled: boolean;
+    onresize: EventEmitter<{}>;
+    private resizer;
+    private subscription;
+    private previousHeight;
+    private previousWidth;
+    private start();
+    private check;
+    ngOnInit(): void;
+    ngOnDestroy(): void;
 }
 /**
  * PacemLightbox Component

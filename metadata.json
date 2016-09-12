@@ -106,10 +106,55 @@
       {
         "type": "compare",
         "errorMessage": "value must be more recent than Birthdate.",
-        "params": { "to": "Birthdate", "operator":  "greater" }
+        "params": {
+          "to": "Birthdate",
+          "operator": "greater"
+        }
       }
     ]
   },
+
+  {
+    "prop": "Sex",
+    "type": "Byte",
+    "extra": {
+      "enum": [
+        {
+          "value": 0,
+          "caption": "male"
+        },
+        {
+          "value": 1,
+          "caption": "female"
+        },
+        {
+          "value": 2,
+          "caption": "other"
+        }
+      ]
+    },
+    "display": {
+      "name": "sex (m/f/?)"
+    },
+    "dataType": "Enumeration"
+  },
+
+  {
+    "prop": "ImageContent",
+    "type": "Byte[]",
+    "extra": {
+      "width": 96,
+      "height": 96
+    },
+    "display": {
+      "name": "picture",
+      "description": "",
+      "short": "picture",
+      "watermark": "picture...",
+      "ui": "snapshot"
+    }
+  },
+
   {
     "prop": "State",
     "type": "text",

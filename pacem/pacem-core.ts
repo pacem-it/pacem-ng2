@@ -63,6 +63,57 @@ export class PacemUtils {
         }
         return new Blob([u8arr], { type: mime });
     }
+
+    /**
+     * Crops an image having the provided url (might be a dataURL) into another having the provided size
+     * @param url
+     * @param width
+     * @param height
+     * @param ctx
+     */
+    static cropImage(url: string, width?: number, height?: number): PromiseLike<string> {
+        var deferred = PacemPromise.defer<string>();
+        let el = new Image();
+        el.onload = function (ev) {
+            let cnv = document.createElement('canvas');
+            let ctx = cnv.getContext('2d');
+            if (width) ctx.canvas.width = width;
+            if (height) ctx.canvas.height = height;
+            PacemUtils.cropImageOntoCanvas(el, ctx);
+            deferred.resolve(ctx.canvas.toDataURL());
+        };
+        el.src = url;
+        return deferred.promise;
+    }
+
+    /**
+     * Crops the snapshot of a drawable element onto a provided canvas context. It gets centered in the area anc cropped (`cover`-like behavior).
+     * @param el drawable element
+     * @param ctx canvas context
+     * @param sourceWidth forced source width
+     * @param sourceHeight forced source height
+     */
+    static cropImageOntoCanvas(el: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, ctx: CanvasRenderingContext2D, sourceWidth?:number, sourceHeight?:number) {
+        //
+        let tgetW = ctx.canvas.width /*= parseFloat(scope.thumbWidth)*/;
+        let tgetH = ctx.canvas.height /*= parseFloat(scope.thumbHeight)*/;
+        let cnvW = tgetW, cnvH = tgetH;
+        let w = sourceWidth || 1.0 * el.width, h = sourceHeight || 1.0 * el.height;
+        //console.log('img original size: ' + w + 'x' + h);
+        var ratio = w / h;
+        var tgetRatio = tgetW / tgetH;
+        if (tgetRatio > ratio) {
+            // crop vertically
+            var f = tgetW / w;
+            tgetH = f * h;
+            ctx.drawImage(el, 0, .5 * (-tgetH + cnvH), cnvW, tgetH);
+        } else {
+            // crop horizontally
+            var f = tgetH / h;
+            tgetW = f * w;
+            ctx.drawImage(el, -Math.abs(.5 * (-tgetW + cnvW)), 0, tgetW, cnvH);
+        }
+    }
     // #endregion
 
     // #endregion

@@ -111,8 +111,6 @@ var PacemInfiniteScroll = (function () {
         this.$viewport = null;
         this.$scroller = null;
         this.$bottomGap = 10;
-        this.$container = this.$viewport = this.$scroller = element.nativeElement;
-        this.$scroller.addEventListener('scroll', this.$scrollDelegate, false);
     }
     Object.defineProperty(PacemInfiniteScroll.prototype, "pacemInfiniteScrollContainer", {
         set: function (v) {
@@ -149,6 +147,10 @@ var PacemInfiniteScroll = (function () {
         enumerable: true,
         configurable: true
     });
+    PacemInfiniteScroll.prototype.ngOnInit = function () {
+        this.$container = this.$viewport = this.$scroller = this.element.nativeElement;
+        this.$scroller.addEventListener('scroll', this.$scrollDelegate, false);
+    };
     PacemInfiniteScroll.prototype.ngOnDestroy = function () {
         if (this.$scroller)
             this.$scroller.removeEventListener('scroll', this.$scrollDelegate, false);
@@ -238,6 +240,81 @@ var PacemInfiniteScroll = (function () {
     return PacemInfiniteScroll;
 }());
 exports.PacemInfiniteScroll = PacemInfiniteScroll;
+var PacemResize = (function () {
+    function PacemResize(elementRef) {
+        var _this = this;
+        this.elementRef = elementRef;
+        this._enabled = true;
+        this.onresize = new core_1.EventEmitter();
+        this.resizer = new Rx_1.Subject();
+        this.check = function (_) {
+            var el = _this.elementRef.nativeElement;
+            var height = el.offsetHeight;
+            var width = el.offsetWidth;
+            if (height != _this.previousHeight
+                || width != _this.previousWidth) {
+                _this.previousHeight = height;
+                _this.previousWidth = width;
+                _this.resizer.next({});
+            }
+            _this._timer = window.requestAnimationFrame(_this.check);
+        };
+    }
+    Object.defineProperty(PacemResize.prototype, "enabled", {
+        get: function () {
+            return this._enabled;
+        },
+        set: function (v) {
+            if (this._enabled != v) {
+                this._enabled = v;
+                this.start();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemResize.prototype.start = function () {
+        var el = this.elementRef.nativeElement;
+        var v = this._enabled;
+        if (v) {
+            this.previousHeight = el.offsetHeight;
+            this.previousWidth = el.offsetWidth;
+            this._timer = window.requestAnimationFrame(this.check);
+        }
+        else
+            window.cancelAnimationFrame(this._timer);
+    };
+    PacemResize.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subscription = this.resizer.asObservable()
+            .debounceTime(50)
+            .subscribe(function (_) {
+            _this.onresize.emit(_);
+        });
+        this.start();
+    };
+    PacemResize.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+        window.cancelAnimationFrame(this._timer);
+    };
+    __decorate([
+        core_1.Input('pacemResizeEnabled'), 
+        __metadata('design:type', Boolean), 
+        __metadata('design:paramtypes', [Boolean])
+    ], PacemResize.prototype, "enabled", null);
+    __decorate([
+        core_1.Output('pacemResize'), 
+        __metadata('design:type', Object)
+    ], PacemResize.prototype, "onresize", void 0);
+    PacemResize = __decorate([
+        core_1.Directive({
+            selector: '[pacemResize]'
+        }), 
+        __metadata('design:paramtypes', [core_1.ElementRef])
+    ], PacemResize);
+    return PacemResize;
+}());
+exports.PacemResize = PacemResize;
 /**
  * PacemLightbox Component
  */
@@ -298,12 +375,17 @@ var PacemLightbox = (function () {
         element.style.padding = '0';
         element.style.top = scrollTop + 'px';
         element.style.left = '0';
+        //
         var container = this.content;
-        window.requestAnimationFrame(function () {
+        container.style.top = '0';
+        container.style.margin = '0 auto';
+        var fnPos = function () {
             var containerHeight = container.offsetHeight;
             var top = (viewportHeight - containerHeight) * .5;
-            container.style.margin = top + 'px auto 0 auto';
-        });
+            container.style.transform = "translateY(" + top + "px)"; // top + 'px auto 0 auto';
+        };
+        window.requestAnimationFrame(fnPos);
+        fnPos();
     };
     __decorate([
         core_1.Input(), 
@@ -321,7 +403,7 @@ var PacemLightbox = (function () {
     PacemLightbox = __decorate([
         core_1.Component({
             selector: 'pacem-lightbox',
-            template: "<div class=\"pacem-lightbox-wrapper\" [hidden]=\"hide\" [pacemHidden]=\"hide\" #wrapper>\n<div class=\"pacem-lightbox\"><ng-content></ng-content></div>\n</div>"
+            template: "<div class=\"pacem-lightbox-wrapper\" [hidden]=\"hide\" [pacemHidden]=\"hide\" #wrapper>\n<div class=\"pacem-lightbox\" (pacemResize)=\"resize($event)\" [pacemResizeEnabled]=\"!hide\"><ng-content></ng-content></div>\n</div>"
         }), 
         __metadata('design:paramtypes', [])
     ], PacemLightbox);
@@ -1567,25 +1649,7 @@ var uiAdapter = {
     },
     stripBase64FromDataURL: stripBase64FromDataURL,
     adaptElementToCanvas: function (el, ctx, srcW, srcH) {
-        var tgetW = ctx.canvas.width;
-        var tgetH = ctx.canvas.height;
-        var cnvW = tgetW, cnvH = tgetH;
-        var w = srcW || (1.0 * el.width), h = srcH || (1.0 * el.height);
-        //console.log('img original size: ' + w + 'x' + h);
-        var ratio = w / h;
-        var tgetRatio = tgetW / tgetH;
-        if (tgetRatio > ratio) {
-            // crop vertically
-            var f = tgetW / w;
-            tgetH = f * h;
-            ctx.drawImage(el, 0, .5 * (-tgetH + cnvH), cnvW, tgetH);
-        }
-        else {
-            // crop horizontally
-            var f = tgetH / h;
-            tgetW = f * w;
-            ctx.drawImage(el, -Math.abs(.5 * (-tgetW + cnvW)), 0, tgetW, cnvH);
-        }
+        pacem_core_1.PacemUtils.cropImageOntoCanvas(el, ctx, srcW, srcH);
     },
     adaptImageToCanvas: function (buffer, canvas) {
         buffer = stripBase64FromDataURL(buffer);
@@ -1753,7 +1817,7 @@ var PacemSnapshot = (function () {
     PacemSnapshot = __decorate([
         core_1.Component({
             selector: 'pacem-snapshot',
-            template: "<div class=\"pacem-snapshot\" [ngClass]=\"{ 'pacem-ongoing': status != 'start' }\"  #root>\n    \n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); pick($event)\" class=\"pacem-browse\" [pacemHidden]=\"status != 'start'\"></button>\n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); take($event)\" class=\"pacem-camera\" [pacemHidden]=\"status != 'start'\"></button>\n    \n    <canvas class=\"pacem-preview\" \n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            #stage [pacemHidden]=\"status != 'confirm'\"></canvas>\n    <!--<div class=\"pacem-snapshot-progress\" [hidden]=\"!processing\"></div>-->\n    <input type=\"file\" #grabber accept=\"image/*\" capture=\"camera\" (change)=\"handleFiles($event)\" hidden />\n    <video *ngIf=\"canUseWebcam\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            [pacemHidden]=\"status != 'taking'\"\n            autoplay=\"autoplay\"\n            #player></video>\n    <button class=\"pacem-countdown\" \n            [pacemHidden]=\"countdown <= 0\">{{ countdown }}</button>\n    <button class=\"pacem-undo\" [pacemHidden]=\"status == 'start' || countdown > 0\" (click)=\"back($event)\"></button>\n    <button class=\"pacem-confirm\" [pacemHidden]=\"status != 'confirm'\" (click)=\"confirm($event)\"></button>\n    <span [hidden]=\"canUseWebcam\"><ng-content></ng-content></span>\n</div>"
+            template: "<div class=\"pacem-snapshot\" [ngClass]=\"{ 'pacem-ongoing': status != 'start', 'pacem-custom-size': (w || h) }\"  #root>\n    \n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); pick($event)\" class=\"pacem-browse\" [pacemHidden]=\"status != 'start'\"></button>\n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); take($event)\" class=\"pacem-camera\" [pacemHidden]=\"status != 'start'\"></button>\n    \n    <canvas class=\"pacem-preview\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            #stage [pacemHidden]=\"status != 'confirm'\"></canvas>\n    <!--<div class=\"pacem-snapshot-progress\" [hidden]=\"!processing\"></div>-->\n    <input type=\"file\" #grabber accept=\"image/*\" capture=\"camera\" (change)=\"handleFiles($event)\" hidden />\n    <video *ngIf=\"canUseWebcam\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            [pacemHidden]=\"status != 'taking'\"\n            autoplay=\"autoplay\"\n            #player></video>\n    <button class=\"pacem-countdown\" \n            [pacemHidden]=\"countdown <= 0\">{{ countdown }}</button>\n    <button class=\"pacem-undo\" [pacemHidden]=\"status == 'start' || countdown > 0\" (click)=\"back($event)\"></button>\n    <button class=\"pacem-confirm\" [pacemHidden]=\"status != 'confirm'\" (click)=\"confirm($event)\"></button>\n    <span [hidden]=\"canUseWebcam\"><ng-content></ng-content></span>\n</div>"
         }), 
         __metadata('design:paramtypes', [core_1.ChangeDetectorRef])
     ], PacemSnapshot);
@@ -2464,10 +2528,10 @@ var PacemUIModule = (function () {
     PacemUIModule = __decorate([
         core_1.NgModule({
             imports: [common_1.CommonModule],
-            declarations: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+            declarations: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
                 PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
                 PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem, PacemCarouselDashboard],
-            exports: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+            exports: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
                 PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
                 PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem],
             providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level

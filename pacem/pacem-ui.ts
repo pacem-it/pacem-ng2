@@ -75,7 +75,7 @@ export class PacemHighlight implements PipeTransform {
 @Directive({
     selector: '[pacemInfiniteScroll]'
 })
-export class PacemInfiniteScroll implements OnDestroy {
+export class PacemInfiniteScroll implements OnInit, OnDestroy {
 
     @Input() set pacemInfiniteScrollContainer(v: string | HTMLElement) {
         var $cont: HTMLElement | string = v;
@@ -103,7 +103,10 @@ export class PacemInfiniteScroll implements OnDestroy {
     @Output() pacemInfiniteScroll = new EventEmitter();
 
     constructor(private element: ElementRef) {
-        this.$container = this.$viewport = this.$scroller = <HTMLElement>element.nativeElement;
+    }
+
+    ngOnInit() {
+        this.$container = this.$viewport = this.$scroller = <HTMLElement>this.element.nativeElement;
         this.$scroller.addEventListener('scroll', this.$scrollDelegate, false);
     }
 
@@ -187,13 +190,80 @@ export class PacemInfiniteScroll implements OnDestroy {
 
 }
 
+@Directive({
+    selector: '[pacemResize]'
+})
+export class PacemResize implements OnInit, OnDestroy {
+
+    constructor(private elementRef: ElementRef) {
+    }
+
+    private _enabled: boolean = true;
+    private _timer: number;
+    @Input('pacemResizeEnabled') set enabled(v: boolean) {
+        if (this._enabled != v) {
+            this._enabled = v;
+            this.start();
+        }
+    }
+    get enabled() {
+        return this._enabled;
+    }
+
+    @Output('pacemResize') onresize = new EventEmitter();
+
+    private resizer = new Subject();
+    private subscription: Subscription;
+    private previousHeight: number;
+    private previousWidth: number;
+
+    private start() {
+        let el = <HTMLElement>this.elementRef.nativeElement;
+        let v = this._enabled;
+        if (v) {
+            this.previousHeight = el.offsetHeight;
+            this.previousWidth = el.offsetWidth;
+            this._timer = window.requestAnimationFrame(this.check);
+        } else
+            window.cancelAnimationFrame(this._timer);
+    }
+
+    private check = (_?) => {
+        let el = <HTMLElement>this.elementRef.nativeElement;
+        let height = el.offsetHeight;
+        let width = el.offsetWidth;
+        if (height != this.previousHeight
+            || width != this.previousWidth) {
+            this.previousHeight = height;
+            this.previousWidth = width;
+            this.resizer.next({});
+        }
+        this._timer = window.requestAnimationFrame(this.check);
+    }
+
+    ngOnInit() {
+        this.subscription = this.resizer.asObservable()
+            .debounceTime(50)
+            .subscribe(_ => {
+                this.onresize.emit(_);
+            });
+        this.start();
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+        window.cancelAnimationFrame(this._timer);
+    }
+
+}
+
 /**
  * PacemLightbox Component
  */
 @Component({
     selector: 'pacem-lightbox',
     template: `<div class="pacem-lightbox-wrapper" [hidden]="hide" [pacemHidden]="hide" #wrapper>
-<div class="pacem-lightbox"><ng-content></ng-content></div>
+<div class="pacem-lightbox" (pacemResize)="resize($event)" [pacemResizeEnabled]="!hide"><ng-content></ng-content></div>
 </div>`
 })
 export class PacemLightbox implements OnInit, OnChanges, OnDestroy {
@@ -255,12 +325,17 @@ export class PacemLightbox implements OnInit, OnChanges, OnDestroy {
         element.style.padding = '0';
         element.style.top = scrollTop + 'px';
         element.style.left = '0';
+        //
         var container = this.content;
-        window.requestAnimationFrame(() => {
+        container.style.top = '0';
+        container.style.margin = '0 auto';
+        let fnPos = () => {
             var containerHeight = container.offsetHeight;
             var top = (viewportHeight - containerHeight) * .5;
-            container.style.margin = top + 'px auto 0 auto';
-        });
+            container.style.transform = `translateY(${top}px)`;// top + 'px auto 0 auto';
+        };
+        window.requestAnimationFrame(fnPos);
+        fnPos();
     }
 }
 
@@ -537,9 +612,9 @@ export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implemen
         else if (this.items && !this.subscription2 || this.subscription2.closed)
             this.subscription2 = this.items.changes
                 .subscribe((c) => {
-                if (this.dashboard)
-                    this.dashboard.refresh();
-            });
+                    if (this.dashboard)
+                        this.dashboard.refresh();
+                });
     }
 
     ngOnInit() {
@@ -628,7 +703,7 @@ export class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> implemen
 })
 class PacemCarouselDashboard implements OnInit, OnDestroy {
 
-    constructor(private changer: ChangeDetectorRef, private elementRef : ElementRef) { }
+    constructor(private changer: ChangeDetectorRef, private elementRef: ElementRef) { }
 
     private _carousel: PacemCarousel;
 
@@ -1420,24 +1495,7 @@ const uiAdapter = {
     },
     stripBase64FromDataURL: stripBase64FromDataURL,
     adaptElementToCanvas: function (el: any, ctx: CanvasRenderingContext2D, srcW?: number, srcH?: number) {
-        let tgetW = ctx.canvas.width /*= parseFloat(scope.thumbWidth)*/;
-        let tgetH = ctx.canvas.height /*= parseFloat(scope.thumbHeight)*/;
-        let cnvW = tgetW, cnvH = tgetH;
-        let w = srcW || (1.0 * el.width), h = srcH || (1.0 * el.height);
-        //console.log('img original size: ' + w + 'x' + h);
-        var ratio = w / h;
-        var tgetRatio = tgetW / tgetH;
-        if (tgetRatio > ratio) {
-            // crop vertically
-            var f = tgetW / w;
-            tgetH = f * h;
-            ctx.drawImage(el, 0, .5 * (-tgetH + cnvH), cnvW, tgetH);
-        } else {
-            // crop horizontally
-            var f = tgetH / h;
-            tgetW = f * w;
-            ctx.drawImage(el, -Math.abs(.5 * (-tgetW + cnvW)), 0, tgetW, cnvH);
-        }
+        PacemUtils.cropImageOntoCanvas(el, ctx, srcW, srcH);
     },
     adaptImageToCanvas: function (buffer: string, canvas: HTMLCanvasElement) {
         buffer = stripBase64FromDataURL(buffer);
@@ -1459,12 +1517,12 @@ const uiAdapter = {
  */
 @Component({
     selector: 'pacem-snapshot',
-    template: `<div class="pacem-snapshot" [ngClass]="{ 'pacem-ongoing': status != 'start' }"  #root>
+    template: `<div class="pacem-snapshot" [ngClass]="{ 'pacem-ongoing': status != 'start', 'pacem-custom-size': (w || h) }"  #root>
     
     <button (click)="$event.preventDefault(); $event.stopPropagation(); pick($event)" class="pacem-browse" [pacemHidden]="status != 'start'"></button>
     <button (click)="$event.preventDefault(); $event.stopPropagation(); take($event)" class="pacem-camera" [pacemHidden]="status != 'start'"></button>
     
-    <canvas class="pacem-preview" 
+    <canvas class="pacem-preview"
             [ngClass]="{ 'pacem-taking': branch == 'take' && status != 'start' }" 
             #stage [pacemHidden]="status != 'confirm'"></canvas>
     <!--<div class="pacem-snapshot-progress" [hidden]="!processing"></div>-->
@@ -1528,7 +1586,7 @@ export class PacemSnapshot {
         evt.preventDefault();
         evt.stopPropagation();
         this.onselect.emit(
-            'data:image/jpeg;base64,'+this.buffer
+            'data:image/jpeg;base64,' + this.buffer
         );
         this.previousStatuses.splice(0);
         this._status = 'start';
@@ -1581,8 +1639,8 @@ export class PacemSnapshot {
 
     private refreshBuffer(buffer): PacemPromise<string> {
         var cnv = <HTMLCanvasElement>this.canvas.nativeElement;
-        cnv.width = cnv.clientWidth;
-        cnv.height = cnv.clientHeight;
+        cnv.width = /*this.width ||*/ cnv.clientWidth;
+        cnv.height = /*this.height ||*/ cnv.clientHeight;
         return uiAdapter.adaptImageToCanvas(buffer, cnv);
     }
 
@@ -1598,8 +1656,8 @@ export class PacemSnapshot {
                         me.cref.detectChanges();
                         if (me.countdown <= 0) {
                             var cnv = document.createElement('canvas');
-                            cnv.width = video.clientWidth
-                            cnv.height = video.clientHeight;
+                            cnv.width = /*this.width ||*/ video.clientWidth;
+                            cnv.height = /*this.height ||*/ video.clientHeight;
                             var ctx = cnv.getContext('2d');
                             uiAdapter.adaptElementToCanvas(video, ctx, video.videoWidth, video.videoHeight);
                             cnv.style.position = 'absolute';
@@ -2333,10 +2391,10 @@ export class PacemHamburgerMenu {
 
 @NgModule({
     imports: [CommonModule],
-    declarations: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+    declarations: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
         PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
         PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem, PacemCarouselDashboard],
-    exports: [PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+    exports: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
         PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
         PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem],
     providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
