@@ -363,6 +363,8 @@ var PacemLightbox = (function () {
         window.document.body.style.overflow = '';
     };
     PacemLightbox.prototype.resize = function (evt) {
+        if (!this.content)
+            return;
         window.document.body.style.overflow = 'hidden';
         var win = window, element = this.wrapperElement.nativeElement;
         var viewportHeight = pacem_core_1.PacemUtils.windowSize.height;
@@ -801,6 +803,7 @@ var PacemCarouselDashboard = (function () {
         var _this = this;
         this.changer = changer;
         this.elementRef = elementRef;
+        this._carouselSubject = new Rx_1.ReplaySubject(1);
         this.resize = function (evt) {
             requestAnimationFrame(function () {
                 var carousel = _this._carousel;
@@ -820,16 +823,26 @@ var PacemCarouselDashboard = (function () {
     }
     Object.defineProperty(PacemCarouselDashboard.prototype, "carousel", {
         set: function (v) {
-            this._carousel = v;
-            this.resize();
+            if (this._carousel != v) {
+                this._carouselSubject.next(v);
+            }
         },
         enumerable: true,
         configurable: true
     });
     PacemCarouselDashboard.prototype.ngOnInit = function () {
+        var _this = this;
+        this._subscription =
+            this._carouselSubject.asObservable()
+                .debounceTime(20)
+                .subscribe(function (_) {
+                _this._carousel = _;
+                _this.refresh();
+            });
         window.addEventListener('resize', this.resize, false);
     };
     PacemCarouselDashboard.prototype.ngOnDestroy = function () {
+        this._subscription.unsubscribe();
         window.removeEventListener('resize', this.resize, false);
     };
     PacemCarouselDashboard.prototype.refresh = function () {

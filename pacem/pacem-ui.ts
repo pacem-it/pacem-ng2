@@ -6,7 +6,7 @@ import { QueryList, Pipe, PipeTransform, Directive, Component, Input, Output, On
 import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
 import { Location, CommonModule } from '@angular/common';
 import { PacemUtils, PacemPromise, pacem } from './pacem-core'
-import { Subscription, Subject, Observable} from 'rxjs/Rx';
+import { Subscription, Subject, ReplaySubject, Observable} from 'rxjs/Rx';
 import { Pacem3DObject, Pacem3D } from './pacem-3d';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/debounce';
@@ -313,6 +313,7 @@ export class PacemLightbox implements OnInit, OnChanges, OnDestroy {
     }
 
     private resize(evt?: any) {
+        if (!this.content) return;
         window.document.body.style.overflow = 'hidden';
         var win = window, element = <HTMLElement>this.wrapperElement.nativeElement;
         var viewportHeight = PacemUtils.windowSize.height;
@@ -706,17 +707,28 @@ class PacemCarouselDashboard implements OnInit, OnDestroy {
     constructor(private changer: ChangeDetectorRef, private elementRef: ElementRef) { }
 
     private _carousel: PacemCarousel;
+    private _carouselSubject = new ReplaySubject<PacemCarousel>(1);
+    private _subscription: Subscription;
 
     set carousel(v: PacemCarousel) {
-        this._carousel = v;
-        this.resize();
+        if (this._carousel != v) {
+            this._carouselSubject.next(v);
+        }
     }
 
     ngOnInit() {
+        this._subscription =
+            this._carouselSubject.asObservable()
+            .debounceTime(20)
+            .subscribe(_ => {
+                this._carousel = _;
+                this.refresh();
+            });
         window.addEventListener('resize', this.resize, false);
     }
 
     ngOnDestroy() {
+        this._subscription.unsubscribe();
         window.removeEventListener('resize', this.resize, false);
     }
 
