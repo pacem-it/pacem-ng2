@@ -35,7 +35,7 @@
 
 @keyframes pacem-label-anim {
     0% {
-        transform: translateY(@_h) scale(1.125) translateX(0) translateZ(0);
+        //transform: translateY(@_h) scale(1.125) translateX(0) translateZ(0);
     }
 
     100% {
@@ -67,8 +67,13 @@
 }
 
 .pacem-field {
-    margin-bottom: @grid_spacing;
+    margin-bottom: @grid_spacing / 3;
+    padding: @grid_spacing / 3 0;
     z-index: 0;
+
+    background-color: @color_lightblue;
+    box-shadow: 0 2px @grid_spacing / 3 rgba(0,0,0,0.25);
+
     @_thumb_border: @grid_spacing/12; // 2px
     ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
         .Watermark();
@@ -147,6 +152,9 @@
         .pacem-contenteditable {
             display: inline-block;
             padding-bottom: @grid_spacing/3;
+        }
+
+        .pacem-contenteditable {
             margin-bottom: @grid_spacing/3;
         }
 
@@ -278,6 +286,7 @@
     img.pacem-readonly {
         padding: 0;
         border: @_thumb_border solid @color_light;
+        margin: @grid_spacing/3 0 @grid_spacing/3 @_left;
     }
 
     pacem-select-many {
@@ -513,10 +522,12 @@
 
 .pacem-field {
 
-    pacem-thumbnail {
+    .pacem-input-container pacem-thumbnail.pacem-input {
+        border: none;
 
         .pacem-thumbnail {
             cursor: pointer;
+            display: block;
         }
 
         .pacem-lightbox {
@@ -552,7 +563,8 @@
     }
 
     &.pacem-has-value {
-        pacem-thumbnail {
+        .pacem-input-container pacem-thumbnail.pacem-input {
+
             &.ng-valid {
 
                 &.ng-dirty {

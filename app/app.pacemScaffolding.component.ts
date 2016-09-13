@@ -9,20 +9,23 @@ import { Component, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, AfterVi
     template: `<h2>Pacem Scaffolding</h2>
 <p>Many input data types (and more to come) are involved in this self-composing form system.<br />
 It includes styling, custom validation and fetching for complex data.</p>
+
+    <button (click)="readonly=!readonly">toggle readonly</button>
+
+    <p></p>
     <form>
-    <pacem-field *ngFor="let item of meta" [field]="item" [entity]="entity"></pacem-field>
+    <pacem-field *ngFor="let item of meta" [field]="item" [entity]="entity" [readonly]="readonly"></pacem-field>
     <p>{{ entity | json }}</p>
     
-<p>This is the readonly version synchronized with the form above:</p>
 
-    <pacem-field *ngFor="let item of meta" readonly="true" [field]="item" [entity]="entity"></pacem-field>
     </form>
 
 `,
-    providers: [PacemLooper, PacemHttp]/*,
-    entryComponents: [PacemField]*/
+    providers: [PacemLooper, PacemHttp]
 })
 export class PacemScaffoldingComponent implements AfterViewInit {
+
+    private readonly = true;
 
     constructor(private ref: ChangeDetectorRef, private looper: PacemLooper, private http: PacemHttp) {
     }
@@ -43,14 +46,6 @@ export class PacemScaffoldingComponent implements AfterViewInit {
         FavFood: "ice cream", //FavFoods: [{ ID: 4 }]
     };
 
-    //ngDoCheck() {
-    //    if (this.entity.FavFoods instanceof Array)
-    //        setTimeout(() => {
-    //            if (JSON.stringify(this.entity.FavFoods) != JSON.stringify(this.entity['FavFoods2'] || [])) {
-    //                this.entity['FavFoods2'] = this.entity.FavFoods.slice(0);
-    //                this.ref.markForCheck();
-    //            }
-    //        });
-    //}
+    
 
 }

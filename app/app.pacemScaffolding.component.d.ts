@@ -5,6 +5,7 @@ export declare class PacemScaffoldingComponent implements AfterViewInit {
     private ref;
     private looper;
     private http;
+    private readonly;
     constructor(ref: ChangeDetectorRef, looper: PacemLooper, http: PacemHttp);
     ngAfterViewInit(): void;
     meta: any[];

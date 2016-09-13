@@ -860,11 +860,6 @@ svg.pacem-bind path {
     transform: translateY(0);
   }
 }
-@keyframes pacem-label-anim {
-  0% {
-    transform: translateY(20px) scale(1.125) translateX(0) translateZ(0);
-  }
-}
 @keyframes pacem-label-before-anim {
   0% {
     transform: rotate(-90deg);
@@ -874,8 +869,11 @@ svg.pacem-bind path {
   }
 }
 .pacem-field {
-  margin-bottom: 24px;
+  margin-bottom: 8px;
+  padding: 8px 0;
   z-index: 0;
+  background-color: #262b3e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 .pacem-field ::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
@@ -959,6 +957,8 @@ svg.pacem-bind path {
 .pacem-field .pacem-input-container .pacem-contenteditable {
   display: inline-block;
   padding-bottom: 8px;
+}
+.pacem-field .pacem-input-container .pacem-contenteditable {
   margin-bottom: 8px;
 }
 .pacem-field .pacem-input-container .pacem-radio-list {
@@ -1064,6 +1064,7 @@ svg.pacem-bind path {
 .pacem-field img.pacem-readonly {
   padding: 0;
   border: 2px solid #fff;
+  margin: 8px 0 8px 20px;
 }
 .pacem-field pacem-select-many span.pacem-readonly {
   padding-left: 20px;
@@ -1211,28 +1212,32 @@ svg.pacem-bind path {
 .pacem-field.pacem-has-value .pacem-input-container pacem-datetime-picker.ng-valid.ng-pristine .pacem-select {
   border-color: rgba(167, 248, 171, 0.2);
 }
-.pacem-field pacem-thumbnail .pacem-thumbnail {
-  cursor: pointer;
+.pacem-field .pacem-input-container pacem-thumbnail.pacem-input {
+  border: none;
 }
-.pacem-field pacem-thumbnail .pacem-lightbox {
+.pacem-field .pacem-input-container pacem-thumbnail.pacem-input .pacem-thumbnail {
+  cursor: pointer;
+  display: block;
+}
+.pacem-field .pacem-input-container pacem-thumbnail.pacem-input .pacem-lightbox {
   background-color: #262b3e;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
-.pacem-field pacem-thumbnail .pacem-lightbox pacem-snapshot {
+.pacem-field .pacem-input-container pacem-thumbnail.pacem-input .pacem-lightbox pacem-snapshot {
   display: inline-block;
 }
-.pacem-field pacem-thumbnail.ng-pristine.ng-invalid .pacem-thumbnail {
+.pacem-field .pacem-input-container pacem-thumbnail.pacem-input.ng-pristine.ng-invalid .pacem-thumbnail {
   border-color: rgba(255, 0, 90, 0.2);
 }
-.pacem-field pacem-thumbnail.ng-dirty.ng-invalid .pacem-thumbnail {
+.pacem-field .pacem-input-container pacem-thumbnail.pacem-input.ng-dirty.ng-invalid .pacem-thumbnail {
   border-color: #ff005a;
 }
-.pacem-field.pacem-has-value pacem-thumbnail.ng-valid.ng-dirty .pacem-thumbnail {
+.pacem-field.pacem-has-value .pacem-input-container pacem-thumbnail.pacem-input.ng-valid.ng-dirty .pacem-thumbnail {
   border-color: #a7f8ab;
 }
-.pacem-field.pacem-has-value pacem-thumbnail.ng-valid.ng-pristine .pacem-thumbnail {
+.pacem-field.pacem-has-value .pacem-input-container pacem-thumbnail.pacem-input.ng-valid.ng-pristine .pacem-thumbnail {
   border-color: rgba(167, 248, 171, 0.2);
 }
 .pacem-map-polyline-info,

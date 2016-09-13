@@ -1106,7 +1106,7 @@ export class PacemFieldBuilder {
                 var ctrl = this.ctrl;
                 if (ctrl && ctrl.valueAccessor) {
                     let _ = ctrl.value;
-                    this.hasValue = (_ != null && _ != '');
+                    this.hasValue = (_ !== undefined && _ !== null && _ !== '');
                     //this.ref.detectChanges();
                 }
             }
@@ -1202,7 +1202,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     ngOnChanges(changes: SimpleChanges) {
         // only handle reference changes (for now)
         let c: SimpleChange;
-        if ((c = changes['field']) && !c.isFirstChange()) {
+        if ((c = changes['field'] || changes['readonly']) && !c.isFirstChange()) {
             this.rebuildInputField();
         }
         if (this.componentRef && this.componentRef.instance) {
@@ -1493,12 +1493,12 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
 
         tmpl = `<div class="pacem-field form-group" [ngClass]="{ 'pacem-fetching': fetching, 'pacem-has-value': hasValue }" ${fieldAttrs}>`
             + labelOuterHtml
-            + '<div class="pacem-input-container" *ngIf="!readonly">'
+            + (!this.readonly ? ('<div class="pacem-input-container">' //*ngIf="!readonly"
             + wrapperOpener + elOuterHtml + wrapperCloser
             + validatorsTmpl
-            + '</div>' // *ngIf="!readonly"
-            + detailTmpl.replace(/\/?>/, ' *ngIf="readonly">')
-            + '</div>';
+            + '</div>') // *ngIf="!readonly"
+            : detailTmpl//.replace(/\/?>/, ' *ngIf="readonly">')
+            ) + '</div>';
 
         const selector = 'pacem-input';
         let input = this.builder.createComponent(selector, tmpl, formReference);

@@ -16,6 +16,7 @@ var PacemScaffoldingComponent = (function () {
         this.ref = ref;
         this.looper = looper;
         this.http = http;
+        this.readonly = true;
         this.meta = [];
         this.entity = {
             Name: 'Sebastian', Resume: 'Your <b>CV</b> here...', Birthdate: '2015-07-08T09:58:00.000Z', Sex: 0,
@@ -35,9 +36,8 @@ var PacemScaffoldingComponent = (function () {
     PacemScaffoldingComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-scaffolding',
-            template: "<h2>Pacem Scaffolding</h2>\n<p>Many input data types (and more to come) are involved in this self-composing form system.<br />\nIt includes styling, custom validation and fetching for complex data.</p>\n    <form>\n    <pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n    <p>{{ entity | json }}</p>\n    \n<p>This is the readonly version synchronized with the form above:</p>\n\n    <pacem-field *ngFor=\"let item of meta\" readonly=\"true\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n    </form>\n\n",
-            providers: [pacem_core_1.PacemLooper, pacem_net_1.PacemHttp] /*,
-            entryComponents: [PacemField]*/
+            template: "<h2>Pacem Scaffolding</h2>\n<p>Many input data types (and more to come) are involved in this self-composing form system.<br />\nIt includes styling, custom validation and fetching for complex data.</p>\n\n    <button (click)=\"readonly=!readonly\">toggle readonly</button>\n\n    <p></p>\n    <form>\n    <pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\" [readonly]=\"readonly\"></pacem-field>\n    <p>{{ entity | json }}</p>\n    \n\n    </form>\n\n",
+            providers: [pacem_core_1.PacemLooper, pacem_net_1.PacemHttp]
         }), 
         __metadata('design:paramtypes', [core_1.ChangeDetectorRef, pacem_core_1.PacemLooper, pacem_net_1.PacemHttp])
     ], PacemScaffoldingComponent);

@@ -1070,7 +1070,7 @@ var PacemFieldBuilder = (function () {
                     var ctrl = _this.ctrl;
                     if (ctrl && ctrl.valueAccessor) {
                         var _ = ctrl.value;
-                        _this.hasValue = (_ != null && _ != '');
+                        _this.hasValue = (_ !== undefined && _ !== null && _ !== '');
                     }
                 };
                 this.sub1 = this.fetcher.onFetching.subscribe(function (_) {
@@ -1186,7 +1186,7 @@ var PacemField = (function () {
     PacemField.prototype.ngOnChanges = function (changes) {
         // only handle reference changes (for now)
         var c;
-        if ((c = changes['field']) && !c.isFirstChange()) {
+        if ((c = changes['field'] || changes['readonly']) && !c.isFirstChange()) {
             this.rebuildInputField();
         }
         if (this.componentRef && this.componentRef.instance) {
@@ -1461,12 +1461,12 @@ var PacemField = (function () {
         }
         tmpl = ("<div class=\"pacem-field form-group\" [ngClass]=\"{ 'pacem-fetching': fetching, 'pacem-has-value': hasValue }\" " + fieldAttrs + ">")
             + labelOuterHtml
-            + '<div class="pacem-input-container" *ngIf="!readonly">'
-            + wrapperOpener + elOuterHtml + wrapperCloser
-            + validatorsTmpl
-            + '</div>' // *ngIf="!readonly"
-            + detailTmpl.replace(/\/?>/, ' *ngIf="readonly">')
-            + '</div>';
+            + (!this.readonly ? ('<div class="pacem-input-container">' //*ngIf="!readonly"
+                + wrapperOpener + elOuterHtml + wrapperCloser
+                + validatorsTmpl
+                + '</div>') // *ngIf="!readonly"
+                : detailTmpl //.replace(/\/?>/, ' *ngIf="readonly">')
+            ) + '</div>';
         var selector = 'pacem-input';
         var input = this.builder.createComponent(selector, tmpl, formReference);
         var cmpRef = input;
