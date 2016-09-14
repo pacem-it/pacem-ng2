@@ -112,6 +112,7 @@ var Pacem3D = (function () {
         this.onSceneUpdated = new core_1.EventEmitter();
         this.onRender = new core_1.EventEmitter();
         this.onPreRender = new core_1.EventEmitter();
+        /** @internal */ this._dict = {};
         this.scope = {
             w: 0, h: 0, widthHalf: 0, heightHalf: 0, lastHover: { id: '' }
         };
@@ -150,17 +151,26 @@ var Pacem3D = (function () {
             // what's really needed:
             var obj = getPointerObject(e);
             if (obj.id != me.scope.lastHover.id) {
-                if (me.scope.lastHover.id)
+                if (me.scope.lastHover.id) {
                     me.onItemOut.emit(me.scope.lastHover);
-                if (obj.id)
+                    var item = _this._dict[me.scope.lastHover.id];
+                    item && item.onOut.emit(me.scope.lastHover);
+                }
+                if (obj.id) {
                     me.onItemOver.emit(obj);
+                    var item = _this._dict[obj.id];
+                    item && item.onOver.emit(obj);
+                }
                 me.scope.lastHover = obj;
             }
         };
         this.clickDelegate = function (event) {
             event.preventDefault();
-            if (_this.scope.lastHover)
+            if (_this.scope.lastHover) {
                 _this.onItemClick.emit(_this.scope.lastHover);
+                var item = _this._dict[_this.scope.lastHover.id];
+                item && item.onClick.emit(_this.scope.lastHover);
+            }
         };
         //#endregion
         this.orbitControlsDelegate = function (evt) {
@@ -310,8 +320,10 @@ var Pacem3DObject = (function () {
         this.init();
     };
     Pacem3DObject.prototype.ngOnDestroy = function () {
-        if (this.obj3D)
+        if (this.obj3D) {
+            delete this.pacem3dCtrl._dict[this.obj3D.uuid];
             this.pacem3dCtrl.scene.remove(this.obj3D);
+        }
     };
     Pacem3DObject.prototype.init = function () {
         var me = this;
@@ -321,6 +333,7 @@ var Pacem3DObject = (function () {
             me.obj3D = obj;
             obj.userData = me.tag;
             scene.add(obj);
+            me.pacem3dCtrl._dict[obj.uuid] = me;
         }
         var format = (me['format'] || 'native').toLowerCase();
         var object = me['object'];
@@ -349,7 +362,7 @@ var Pacem3DObject = (function () {
                         then(new THREE.Mesh(g, (m && m.length && m[0]) || new THREE.MeshLambertMaterial()));
                     });
                 else {
-                    var tuple = loader.parse(me.object), m = tuple.materials;
+                    var tuple = loader.parse(JSON.parse(me.object)), m = tuple.materials;
                     then(new THREE.Mesh(tuple.geometry, (m && m.length && m[0]) || new THREE.MeshLambertMaterial()));
                 }
                 break;

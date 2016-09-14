@@ -131,6 +131,8 @@ export class Pacem3D implements OnChanges, OnInit {
     @Output('render') onRender = new EventEmitter<{ scene: THREE.Scene }>();
     @Output('prerender') onPreRender = new EventEmitter<{ cancel: boolean, scene: THREE.Scene }>();
 
+    /** @internal */_dict: { [key: string]: Pacem3DObject } = {};
+
     resize(width: number | string, height: number | string) {
         let w: string = typeof width === 'string' ? width : width + 'px';
         let h: string = typeof height === 'string' ? height : height + 'px';
@@ -205,8 +207,16 @@ export class Pacem3D implements OnChanges, OnInit {
         // what's really needed:
         let obj = getPointerObject(e);
         if (obj.id != me.scope.lastHover.id) {
-            if (me.scope.lastHover.id) me.onItemOut.emit(me.scope.lastHover);
-            if (obj.id) me.onItemOver.emit(obj);
+            if (me.scope.lastHover.id) {
+                me.onItemOut.emit(me.scope.lastHover);
+                let item = this._dict[me.scope.lastHover.id];
+                item && item.onOut.emit(me.scope.lastHover);
+            }
+            if (obj.id) {
+                me.onItemOver.emit(obj);
+                let item = this._dict[obj.id];
+                item && item.onOver.emit(obj);
+            }
             me.scope.lastHover = obj;
         }
     }
@@ -216,7 +226,11 @@ export class Pacem3D implements OnChanges, OnInit {
     }
     private clickDelegate = (event: PointerEvent) => {
         event.preventDefault();
-        if (this.scope.lastHover) this.onItemClick.emit(this.scope.lastHover);
+        if (this.scope.lastHover) {
+            this.onItemClick.emit(this.scope.lastHover);
+            let item = this._dict[this.scope.lastHover.id];
+            item && item.onClick.emit(this.scope.lastHover);
+        }
     }
 
     //#endregion
@@ -311,8 +325,10 @@ export class Pacem3DObject implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.obj3D)
+        if (this.obj3D) {
+            delete this.pacem3dCtrl._dict[this.obj3D.uuid];
             this.pacem3dCtrl.scene.remove(this.obj3D);
+        }
     }
 
     private init() {
@@ -324,6 +340,7 @@ export class Pacem3DObject implements OnInit, OnDestroy {
             me.obj3D = obj;
             obj.userData = me.tag;
             scene.add(obj);
+            me.pacem3dCtrl._dict[obj.uuid] = me;
         }
 
         let format = (me['format'] || 'native').toLowerCase();
@@ -357,7 +374,7 @@ export class Pacem3DObject implements OnInit, OnDestroy {
 
                     });
                 else {
-                    let tuple = loader.parse(me.object),
+                    let tuple = loader.parse(JSON.parse(<string>me.object)),
                         m = tuple.materials;
                     then(new THREE.Mesh(tuple.geometry, (m && m.length && m[0]) || new THREE.MeshLambertMaterial()));
                 }
@@ -408,8 +425,7 @@ export class Pacem3DObject implements OnInit, OnDestroy {
             y: vector.y
         };
     }
-
-
+    
     get projectionCircle() {
         let sphere = this.boundingSphere;
         let center = this.obj3D.position.clone();

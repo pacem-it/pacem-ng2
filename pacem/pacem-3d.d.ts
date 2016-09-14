@@ -35,6 +35,9 @@ export declare class Pacem3D implements OnChanges, OnInit {
         cancel: boolean;
         scene: THREE.Scene;
     }>;
+    /** @internal */ _dict: {
+        [key: string]: Pacem3DObject;
+    };
     resize(width: number | string, height: number | string): void;
     private scope;
     ngOnInit(): void;

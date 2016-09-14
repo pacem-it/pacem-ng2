@@ -5,11 +5,11 @@ import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from
 @Component({
     selector: 'app-pacem-3d',
     template: `<h2>Pacem 3D</h2>
-<div #container (window:resize)="onResize($event)"><pacem-3d orbit="true" interactive="true" #canvas
-        (itemclick)="onClick($event)"
-        (itemover)="onOver($event)"
-        (itemout)="onOut($event)">
-    <pacem-3d-object *ngFor="let obj of objects; let i=index" [url]="obj.url" [object]="obj.mesh" [position]="obj.position" [tag]="obj.tag" [format]="obj.format"></pacem-3d-object>
+<div #container (window:resize)="onResize($event)"><pacem-3d orbit="true" interactive="true" #canvas>
+    <pacem-3d-object *ngFor="let obj of objects; let i=index" [url]="obj.url" [object]="obj.mesh" [position]="obj.position" [tag]="obj.tag" [format]="obj.format"
+        (click)="onClick($event)"
+        (over)="onOver($event)"
+        (out)="onOut($event)"></pacem-3d-object>
     <pacem-3d-light position="25 12.5 50" intensity="1" color="#8fbbcc"></pacem-3d-light>
 </pacem-3d></div>`/*, 
     entryComponents: [Pacem3D]*/
