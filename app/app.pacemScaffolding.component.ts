@@ -2,6 +2,7 @@
 import { PacemHttp } from './../pacem/pacem-net';
 import { PacemField } from './../pacem/pacem-scaffolding';
 import { JsonPipe } from '@angular/common';
+import { NgForm } from '@angular/forms';
 import { Component, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
 @Component({
@@ -10,13 +11,22 @@ import { Component, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, AfterVi
 <p>Many input data types (and more to come) are involved in this self-composing form system.<br />
 It includes styling, custom validation and fetching for complex data.</p>
 
+<!--<form>
+    <pacem-datetime-picker name="Birthdate" [(ngModel)]="entity.Birthdate"></pacem-datetime-picker>
+</form>-->
+
     <button (click)="readonly=!readonly">toggle readonly</button>
 
     <p></p>
-    <form>
-    <pacem-field *ngFor="let item of meta" [field]="item" [entity]="entity" [readonly]="readonly"></pacem-field>
+    <form #f="ngForm" novalidate (ngSubmit)="check(f)">
+    <pacem-field    *ngFor="let item of meta" [field]="item" [entity]="entity" [readonly]="readonly" 
+                    [form]="f">
+    </pacem-field>
     <p>{{ entity | json }}</p>
     
+    <input type="submit" value="submit" />
+
+    <b>{{ ( f.valid ? 'valid': 'invalid' ) }}</b> and <b>{{ (f.pristine ?  'pristine' : 'dirty') }}</b>
 
     </form>
 
@@ -28,6 +38,10 @@ export class PacemScaffoldingComponent implements AfterViewInit {
     private readonly = true;
 
     constructor(private ref: ChangeDetectorRef, private looper: PacemLooper, private http: PacemHttp) {
+    }
+
+    check(form:NgForm) {
+        console.log(form.valid ? 'VALID' : 'INVALID');
     }
 
     ngAfterViewInit() {

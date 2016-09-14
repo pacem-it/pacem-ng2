@@ -1,11 +1,12 @@
 ﻿/*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-import { NgModule, Directive, Component, Injectable, Compiler, Renderer, Input, Output, EventEmitter, Optional,
+import { NgModule, Directive, Component, Injectable, Compiler, Renderer, Input, Output, EventEmitter,
+    Optional, Host, Self, SkipSelf,
     ViewContainerRef, ViewChild, ElementRef, ComponentRef, forwardRef,
     DoCheck, ChangeDetectorRef, KeyValueDiffers, KeyValueDiffer, ChangeDetectionStrategy,
     OnDestroy, OnInit, OnChanges, AfterViewInit, SimpleChange, SimpleChanges, Attribute } from '@angular/core';
 import { Validators, Validator, ValidatorFn, NG_VALIDATORS, AbstractControl, NgControl,
-    SelectControlValueAccessor, NgSelectOption, CheckboxControlValueAccessor, ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel,
-    FormsModule } from '@angular/forms';
+    SelectControlValueAccessor, NgSelectOption, CheckboxControlValueAccessor, ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel, NgForm,
+    FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PacemUtils, PacemDate, PacemCoreModule } from './pacem-core';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
@@ -107,7 +108,8 @@ interface IPacemWithFetchableDatasource extends IPacemWithDatasource {
 
 interface IPacemWithEntity extends IPacemWithFetchableDatasource {
     entity: any;
-    readonly: boolean;
+    model: NgModel;
+    //readonly: boolean;
 }
 
 function getDateFormats(dotNetFormat: string) {
@@ -143,6 +145,14 @@ export declare type pacemFieldMetadata = {
     validators: { type: string, errorMessage: string, params?: any }[];
 }
 
+function MakeValueAccessorProvider(type: any) {
+    return {
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => type),
+        multi: true
+    };
+}
+
 export abstract class BaseValueAccessor implements ControlValueAccessor {
 
     constructor(private ngControl: NgControl) {
@@ -166,7 +176,8 @@ export abstract class BaseValueAccessor implements ControlValueAccessor {
      * @param value new value
      */
     writeValue(value: any) {
-        this._value = value;
+        if (this._value !== value)
+            this._value = value;
     }
 
     protected forceWriteValue(value: any) {
@@ -181,8 +192,7 @@ export abstract class BaseValueAccessor implements ControlValueAccessor {
 }
 
 @Directive({
-    selector:
-    '.pacem-radio-list[ngModel]'
+    selector: '.pacem-radio-list[ngModel]'
 })
 class RadioControlListValueAccessor extends BaseValueAccessor {
 
@@ -919,8 +929,7 @@ class PacemContentEditable extends BaseValueAccessor implements OnInit, OnDestro
     Webcam access is <b>impossile</b> on this machine!
     </pacem-snapshot>
 </pacem-lightbox>
-`
-})
+`})
 class PacemThumbnail extends BaseValueAccessor {
 
     @ViewChild('lightbox') lightbox: PacemLightbox;
@@ -1074,9 +1083,12 @@ export class PacemFieldBuilder {
         //, DoCheck // don't implement DoCheck HERE!
         {
             @Input() entity: any;
-            @Input() readonly: boolean;
             @Input() fetchData: IFetchData;
             @ViewChild(ctrlRef) ctrl: NgModel;
+
+            get model() {
+                return this.ctrl;
+            }
 
             private sub1: Subscription;
             private sub2: Subscription;
@@ -1088,7 +1100,6 @@ export class PacemFieldBuilder {
                 private ref: ChangeDetectorRef,
                 private fetcher: DatasourceFetcher/*,
                 private differs: KeyValueDiffers*/) {
-
                 this.sub1 = this.fetcher.onFetching.subscribe(_ => {
                     this.fetching = true;
                     //this.ref.detectChanges();
@@ -1107,7 +1118,6 @@ export class PacemFieldBuilder {
                 if (ctrl && ctrl.valueAccessor) {
                     let _ = ctrl.value;
                     this.hasValue = (_ !== undefined && _ !== null && _ !== '');
-                    //this.ref.detectChanges();
                 }
             }
 
@@ -1147,11 +1157,6 @@ export class PacemFieldBuilder {
                     });
             }
 
-            //ngDoCheck() {
-            //    if (this.differer && this.differer.diff(this.fetchData))
-            //        this.fetch();
-            //}
-
             ngOnDestroy() {
                 if (this.subscription)
                     this.subscription.unsubscribe();
@@ -1180,7 +1185,7 @@ export class PacemFieldBuilder {
     <div #placeholder hidden></div>
     `,
     //entryComponents: [PacemSelectMany, PacemAutocomplete],
-    providers: [/*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder, NgControl,
+    providers: [/*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder, 
         PacemDate, MinValidator, MaxValidator, CompareValidator]
 })
 export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
@@ -1191,12 +1196,31 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     protected dynamicComponentTarget: ViewContainerRef;
     // this will be reference to dynamic content - to be able to destroy it
     private componentRef: ComponentRef<IPacemWithEntity>;
+    private subscription: Subscription;
 
     @Input() field: pacemFieldMetadata;
     @Input() entity: any;
     @Input() readonly: boolean;
 
+    private _form: NgForm;
+    @Input() set form(v: NgForm) {
+        if (v == this._form) return;
+        this._form = v;
+        this.syncControl();
+    }
+
     constructor(private compiler: Compiler, private builder: PacemFieldBuilder) {
+    }
+
+    private syncControl(v?: NgForm) {
+        if (this.readonly) return;
+        let model = (this.componentRef && this.componentRef.instance && this.componentRef.instance.model);
+        if (model) {
+            let frmCtrl = this._form && this._form.control,
+                name = this.field.prop;
+            if (frmCtrl && !frmCtrl.contains(name))
+                frmCtrl.addControl(name, model.control);
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -1208,8 +1232,6 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
         if (this.componentRef && this.componentRef.instance) {
             if ((c = changes['entity']) && !c.isFirstChange())
                 this.componentRef.instance.entity = c.currentValue;
-            if ((c = changes['readonly']) && !c.isFirstChange())
-                this.componentRef.instance.readonly = c.currentValue;
         }
     }
 
@@ -1218,12 +1240,27 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.componentRef) this.componentRef.destroy();
+        this.dispose();
+    }
+
+    private dispose() {
+        if (this.componentRef) {
+            let model = (this.componentRef.instance && this.componentRef.instance.model);
+            if (model) {
+                let frmCtrl = this._form && this._form.control,
+                    name = this.field.prop;
+                if (frmCtrl && frmCtrl.contains(name))
+                    frmCtrl.removeControl(name);
+            }
+            this.componentRef.destroy();
+        }
+        if (this.subscription && !this.subscription.closed) this.subscription.unsubscribe();
     }
 
     private uid: string = `_${PacemUtils.uniqueCode()}`;
+
     private rebuildInputField() {
-        if (this.componentRef) this.componentRef.destroy();
+        this.dispose();
         if (!this.field || !this.entity) return;
         //
         let field = this.field;
@@ -1250,8 +1287,9 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
         PacemUtils.addClass(label, 'pacem-label');
 
         // setting what will be the `#name => ngModel` template reference (for validation)
-        let formReference = (field.prop + PacemUtils.uniqueCode()).toLowerCase();
+        let formReference = (field.prop + this.uid/*PacemUtils.uniqueCode()*/).toLowerCase();
         attrs['#' + formReference] = 'ngModel';
+        //attrs['#' + field.prop] = 'ngForm';
         switch (field.display && field.display.ui) {
             // TODO: remove this (use dataType = 'HTML' instead).
             case 'contentEditable':
@@ -1470,11 +1508,13 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
             attrs['tabindex'] = '-1';
         }
         let el = document.createElement(tagName);
-        PacemUtils.addClass(el, 'form-control');
         let elOuterHtml: string = el.outerHTML;
         let selfClosing = !(new RegExp(`</${tagName}`, 'i').test(elOuterHtml));
         if (selfClosing && !elOuterHtml.endsWith('/>'))
             elOuterHtml = elOuterHtml.replace('>', '/>');
+        //
+        if (attrs['class']) attrs['class'] += ' form-control';
+        else attrs['class'] = 'form-control';
         for (var prop in attrs)
             elOuterHtml = elOuterHtml.replace(selfClosing ? /\/>$/ : /></, ` ${prop}="${attrs[prop]}"${(selfClosing ? '/>' : '><')}`);
         if (innerHtml && !selfClosing)
@@ -1494,10 +1534,10 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
         tmpl = `<div class="pacem-field form-group" [ngClass]="{ 'pacem-fetching': fetching, 'pacem-has-value': hasValue }" ${fieldAttrs}>`
             + labelOuterHtml
             + (!this.readonly ? ('<div class="pacem-input-container">' //*ngIf="!readonly"
-            + wrapperOpener + elOuterHtml + wrapperCloser
-            + validatorsTmpl
-            + '</div>') // *ngIf="!readonly"
-            : detailTmpl//.replace(/\/?>/, ' *ngIf="readonly">')
+                + wrapperOpener + elOuterHtml + wrapperCloser
+                + validatorsTmpl
+                + '</div>') // *ngIf="!readonly"
+                : detailTmpl//.replace(/\/?>/, ' *ngIf="readonly">')
             ) + '</div>';
 
         const selector = 'pacem-input';
@@ -1511,16 +1551,15 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                 // and here we have access to our dynamic component
                 let component = this.componentRef.instance;
                 component.entity = this.entity;
-                component.readonly = this.readonly;
                 if (fetchData)
                     component.fetchData = fetchData;
+                this.syncControl();
             });
     }
-
 }
 
 @NgModule({
-    imports: [FormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule],
+    imports: [FormsModule, ReactiveFormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule],
     declarations: [PacemField],
     exports: [PacemField, PacemDatetimePicker],
     providers: [PacemExecCommand]

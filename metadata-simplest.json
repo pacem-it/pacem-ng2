@@ -1,0 +1,39 @@
+﻿[
+  {
+    "prop": "UserName",
+    "type": "String",
+    "extra": { },
+    "display": {
+      "name": "username",
+      "description": "username",
+      "short": "username",
+      "watermark": "email...",
+      "ui": null,
+      "null": null,
+      "format": null
+    },
+    "isReadOnly": false,
+    "dataType": "EmailAddress",
+    "isComplexType": false,
+    "isNullable": false
+    
+  },
+  {
+    "prop": "Password",
+    "type": "String",
+    "extra": { },
+    "display": {
+      "name": "password",
+      "description": "password",
+      "short": "password",
+      "watermark": "password...",
+      "ui": null,
+      "null": null,
+      "format": null
+    },
+    "isReadOnly": false,
+    "dataType": "Password",
+    "isComplexType": false,
+    "isNullable": false
+  }
+]

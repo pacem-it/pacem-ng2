@@ -1,0 +1,37 @@
+﻿[
+  {
+    "prop": "UserName",
+    "type": "String",
+    "extra": { },
+    "display": {
+      "name": "username",
+      "description": "username",
+      "short": "username",
+      "watermark": "email...",
+      "ui": null,
+      "null": null,
+      "format": null
+    },
+    "isReadOnly": false,
+    "dataType": "EmailAddress",
+    "isComplexType": false,
+    "isNullable": false,
+    "validators": [
+      {
+        "errorMessage": "field username allows 127 chars at most.",
+        "type": "length",
+        "params": { "max": 127 }
+      },
+      {
+        "errorMessage": "field username is not a valid email address.",
+        "type": "email",
+        "params": { }
+      },
+      {
+        "errorMessage": "field username is required.",
+        "type": "required",
+        "params": { }
+      }
+    ]
+  }
+]

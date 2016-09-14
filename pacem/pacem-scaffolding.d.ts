@@ -1,5 +1,5 @@
 import { Compiler, EventEmitter, ViewContainerRef, ElementRef, OnDestroy, OnInit, OnChanges, AfterViewInit, SimpleChanges } from '@angular/core';
-import { NgControl, ControlValueAccessor, NgModel } from '@angular/forms';
+import { NgControl, ControlValueAccessor, NgModel, NgForm } from '@angular/forms';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/toPromise';
@@ -111,13 +111,18 @@ export declare class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     labelElementRef: ElementRef;
     protected dynamicComponentTarget: ViewContainerRef;
     private componentRef;
+    private subscription;
     field: pacemFieldMetadata;
     entity: any;
     readonly: boolean;
+    private _form;
+    form: NgForm;
     constructor(compiler: Compiler, builder: PacemFieldBuilder);
+    private syncControl(v?);
     ngOnChanges(changes: SimpleChanges): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
+    private dispose();
     private uid;
     private rebuildInputField();
 }

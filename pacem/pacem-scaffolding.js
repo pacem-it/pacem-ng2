@@ -114,6 +114,13 @@ function getDateFormats(dotNetFormat) {
             return format;
     }
 }
+function MakeValueAccessorProvider(type) {
+    return {
+        provide: forms_1.NG_VALUE_ACCESSOR,
+        useExisting: core_1.forwardRef(function () { return type; }),
+        multi: true
+    };
+}
 var BaseValueAccessor = (function () {
     function BaseValueAccessor(ngControl) {
         this.ngControl = ngControl;
@@ -139,7 +146,8 @@ var BaseValueAccessor = (function () {
      * @param value new value
      */
     BaseValueAccessor.prototype.writeValue = function (value) {
-        this._value = value;
+        if (this._value !== value)
+            this._value = value;
     };
     BaseValueAccessor.prototype.forceWriteValue = function (value) {
         this._value = value;
@@ -942,8 +950,7 @@ var PacemThumbnail = (function (_super) {
     PacemThumbnail = __decorate([
         core_1.Component({
             selector: 'pacem-thumbnail[ngModel]',
-            template: "<img [ngStyle]=\"{ 'width': width+'px', 'height': height+'px' }\" class=\"pacem-thumbnail\" [attr.src]=\"source\" (click)=\"changing=true\" />\n<pacem-lightbox #lightbox [show]=\"changing\" (close)=\"changing=false\">\n    <pacem-snapshot (select)=\"onchange($event)\" #snapshot>\n    Webcam access is <b>impossile</b> on this machine!\n    </pacem-snapshot>\n</pacem-lightbox>\n"
-        }), 
+            template: "<img [ngStyle]=\"{ 'width': width+'px', 'height': height+'px' }\" class=\"pacem-thumbnail\" [attr.src]=\"source\" (click)=\"changing=true\" />\n<pacem-lightbox #lightbox [show]=\"changing\" (close)=\"changing=false\">\n    <pacem-snapshot (select)=\"onchange($event)\" #snapshot>\n    Webcam access is <b>impossile</b> on this machine!\n    </pacem-snapshot>\n</pacem-lightbox>\n" }), 
         __metadata('design:paramtypes', [forms_1.NgModel])
     ], PacemThumbnail);
     return PacemThumbnail;
@@ -1082,6 +1089,13 @@ var PacemFieldBuilder = (function () {
                     //this.ref.detectChanges();
                 });
             }
+            Object.defineProperty(PacemFieldDynamicField.prototype, "model", {
+                get: function () {
+                    return this.ctrl;
+                },
+                enumerable: true,
+                configurable: true
+            });
             PacemFieldDynamicField.prototype.ngAfterViewInit = function () {
                 var ctrl = this.ctrl;
                 if (ctrl && ctrl.valueAccessor) {
@@ -1115,10 +1129,6 @@ var PacemFieldBuilder = (function () {
                     _this.ref.markForCheck();
                 });
             };
-            //ngDoCheck() {
-            //    if (this.differer && this.differer.diff(this.fetchData))
-            //        this.fetch();
-            //}
             PacemFieldDynamicField.prototype.ngOnDestroy = function () {
                 if (this.subscription)
                     this.subscription.unsubscribe();
@@ -1131,10 +1141,6 @@ var PacemFieldBuilder = (function () {
                 core_1.Input(), 
                 __metadata('design:type', Object)
             ], PacemFieldDynamicField.prototype, "entity", void 0);
-            __decorate([
-                core_1.Input(), 
-                __metadata('design:type', Boolean)
-            ], PacemFieldDynamicField.prototype, "readonly", void 0);
             __decorate([
                 core_1.Input(), 
                 __metadata('design:type', Object)
@@ -1183,6 +1189,26 @@ var PacemField = (function () {
         this.builder = builder;
         this.uid = "_" + pacem_core_1.PacemUtils.uniqueCode();
     }
+    Object.defineProperty(PacemField.prototype, "form", {
+        set: function (v) {
+            if (v == this._form)
+                return;
+            this._form = v;
+            this.syncControl();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemField.prototype.syncControl = function (v) {
+        if (this.readonly)
+            return;
+        var model = (this.componentRef && this.componentRef.instance && this.componentRef.instance.model);
+        if (model) {
+            var frmCtrl = this._form && this._form.control, name_1 = this.field.prop;
+            if (frmCtrl && !frmCtrl.contains(name_1))
+                frmCtrl.addControl(name_1, model.control);
+        }
+    };
     PacemField.prototype.ngOnChanges = function (changes) {
         // only handle reference changes (for now)
         var c;
@@ -1192,21 +1218,30 @@ var PacemField = (function () {
         if (this.componentRef && this.componentRef.instance) {
             if ((c = changes['entity']) && !c.isFirstChange())
                 this.componentRef.instance.entity = c.currentValue;
-            if ((c = changes['readonly']) && !c.isFirstChange())
-                this.componentRef.instance.readonly = c.currentValue;
         }
     };
     PacemField.prototype.ngAfterViewInit = function () {
         this.rebuildInputField();
     };
     PacemField.prototype.ngOnDestroy = function () {
-        if (this.componentRef)
+        this.dispose();
+    };
+    PacemField.prototype.dispose = function () {
+        if (this.componentRef) {
+            var model = (this.componentRef.instance && this.componentRef.instance.model);
+            if (model) {
+                var frmCtrl = this._form && this._form.control, name_2 = this.field.prop;
+                if (frmCtrl && frmCtrl.contains(name_2))
+                    frmCtrl.removeControl(name_2);
+            }
             this.componentRef.destroy();
+        }
+        if (this.subscription && !this.subscription.closed)
+            this.subscription.unsubscribe();
     };
     PacemField.prototype.rebuildInputField = function () {
         var _this = this;
-        if (this.componentRef)
-            this.componentRef.destroy();
+        this.dispose();
         if (!this.field || !this.entity)
             return;
         //
@@ -1227,8 +1262,9 @@ var PacemField = (function () {
         label.innerText = caption;
         pacem_core_1.PacemUtils.addClass(label, 'pacem-label');
         // setting what will be the `#name => ngModel` template reference (for validation)
-        var formReference = (field.prop + pacem_core_1.PacemUtils.uniqueCode()).toLowerCase();
+        var formReference = (field.prop + this.uid /*PacemUtils.uniqueCode()*/).toLowerCase();
         attrs['#' + formReference] = 'ngModel';
+        //attrs['#' + field.prop] = 'ngForm';
         switch (field.display && field.display.ui) {
             // TODO: remove this (use dataType = 'HTML' instead).
             case 'contentEditable':
@@ -1441,11 +1477,15 @@ var PacemField = (function () {
             attrs['tabindex'] = '-1';
         }
         var el = document.createElement(tagName);
-        pacem_core_1.PacemUtils.addClass(el, 'form-control');
         var elOuterHtml = el.outerHTML;
         var selfClosing = !(new RegExp("</" + tagName, 'i').test(elOuterHtml));
         if (selfClosing && !elOuterHtml.endsWith('/>'))
             elOuterHtml = elOuterHtml.replace('>', '/>');
+        //
+        if (attrs['class'])
+            attrs['class'] += ' form-control';
+        else
+            attrs['class'] = 'form-control';
         for (var prop in attrs)
             elOuterHtml = elOuterHtml.replace(selfClosing ? /\/>$/ : /></, " " + prop + "=\"" + attrs[prop] + "\"" + (selfClosing ? '/>' : '><'));
         if (innerHtml && !selfClosing)
@@ -1478,9 +1518,9 @@ var PacemField = (function () {
             // and here we have access to our dynamic component
             var component = _this.componentRef.instance;
             component.entity = _this.entity;
-            component.readonly = _this.readonly;
             if (fetchData)
                 component.fetchData = fetchData;
+            _this.syncControl();
         });
     };
     __decorate([
@@ -1503,12 +1543,17 @@ var PacemField = (function () {
         core_1.Input(), 
         __metadata('design:type', Boolean)
     ], PacemField.prototype, "readonly", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', forms_1.NgForm), 
+        __metadata('design:paramtypes', [forms_1.NgForm])
+    ], PacemField.prototype, "form", null);
     PacemField = __decorate([
         core_1.Component({
             selector: 'pacem-field',
             template: "\n    <div #placeholder hidden></div>\n    ",
             //entryComponents: [PacemSelectMany, PacemAutocomplete],
-            providers: [ /*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder, forms_1.NgControl,
+            providers: [ /*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder,
                 pacem_core_1.PacemDate, MinValidator, MaxValidator, CompareValidator]
         }), 
         __metadata('design:paramtypes', [core_1.Compiler, PacemFieldBuilder])
@@ -1521,7 +1566,7 @@ var PacemScaffoldingModule = (function () {
     }
     PacemScaffoldingModule = __decorate([
         core_1.NgModule({
-            imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
+            imports: [forms_1.FormsModule, forms_1.ReactiveFormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
             declarations: [PacemField],
             exports: [PacemField, PacemDatetimePicker],
             providers: [PacemExecCommand]

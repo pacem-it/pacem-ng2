@@ -23,7 +23,7 @@ var AppModule = (function () {
     AppModule = __decorate([
         core_1.NgModule({
             imports: [
-                platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, common_1.CommonModule, pacem_module_1.PacemModule, app_routing_1.routing
+                platform_browser_1.BrowserModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, common_1.CommonModule, pacem_module_1.PacemModule, app_routing_1.routing
             ],
             declarations: app_routing_1.pages.map(function (p) { return p.component; }).concat([
                 app_component_1.AppComponent,

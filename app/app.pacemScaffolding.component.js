@@ -23,6 +23,9 @@ var PacemScaffoldingComponent = (function () {
             FavFood: "ice cream",
         };
     }
+    PacemScaffoldingComponent.prototype.check = function (form) {
+        console.log(form.valid ? 'VALID' : 'INVALID');
+    };
     PacemScaffoldingComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.http.get('metadata.json')
@@ -36,7 +39,7 @@ var PacemScaffoldingComponent = (function () {
     PacemScaffoldingComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-scaffolding',
-            template: "<h2>Pacem Scaffolding</h2>\n<p>Many input data types (and more to come) are involved in this self-composing form system.<br />\nIt includes styling, custom validation and fetching for complex data.</p>\n\n    <button (click)=\"readonly=!readonly\">toggle readonly</button>\n\n    <p></p>\n    <form>\n    <pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\" [readonly]=\"readonly\"></pacem-field>\n    <p>{{ entity | json }}</p>\n    \n\n    </form>\n\n",
+            template: "<h2>Pacem Scaffolding</h2>\n<p>Many input data types (and more to come) are involved in this self-composing form system.<br />\nIt includes styling, custom validation and fetching for complex data.</p>\n\n<!--<form>\n    <pacem-datetime-picker name=\"Birthdate\" [(ngModel)]=\"entity.Birthdate\"></pacem-datetime-picker>\n</form>-->\n\n    <button (click)=\"readonly=!readonly\">toggle readonly</button>\n\n    <p></p>\n    <form #f=\"ngForm\" novalidate (ngSubmit)=\"check(f)\">\n    <pacem-field    *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\" [readonly]=\"readonly\" \n                    [form]=\"f\">\n    </pacem-field>\n    <p>{{ entity | json }}</p>\n    \n    <input type=\"submit\" value=\"submit\" />\n\n    <b>{{ ( f.valid ? 'valid': 'invalid' ) }}</b> and <b>{{ (f.pristine ?  'pristine' : 'dirty') }}</b>\n\n    </form>\n\n",
             providers: [pacem_core_1.PacemLooper, pacem_net_1.PacemHttp]
         }), 
         __metadata('design:paramtypes', [core_1.ChangeDetectorRef, pacem_core_1.PacemLooper, pacem_net_1.PacemHttp])

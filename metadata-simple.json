@@ -1,0 +1,111 @@
+﻿[
+  {
+    "prop": "UserName",
+    "type": "String",
+    "extra": { },
+    "display": {
+      "name": "username",
+      "description": "username",
+      "short": "username",
+      "watermark": "email...",
+      "ui": null,
+      "null": null,
+      "format": null
+    },
+    "isReadOnly": false,
+    "dataType": "EmailAddress",
+    "isComplexType": false,
+    "isNullable": false,
+    "validators": [
+      {
+        "errorMessage": "field username allows 127 chars at most.",
+        "type": "length",
+        "params": { "max": 127 }
+      },
+      {
+        "errorMessage": "field username is not a valid email address.",
+        "type": "email",
+        "params": { }
+      },
+      {
+        "errorMessage": "field username is required.",
+        "type": "required",
+        "params": { }
+      }
+    ]
+  },
+  {
+    "prop": "Password",
+    "type": "String",
+    "extra": { },
+    "display": {
+      "name": "password",
+      "description": "password",
+      "short": "password",
+      "watermark": "password...",
+      "ui": null,
+      "null": null,
+      "format": null
+    },
+    "isReadOnly": false,
+    "dataType": "Password",
+    "isComplexType": false,
+    "isNullable": false,
+    "validators": [
+      {
+        "errorMessage": "length of field password must be between 8 and 15 chars.",
+        "type": "length",
+        "params": {
+          "min": 8,
+          "max": 15
+        }
+      },
+      {
+        "errorMessage": "field password is required.",
+        "type": "required",
+        "params": { }
+      }
+    ]
+  },
+  {
+    "prop": "RememberMe",
+    "type": "Byte",
+    "extra": {
+      "enum": [
+        {
+          "value": 1,
+          "caption": "keep me signed in on this machine"
+        },
+        {
+          "value": 0,
+          "caption": "ask my credentials every time"
+        }
+      ]
+    },
+    "display": {
+      "name": "keep me signed in",
+      "description": "remember me on this computer",
+      "short": "remember me?",
+      "watermark": "remember me...",
+      "ui": null,
+      "null": null,
+      "format": null
+    },
+    "isReadOnly": false,
+    "dataType": "Enumeration",
+    "isComplexType": false,
+    "isNullable": false,
+    "validators": [
+      {
+        "errorMessage": "field keep me signed in is required.",
+        "type": "required",
+        "params": { }
+      },
+      {
+        "errorMessage": "The field keep me signed in must be a number.",
+        "type": "number",
+        "params": { }
+      }
+    ]
+  }
+]

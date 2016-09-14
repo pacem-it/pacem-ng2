@@ -1,5 +1,6 @@
 import { PacemLooper } from './../pacem/pacem-core';
 import { PacemHttp } from './../pacem/pacem-net';
+import { NgForm } from '@angular/forms';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
 export declare class PacemScaffoldingComponent implements AfterViewInit {
     private ref;
@@ -7,6 +8,7 @@ export declare class PacemScaffoldingComponent implements AfterViewInit {
     private http;
     private readonly;
     constructor(ref: ChangeDetectorRef, looper: PacemLooper, http: PacemHttp);
+    check(form: NgForm): void;
     ngAfterViewInit(): void;
     meta: any[];
     entity: {
