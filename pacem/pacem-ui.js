@@ -2077,7 +2077,7 @@ var PacemPieChart = (function () {
         this.location = location;
         this.supportsSVGTransforms = false;
         this.normalizePath = function (path) {
-            var href = path || _this.location.path();
+            var href = (path && path.url) || _this.location.path();
             if (('#' + href) === window.location.hash)
                 href = '';
             _this.href = href;

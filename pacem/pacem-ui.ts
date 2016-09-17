@@ -1938,8 +1938,8 @@ export class PacemPieChart implements OnDestroy, AfterContentInit {
 
     private href: string;
 
-    private normalizePath = (path?:string) => {
-        let href = path || this.location.path();
+    private normalizePath = (path?: {url: string}) => {
+        let href = (path && path.url) || this.location.path();
         if (('#' + href) === window.location.hash) href = '';
         this.href = href;
     }
