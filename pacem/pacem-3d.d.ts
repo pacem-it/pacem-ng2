@@ -55,6 +55,7 @@ export declare class Pacem3D implements OnChanges, OnInit {
     setCamera(cam: THREE.Camera): void;
     private render();
     private init();
+    private _firstRender;
     private animate();
 }
 export declare class Pacem3DObject implements OnInit, OnDestroy {
@@ -75,13 +76,21 @@ export declare class Pacem3DObject implements OnInit, OnDestroy {
     ngOnDestroy(): void;
     private init();
     boundingSphere: THREE.Sphere;
+    boundingBox: THREE.Box3;
     private getPointCoords(point);
-    projectionCircle: {
-        center: {
+    projectionBox: {
+        offset: {
             left: number;
             top: number;
         };
-        radius: number;
+        center: {
+            x: number;
+            y: number;
+        };
+        faces: {
+            x: number;
+            y: number;
+        }[];
     };
 }
 export declare class Pacem3DCamera implements OnInit, OnDestroy, OnChanges {

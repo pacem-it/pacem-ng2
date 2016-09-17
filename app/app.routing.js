@@ -27,4 +27,4 @@ exports.pages = [
 ];
 var appRoutes = exports.pages.map(function (cmp) { return { path: 'pacem/' + cmp.component.name, component: cmp.component }; })
     .concat([{ path: '**', component: app_404_component_1.PageNotFoundComponent }]);
-exports.routing = router_1.RouterModule.forRoot(appRoutes);
+exports.routing = router_1.RouterModule.forRoot(appRoutes, { useHash: false });

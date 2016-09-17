@@ -29,8 +29,8 @@ var PacemNetComponent = (function () {
         hub.start();
         //
         this.http.get('metadata-net.json')
-            .success(function (responseText) {
-            var meta = JSON.parse(responseText);
+            .success(function (response) {
+            var meta = response.json;
             _this.meta = meta;
         });
     };

@@ -29,8 +29,8 @@ var PacemScaffoldingComponent = (function () {
     PacemScaffoldingComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.http.get('metadata.json')
-            .success(function (responseText) {
-            var meta = JSON.parse(responseText);
+            .success(function (response) {
+            var meta = response.json;
             _this.looper.loop(meta, function (item) {
                 _this.meta.push(item);
             });

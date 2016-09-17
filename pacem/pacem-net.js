@@ -12,6 +12,107 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var pacem_core_1 = require('./pacem-core');
 var noop = function () { };
+var PacemResponse = (function () {
+    function PacemResponse(req, processTime) {
+        if (!req)
+            return;
+        this._status = req.status;
+        this._body = req.response;
+        this._text = req.responseText;
+        this._type = req.responseType;
+        this._allHeadersRaw = req.getAllResponseHeaders();
+        this._processTime = processTime;
+    }
+    Object.defineProperty(PacemResponse.prototype, "processTime", {
+        get: function () {
+            return this._processTime;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "headers", {
+        get: function () {
+            if (this._headers === undefined && this._allHeadersRaw)
+                this._parseHeaders();
+            return this._headers;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "size", {
+        get: function () {
+            return +this.headers['Content-Length'];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "mime", {
+        get: function () {
+            return this.headers['Content-Type'];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "date", {
+        get: function () {
+            return new Date(Date.parse(this.headers['Date']));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PacemResponse.prototype._parseHeaders = function () {
+        var headers = {}, rows = this._allHeadersRaw.split('\r\n');
+        rows.forEach(function (r) {
+            if (r && r.length) {
+                var index = r.indexOf(':');
+                var key = r.substr(0, index).trim();
+                var value = r.substr(index + 1).trim();
+                headers[key] = value;
+            }
+        });
+        this._headers = headers;
+    };
+    Object.defineProperty(PacemResponse.prototype, "status", {
+        get: function () { return this._status; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "text", {
+        get: function () { return this._text; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "content", {
+        get: function () { return this._body; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "type", {
+        get: function () { return this._type; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PacemResponse.prototype, "json", {
+        /**
+         * Short-hand utility for getting or parsing json content (if any).
+         */
+        get: function () {
+            if (this._type === 'json')
+                return this._body;
+            else
+                try {
+                    return JSON.parse(this._text);
+                }
+                catch (e) {
+                    return undefined;
+                }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return PacemResponse;
+}());
+exports.PacemResponse = PacemResponse;
 /**
  * Vanilla implementation for http requests.
  */
@@ -26,6 +127,7 @@ var PacemHttp = (function () {
      * @param {Object} [options] - Options for the request.
      * @param {Object} [options.data] - Data to be sent along.
      * @param {String} [options.method=CORS] - HTTP Verb to be used.
+     * @param {Object} [options.headers] - Key-value pairs of strings.
      * @param {Function} [options.progress] - Callback on retrieval progress.
      */
     PacemHttp.prototype.request = function (url, options) {
@@ -35,6 +137,7 @@ var PacemHttp = (function () {
         var method = options.method || 'CORS';
         var data = options.data || {};
         var progress = options.progress || noop;
+        var headers = options.headers || {};
         var req = new XMLHttpRequest();
         req.addEventListener("progress", function (evt) {
             if (evt.lengthComputable) {
@@ -49,10 +152,11 @@ var PacemHttp = (function () {
             deferred.reject(Error(pacem_core_1.pacem.localization.default.errors.NETWORK));
         }, false);
         //req.addEventListener("abort", transferCanceled, false);
+        var stopWatch;
         req.addEventListener('load', function () {
             if (req.status == 200) {
                 // Resolve the promise with the response
-                var response = req.responseText;
+                var response = new PacemResponse(req, Date.now() - stopWatch);
                 deferred.resolve(response);
             }
             else
@@ -75,27 +179,31 @@ var PacemHttp = (function () {
                 req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 break;
         }
+        for (var kvp in headers) {
+            req.setRequestHeader(kvp, headers[kvp]);
+        }
         //
+        stopWatch = Date.now();
         req.send(params);
         return deferred.promise;
     };
     /**
      * Short-hand for 'GET' request.
      */
-    PacemHttp.prototype.get = function (url, data) {
-        return this.request(url, { 'method': 'GET', 'data': data });
+    PacemHttp.prototype.get = function (url, data, headers) {
+        return this.request(url, { 'method': 'GET', 'data': data, 'headers': headers || {} });
     };
     /**
      * Short-hand for 'CORS' request.
      */
-    PacemHttp.prototype.cors = function (url, data) {
-        return this.request(url, { 'data': data });
+    PacemHttp.prototype.cors = function (url, data, headers) {
+        return this.request(url, { 'data': data, 'headers': headers || {} });
     };
     /**
      * Short-hand for 'POST' request.
      */
-    PacemHttp.prototype.post = function (url, data) {
-        return this.request(url, { 'method': 'POST', 'data': data });
+    PacemHttp.prototype.post = function (url, data, headers) {
+        return this.request(url, { 'method': 'POST', 'data': data, 'headers': headers || {} });
     };
     PacemHttp = __decorate([
         core_1.Injectable(), 

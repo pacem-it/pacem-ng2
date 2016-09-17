@@ -17,7 +17,7 @@ function supportsSVGTransforms() {
     return 'transform' in svg;
 }
 
-export declare type pacemBindAnchors = 'auto' | 'left' | 'top' | 'right' | 'bottom';
+export declare type pacemBindAnchors = 'auto' | 'left' | 'top' | 'right' | 'bottom' | 'center';
 
 @Directive({
     selector: '[pacemHidden]'
@@ -1918,10 +1918,10 @@ export class PacemPieChartSlice {
         <circle cx="50" cy="50" r="10" fill="#000" />
     </mask>
     </defs>
-    <circle cx="50" cy="50" r="50" [attr.mask]="'url('+ location.path() +'#inner-mask)'" class="pacem-pie-chart-background" />
+    <circle cx="50" cy="50" r="50" [attr.mask]="'url('+ href +'#inner-mask)'" class="pacem-pie-chart-background" />
     <g>
         <svg:path *ngFor="let slice of slices" 
-                [attr.mask]="'url('+ location.path() +'#slices-mask)'"
+                [attr.mask]="'url('+ href +'#slices-mask)'"
                 [attr.fill]="slice.color" 
                 [attr.d]="slice.path"
                 [attr.style]="slice.style"></svg:path>
@@ -1936,7 +1936,18 @@ export class PacemPieChart implements OnDestroy, AfterContentInit {
 
     private supportsSVGTransforms: boolean = false;
 
+    private href: string;
+
+    private normalizePath = (path?:string) => {
+        let href = path || this.location.path();
+        if (('#' + href) === window.location.hash) href = '';
+        this.href = href;
+    }
+    
     ngAfterContentInit() {
+        this.location.subscribe(this.normalizePath);
+        this.normalizePath();
+
         let render = () => {
             this.normalize();
             this.draw();
@@ -2122,6 +2133,14 @@ export class PacemBindService {
         return PacemBindService.targetMappings.has(key) && PacemBindService.targetMappings.get(key);
     }
 
+    /**
+     * Refreshes the bindings for a provided target key.
+     * @param key target
+     */
+    refresh(key?: string) {
+        // TODO: make the argument `key` required and be sure to trigger with a target
+        this.onset.emit(key);
+    }
 }
 
 export declare type pacemBindTargetRef = {
@@ -2138,11 +2157,6 @@ export declare type pacemBindTargetRef = {
 export class PacemBindTargets implements OnChanges, OnDestroy, OnInit {
 
     constructor(private bindings: PacemBindService, private elementRef: ElementRef) {
-        const me = this;
-        me.subscription = bindings.onset.asObservable().merge(bindings.onremove.asObservable())
-            .subscribe((_) => {
-                me.debounceBindersBuild();
-            });
     }
 
     refresh() {
@@ -2152,11 +2166,23 @@ export class PacemBindTargets implements OnChanges, OnDestroy, OnInit {
     @Input('pacemBindTargets') targetKeys: pacemBindTargetRef[] | string[] = [];
 
     ngOnInit() {
+        const me = this;
+        let bindings = me.bindings;
+        me.subscription = bindings.onset.asObservable()
+            .merge(bindings.onremove.asObservable())
+            .subscribe((key:string) => {
+                // TODO: rebuild only if the argument `key` is relevant
+                me.debounceBindersBuild();
+            });
+        //
         let uiElement = <SVGSVGElement>document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         uiElement.style.position = 'absolute';
         uiElement.classList.add('pacem-bind');
         uiElement.style.top = '0';
         uiElement.style.left = '0';
+        uiElement.style.maxWidth = '100vw';
+        uiElement.style.maxHeight = '100vh';
+        uiElement.style.overflow = 'hidden';
         uiElement.style.pointerEvents = 'none';
         document.body.appendChild(uiElement);
         this.uiElement = uiElement;
@@ -2209,21 +2235,48 @@ export class PacemBindTargets implements OnChanges, OnDestroy, OnInit {
         this.isBuildingFlag = false;
     }
 
-    private computeTargetRect(target: pacemBindTarget) {
-        let targetPoint = { left: 0, top: 0, width: 0, height: 0 };
+    private computeTargetRect(target: pacemBindTarget): { top: { x: number, y: number }, bottom: { x: number, y: number }, left: { x: number, y: number }, right: { x: number, y: number }, center: { x: number, y: number } } {
+        let targetPoint = { top: { x: 0, y: 0 }, bottom: { x: 0, y: 0 }, left: { x: 0, y: 0 }, right: { x: 0, y: 0 }, center: { x: 0, y: 0 } };
         let p3d = target instanceof Pacem3DObject && target as Pacem3DObject;
         if (p3d) {
-            let circ = p3d.projectionCircle;
-            targetPoint.left = circ.center.left - circ.radius;
-            targetPoint.top = circ.center.top - circ.radius;
-            targetPoint.width = targetPoint.height = 2 * circ.radius;
+            let box = p3d.projectionBox;
+            if (box) {
+                targetPoint.center = { x: box.offset.left + box.center.x, y: box.offset.top + box.center.y };
+
+                let left = { x: Number.MAX_VALUE, y: 0 };
+                let right = { x: Number.MIN_VALUE, y: 0 };
+                let top = { y: Number.MAX_VALUE, x: 0 };
+                let bottom = { y: Number.MIN_VALUE, x: 0};
+                box.faces.forEach(f => {
+                    if (f.x < left.x) left = f;
+                    else if (f.x > right.x) right = f;
+                    if (f.y < top.y) top = f;
+                    else if (f.y > bottom.y) bottom = f;
+                });
+
+                bottom.x += box.offset.left;
+                top.x += box.offset.left;
+                right.x += box.offset.left;
+                left.x += box.offset.left;
+                bottom.y += box.offset.top;
+                top.y += box.offset.top;
+                right.y += box.offset.top;
+                left.y += box.offset.top;
+
+                targetPoint.bottom = bottom;
+                targetPoint.top = top;
+                targetPoint.left = left;
+                targetPoint.right = right;
+            }
         } else {
             let el = target as HTMLElement | SVGElement;
             let offset = PacemUtils.offset(el);
-            targetPoint.left = offset.left;
-            targetPoint.top = offset.top;
-            targetPoint.width = el.clientWidth;
-            targetPoint.height = el.clientHeight;
+            let w = el.clientWidth, h = el.clientHeight, w2 = w * .5, h2 = h * .5;
+            targetPoint.top = { x: offset.left + w2, y: offset.top };
+            targetPoint.bottom = { x: offset.left + w2, y: offset.top + h };
+            targetPoint.center = { x: offset.left + w2, y: offset.top + h2 };
+            targetPoint.left = { x: offset.left, y: offset.top + h2 };
+            targetPoint.right = { x: offset.left + w, y: offset.top + h2 };
         }
         return targetPoint;
     }
@@ -2234,33 +2287,32 @@ export class PacemBindTargets implements OnChanges, OnDestroy, OnInit {
      * @param to
      */
     private computeAnchor(
-        from: { left: number, top: number, width: number, height: number },
-        to: { left: number, top: number, width: number, height: number },
+        from: { top: { x: number, y: number }, bottom: { x: number, y: number }, left: { x: number, y: number }, right: { x: number, y: number }, center: { x: number, y: number } },
+        to: { top: { x: number, y: number }, bottom: { x: number, y: number }, left: { x: number, y: number }, right: { x: number, y: number }, center: { x: number, y: number } },
         anchor: pacemBindAnchors = 'auto') {
-        const center = {
-            x: Math.round(from.left + from.width / 2),
-            y: Math.round(from.top + from.height / 2)
-        };
-        const centerTo = {
-            x: Math.round(to.left + to.width / 2),
-            y: Math.round(to.top + to.height / 2)
-        };
-        let ptTop = { x: centerTo.x, y: Math.round(centerTo.y - to.height / 2) };
-        let ptBottom = { x: centerTo.x, y: Math.round(centerTo.y + to.height / 2) };
-        let ptLeft = { x: Math.round(centerTo.x - to.width / 2), y: centerTo.y };
-        let ptRight = { x: Math.round(centerTo.x + to.width / 2), y: centerTo.y };
+        const center = from.center;
+        const centerTo = to.center;
 
-        let padBottom = { x: ptBottom.x, y: ptBottom.y + to.height };
-        let padLeft = { x: ptLeft.x - to.width, y: ptLeft.y };
-        let padRight = { x: ptRight.x + to.width, y: ptRight.y };
-        let padTop = { x: ptTop.x, y: ptTop.y - to.height };
+        let ptTop = to.top;
+        let ptBottom = to.bottom;
+        let ptLeft = to.left;
+        let ptRight = to.right;
+        
+        let padBottom = { x: 2 * ptBottom.x - ptTop.x, y: 2 * ptBottom.y - ptTop.y };
+        let padLeft = { x: 2 * ptLeft.x - ptRight.x, y: 2 * ptLeft.y - ptRight.y };
+        let padRight = { x: 2 * ptRight.x - ptLeft.x, y: 2 * ptRight.y - ptLeft.y };
+        let padTop = { x: 2 * ptTop.x - ptBottom.x, y: 2 * ptTop.y - ptBottom.y };
+        let padCenter = { x: centerTo.x - .5 * (centerTo.x - center.x), y: centerTo.y - .5 * (centerTo.y - center.y) };
 
+        let retCenter = [centerTo, padCenter];
         let retTop = [ptTop, padTop];
         let retBottom = [ptBottom, padBottom];
         let retLeft = [ptLeft, padLeft];
         let retRight = [ptRight, padRight];
 
         switch (anchor.toLowerCase()) {
+            case 'center':
+                return retCenter;
             case 'top':
                 return retTop;
             case 'left':
@@ -2352,7 +2404,7 @@ export class PacemBindTarget implements OnDestroy, OnChanges {
     @Input('pacemBindTarget') key: string;
 
     refresh() {
-        this.bindings.onset.emit();
+        this.bindings.refresh(this.key);
     }
 
     ngOnChanges(changes: SimpleChanges) {

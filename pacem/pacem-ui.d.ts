@@ -5,7 +5,7 @@ import { Pacem3DObject } from './pacem-3d';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/debounce';
 import 'rxjs/add/operator/merge';
-export declare type pacemBindAnchors = 'auto' | 'left' | 'top' | 'right' | 'bottom';
+export declare type pacemBindAnchors = 'auto' | 'left' | 'top' | 'right' | 'bottom' | 'center';
 export declare class PacemHidden {
     private elRef;
     hidden: boolean;
@@ -396,6 +396,8 @@ export declare class PacemPieChart implements OnDestroy, AfterContentInit {
     private location;
     constructor(sce: DomSanitizer, location: Location);
     private supportsSVGTransforms;
+    private href;
+    private normalizePath;
     ngAfterContentInit(): void;
     private subj;
     /**
@@ -445,6 +447,11 @@ export declare class PacemBindService {
      * @param key
      */
     getTarget(key: string): pacemBindTarget;
+    /**
+     * Refreshes the bindings for a provided target key.
+     * @param key target
+     */
+    refresh(key?: string): void;
 }
 export declare type pacemBindTargetRef = {
     key: string;

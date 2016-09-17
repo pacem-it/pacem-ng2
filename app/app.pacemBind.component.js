@@ -12,9 +12,13 @@ var core_1 = require('@angular/core');
 var pacem_core_1 = require('./../pacem/pacem-core');
 var pacem_ui_1 = require('./../pacem/pacem-ui');
 var PacemBindComponent = (function () {
-    function PacemBindComponent() {
+    function PacemBindComponent(bindings) {
+        this.bindings = bindings;
         this.obj = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshNormalMaterial());
     }
+    PacemBindComponent.prototype.refresh = function () {
+        this.bindings.refresh();
+    };
     PacemBindComponent.prototype.startDrag = function (evt) {
         evt.stopPropagation();
         this.startPoint = { x: evt.pageX, y: evt.pageY };
@@ -46,7 +50,7 @@ var PacemBindComponent = (function () {
     PacemBindComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-bind',
-            template: "<h2>Pacem Bind</h2>\n<div>\n\n<div class=\"target\" pacemBindTarget=\"target\" #target=\"pacemBindTarget\"></div>\n\n<div class=\"target source\" pacemBindTarget=\"targetAndSource\" [pacemBindTargets]=\"[{key: 'target', from: 'bottom', to: 'top', css: 'fixed'}]\"\n     (mousedown)=\"startDrag($event)\" (mousemove)=\"drag($event)\" (mouseup)=\"drop($event)\"></div>\n\n<div class=\"source\" [pacemBindTargets]=\"['target']\" (mousedown)=\"startDrag($event)\" (mousemove)=\"drag($event)\" (mouseup)=\"drop($event)\"></div>\n<div class=\"source\" [pacemBindTargets]=\"[{key: 'target3d', from: 'left', to: 'bottom', css: 'fixed'},\n{key: 'targetAndSource', from: 'bottom', to: 'top', css: 'fixed'}]\" (mousedown)=\"startDrag($event)\" (mousemove)=\"drag($event)\" (mouseup)=\"drop($event)\"></div>\n\n\n<pacem-3d orbit=\"true\" (sceneupdated)=\"trigger.refresh()\">\n<pacem-3d-object pacemBindTarget=\"target3d\" [object]=\"obj\" position=\"0,.0,0\"></pacem-3d-object>\n</pacem-3d>\n\n\n</div>",
+            template: "<h2>Pacem Bind</h2>\n<div>\n\n<div class=\"target\" pacemBindTarget=\"target\" #target=\"pacemBindTarget\"></div>\n\n<div class=\"target source\" pacemBindTarget=\"targetAndSource\" [pacemBindTargets]=\"[{key: 'target', from: 'bottom', to: 'top', css: 'fixed'}]\"\n     (mousedown)=\"startDrag($event)\" (mousemove)=\"drag($event)\" (mouseup)=\"drop($event)\"></div>\n\n<div class=\"source\" [pacemBindTargets]=\"['target']\" (mousedown)=\"startDrag($event)\" (mousemove)=\"drag($event)\" (mouseup)=\"drop($event)\"></div>\n<div class=\"source\" [pacemBindTargets]=\"[{key: 'target3d', from: 'left', to: 'bottom', css: 'fixed'},\n{key: 'targetAndSource', from: 'bottom', to: 'top', css: 'fixed'}]\" (mousedown)=\"startDrag($event)\" (mousemove)=\"drag($event)\" (mouseup)=\"drop($event)\"></div>\n\n\n<pacem-3d orbit=\"true\" (sceneupdated)=\"refresh()\">\n<pacem-3d-object pacemBindTarget=\"target3d\" [object]=\"obj\" position=\"0,.0,0\"></pacem-3d-object>\n</pacem-3d>\n\n\n</div>",
             styles: [
                 '.target, .source{ position: absolute; width: 100px; height: 100px; }',
                 '.target { top: 450px; left: 450px; background: #f00; }',
@@ -56,7 +60,7 @@ var PacemBindComponent = (function () {
             ] /*,
             entryComponents: [Pacem3D, PacemBindTarget, PacemBindTargets]*/
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [pacem_ui_1.PacemBindService])
     ], PacemBindComponent);
     return PacemBindComponent;
 }());

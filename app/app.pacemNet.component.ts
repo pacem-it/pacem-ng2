@@ -33,8 +33,8 @@ export class PacemNetComponent implements OnInit, OnDestroy {
         hub.start();
         //
         this.http.get('metadata-net.json')
-            .success((responseText) => {
-                const meta = JSON.parse(responseText) as any[];
+            .success((response) => {
+                const meta = response.json as any[];
                 this.meta = meta;
             });
     }

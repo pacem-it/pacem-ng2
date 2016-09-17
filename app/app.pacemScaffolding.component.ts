@@ -46,8 +46,8 @@ export class PacemScaffoldingComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.http.get('metadata.json')
-            .success((responseText) => {
-                const meta = JSON.parse(responseText) as any[];
+            .success((response) => {
+                const meta = response.json as any[];
                 this.looper.loop(meta, (item) => {
                     this.meta.push(item);
                 });

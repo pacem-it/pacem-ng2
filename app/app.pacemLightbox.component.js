@@ -22,8 +22,8 @@ var PacemLightboxComponent = (function () {
     PacemLightboxComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.http.get('gallery.json')
-            .success(function (responseText) {
-            _this.pictures = JSON.parse(responseText);
+            .success(function (response) {
+            _this.pictures = response.json;
             _this.size = _this.pictures.length;
         });
     };

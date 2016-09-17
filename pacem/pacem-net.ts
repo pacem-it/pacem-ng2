@@ -5,6 +5,80 @@ import { PacemUtils, PacemPromise, pacem } from './pacem-core';
 
 const noop = () => { };
 
+export class PacemResponse {
+
+    constructor(req: XMLHttpRequest, processTime:number) {
+        if (!req) return;
+        this._status = req.status;
+        this._body = req.response;
+        this._text = req.responseText;
+        this._type = req.responseType;
+        this._allHeadersRaw = req.getAllResponseHeaders();
+        this._processTime = processTime;
+    }
+
+    private _processTime: number;
+    private _status: number;
+    private _text: string;
+    private _body: any;
+    private _type: string;
+    private _allHeadersRaw: string;
+    private _headers: { [key: string]: string };
+
+    get processTime():number {
+        return this._processTime;
+    }
+
+    get headers(): { [key: string]: string } {
+        if (this._headers === undefined && this._allHeadersRaw)
+            this._parseHeaders();
+        return this._headers;
+    }
+
+    get size(): number {
+        return +this.headers['Content-Length'];
+    }
+
+    get mime(): string {
+        return this.headers['Content-Type'];
+    }
+
+    get date(): Date {
+        return new Date(Date.parse(this.headers['Date']));
+    }
+
+    private _parseHeaders() {
+        let headers: { [key: string]: string } = {}, rows = this._allHeadersRaw.split('\r\n');
+        rows.forEach(r => {
+            if (r && r.length) {
+                let index = r.indexOf(':');
+                let key = r.substr(0, index).trim();
+                let value = r.substr(index+1).trim();
+                headers[key] = value;
+            }
+        });
+        this._headers = headers;
+    }
+
+    get status() { return this._status; }
+    get text() { return this._text; }
+    get content() { return this._body; }
+    get type() { return this._type; }
+
+    /**
+     * Short-hand utility for getting or parsing json content (if any).
+     */
+    get json() {
+        if (this._type === 'json') return this._body;
+        else
+            try {
+                return JSON.parse(this._text);
+            } catch (e) {
+                return undefined;
+            }
+    }
+}
+
 /**
  * Vanilla implementation for http requests.
  */
@@ -21,15 +95,17 @@ export class PacemHttp {
      * @param {Object} [options] - Options for the request.
      * @param {Object} [options.data] - Data to be sent along.
      * @param {String} [options.method=CORS] - HTTP Verb to be used.
+     * @param {Object} [options.headers] - Key-value pairs of strings.
      * @param {Function} [options.progress] - Callback on retrieval progress.
      */
-    request(url, options) {
+    request(url, options?) {
         var _this = this;
-        let deferred = PacemPromise.defer<string>();
+        let deferred = PacemPromise.defer<PacemResponse>();
         options = options || {};
         var method = options.method || 'CORS';
         var data = options.data || {};
         var progress = options.progress || noop;
+        var headers: { [key: string]: string } = options.headers || {};
 
         var req = new XMLHttpRequest();
 
@@ -46,10 +122,11 @@ export class PacemHttp {
         }, false);
         //req.addEventListener("abort", transferCanceled, false);
 
+        var stopWatch: number;
         req.addEventListener('load', () => {
             if (req.status == 200) {
                 // Resolve the promise with the response
-                var response = req.responseText;
+                var response = new PacemResponse(req, Date.now() - stopWatch);
                 deferred.resolve(response);
             } else
                 deferred.reject(Error(req.statusText));
@@ -74,7 +151,11 @@ export class PacemHttp {
                 req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 break;
         }
+        for (var kvp in headers) {
+            req.setRequestHeader(kvp, headers[kvp]);
+        }
         //
+        stopWatch = Date.now();
         req.send(params);
         return deferred.promise;
     }
@@ -82,22 +163,22 @@ export class PacemHttp {
     /**
      * Short-hand for 'GET' request.
      */
-    get(url, data?) {
-        return this.request(url, { 'method': 'GET', 'data': data });
+    get(url, data?, headers?: { [key: string]: string }) {
+        return this.request(url, { 'method': 'GET', 'data': data, 'headers': headers || {} });
     }
 
     /**
      * Short-hand for 'CORS' request.
      */
-    cors(url, data?) {
-        return this.request(url, { 'data': data });
+    cors(url, data?, headers?: { [key: string]: string }) {
+        return this.request(url, { 'data': data, 'headers': headers || {} });
     }
 
     /**
      * Short-hand for 'POST' request.
      */
-    post(url, data?) {
-        return this.request(url, { 'method': 'POST', 'data': data });
+    post(url, data?, headers?: { [key: string]: string }) {
+        return this.request(url, { 'method': 'POST', 'data': data, 'headers': headers || {} });
     }
 
 }
@@ -189,7 +270,7 @@ export class PacemHub {
      * Invokes a server hub method with the given arguments.
      * @param methodName method name
      */
-    invoke(methodName:string, ...args:any[]) {
+    invoke(methodName: string, ...args: any[]) {
         var _me = this;
         var deferred = PacemPromise.defer();
         _me.proxy.invoke.apply(_me.proxy, $.makeArray(arguments))

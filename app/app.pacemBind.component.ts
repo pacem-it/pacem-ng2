@@ -1,6 +1,6 @@
 ﻿import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { PacemUtils } from './../pacem/pacem-core';
-import { PacemBindTarget, PacemBindTargets } from './../pacem/pacem-ui';
+import { PacemBindTarget, PacemBindTargets, PacemBindService } from './../pacem/pacem-ui';
 import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from './../pacem/pacem-3d';
 
 @Component({
@@ -18,7 +18,7 @@ import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from
 {key: 'targetAndSource', from: 'bottom', to: 'top', css: 'fixed'}]" (mousedown)="startDrag($event)" (mousemove)="drag($event)" (mouseup)="drop($event)"></div>
 
 
-<pacem-3d orbit="true" (sceneupdated)="trigger.refresh()">
+<pacem-3d orbit="true" (sceneupdated)="refresh()">
 <pacem-3d-object pacemBindTarget="target3d" [object]="obj" position="0,.0,0"></pacem-3d-object>
 </pacem-3d>
 
@@ -36,6 +36,13 @@ import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from
 export class PacemBindComponent {
 
     @ViewChild('target') trigger: PacemBindTarget;
+
+    constructor(private bindings: PacemBindService) {
+    }
+
+    refresh() {
+        this.bindings.refresh();
+    }
 
     private startPoint: { x: number, y: number };
     private startPosition: { x: number, y: number };

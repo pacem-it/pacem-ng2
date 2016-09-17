@@ -2072,15 +2072,24 @@ exports.PacemPieChartSlice = PacemPieChartSlice;
  */
 var PacemPieChart = (function () {
     function PacemPieChart(sce, location) {
+        var _this = this;
         this.sce = sce;
         this.location = location;
         this.supportsSVGTransforms = false;
+        this.normalizePath = function (path) {
+            var href = path || _this.location.path();
+            if (('#' + href) === window.location.hash)
+                href = '';
+            _this.href = href;
+        };
         this.subj = new Rx_1.Subject();
         this.sum = .0;
         this.supportsSVGTransforms = supportsSVGTransforms();
     }
     PacemPieChart.prototype.ngAfterContentInit = function () {
         var _this = this;
+        this.location.subscribe(this.normalizePath);
+        this.normalizePath();
         var render = function () {
             _this.normalize();
             _this.draw();
@@ -2165,7 +2174,7 @@ var PacemPieChart = (function () {
     PacemPieChart = __decorate([
         core_1.Component({
             selector: 'pacem-pie-chart',
-            template: "<div class=\"pacem-pie-chart\">\n<ng-content></ng-content>\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0,0,100,100\" width=\"100%\" height=\"100%\">\n    <defs>\n    <mask id=\"slices-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"45\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#000\" />\n    </mask>\n    <mask id=\"inner-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#000\" />\n    </mask>\n    </defs>\n    <circle cx=\"50\" cy=\"50\" r=\"50\" [attr.mask]=\"'url('+ location.path() +'#inner-mask)'\" class=\"pacem-pie-chart-background\" />\n    <g>\n        <svg:path *ngFor=\"let slice of slices\" \n                [attr.mask]=\"'url('+ location.path() +'#slices-mask)'\"\n                [attr.fill]=\"slice.color\" \n                [attr.d]=\"slice.path\"\n                [attr.style]=\"slice.style\"></svg:path>\n    </g>\n</svg></div>"
+            template: "<div class=\"pacem-pie-chart\">\n<ng-content></ng-content>\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0,0,100,100\" width=\"100%\" height=\"100%\">\n    <defs>\n    <mask id=\"slices-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"45\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#000\" />\n    </mask>\n    <mask id=\"inner-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#000\" />\n    </mask>\n    </defs>\n    <circle cx=\"50\" cy=\"50\" r=\"50\" [attr.mask]=\"'url('+ href +'#inner-mask)'\" class=\"pacem-pie-chart-background\" />\n    <g>\n        <svg:path *ngFor=\"let slice of slices\" \n                [attr.mask]=\"'url('+ href +'#slices-mask)'\"\n                [attr.fill]=\"slice.color\" \n                [attr.d]=\"slice.path\"\n                [attr.style]=\"slice.style\"></svg:path>\n    </g>\n</svg></div>"
         }), 
         __metadata('design:paramtypes', [platform_browser_1.DomSanitizer, common_1.Location])
     ], PacemPieChart);
@@ -2265,6 +2274,14 @@ var PacemBindService = (function () {
     PacemBindService.prototype.getTarget = function (key) {
         return PacemBindService.targetMappings.has(key) && PacemBindService.targetMappings.get(key);
     };
+    /**
+     * Refreshes the bindings for a provided target key.
+     * @param key target
+     */
+    PacemBindService.prototype.refresh = function (key) {
+        // TODO: make the argument `key` required and be sure to trigger with a target
+        this.onset.emit(key);
+    };
     PacemBindService.targetMappings = new Map();
     PacemBindService = __decorate([
         core_1.Injectable(), 
@@ -2281,21 +2298,28 @@ var PacemBindTargets = (function () {
         this.initialized = false;
         this.isBuildingFlag = false;
         this.mappings = new Map();
-        var me = this;
-        me.subscription = bindings.onset.asObservable().merge(bindings.onremove.asObservable())
-            .subscribe(function (_) {
-            me.debounceBindersBuild();
-        });
     }
     PacemBindTargets.prototype.refresh = function () {
         this.debounceBindersBuild();
     };
     PacemBindTargets.prototype.ngOnInit = function () {
+        var me = this;
+        var bindings = me.bindings;
+        me.subscription = bindings.onset.asObservable()
+            .merge(bindings.onremove.asObservable())
+            .subscribe(function (key) {
+            // TODO: rebuild only if the argument `key` is relevant
+            me.debounceBindersBuild();
+        });
+        //
         var uiElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         uiElement.style.position = 'absolute';
         uiElement.classList.add('pacem-bind');
         uiElement.style.top = '0';
         uiElement.style.left = '0';
+        uiElement.style.maxWidth = '100vw';
+        uiElement.style.maxHeight = '100vh';
+        uiElement.style.overflow = 'hidden';
         uiElement.style.pointerEvents = 'none';
         document.body.appendChild(uiElement);
         this.uiElement = uiElement;
@@ -2342,21 +2366,49 @@ var PacemBindTargets = (function () {
         this.isBuildingFlag = false;
     };
     PacemBindTargets.prototype.computeTargetRect = function (target) {
-        var targetPoint = { left: 0, top: 0, width: 0, height: 0 };
+        var targetPoint = { top: { x: 0, y: 0 }, bottom: { x: 0, y: 0 }, left: { x: 0, y: 0 }, right: { x: 0, y: 0 }, center: { x: 0, y: 0 } };
         var p3d = target instanceof pacem_3d_1.Pacem3DObject && target;
         if (p3d) {
-            var circ = p3d.projectionCircle;
-            targetPoint.left = circ.center.left - circ.radius;
-            targetPoint.top = circ.center.top - circ.radius;
-            targetPoint.width = targetPoint.height = 2 * circ.radius;
+            var box = p3d.projectionBox;
+            if (box) {
+                targetPoint.center = { x: box.offset.left + box.center.x, y: box.offset.top + box.center.y };
+                var left_1 = { x: Number.MAX_VALUE, y: 0 };
+                var right_1 = { x: Number.MIN_VALUE, y: 0 };
+                var top_1 = { y: Number.MAX_VALUE, x: 0 };
+                var bottom_1 = { y: Number.MIN_VALUE, x: 0 };
+                box.faces.forEach(function (f) {
+                    if (f.x < left_1.x)
+                        left_1 = f;
+                    else if (f.x > right_1.x)
+                        right_1 = f;
+                    if (f.y < top_1.y)
+                        top_1 = f;
+                    else if (f.y > bottom_1.y)
+                        bottom_1 = f;
+                });
+                bottom_1.x += box.offset.left;
+                top_1.x += box.offset.left;
+                right_1.x += box.offset.left;
+                left_1.x += box.offset.left;
+                bottom_1.y += box.offset.top;
+                top_1.y += box.offset.top;
+                right_1.y += box.offset.top;
+                left_1.y += box.offset.top;
+                targetPoint.bottom = bottom_1;
+                targetPoint.top = top_1;
+                targetPoint.left = left_1;
+                targetPoint.right = right_1;
+            }
         }
         else {
             var el = target;
             var offset = pacem_core_1.PacemUtils.offset(el);
-            targetPoint.left = offset.left;
-            targetPoint.top = offset.top;
-            targetPoint.width = el.clientWidth;
-            targetPoint.height = el.clientHeight;
+            var w = el.clientWidth, h = el.clientHeight, w2 = w * .5, h2 = h * .5;
+            targetPoint.top = { x: offset.left + w2, y: offset.top };
+            targetPoint.bottom = { x: offset.left + w2, y: offset.top + h };
+            targetPoint.center = { x: offset.left + w2, y: offset.top + h2 };
+            targetPoint.left = { x: offset.left, y: offset.top + h2 };
+            targetPoint.right = { x: offset.left + w, y: offset.top + h2 };
         }
         return targetPoint;
     };
@@ -2367,27 +2419,25 @@ var PacemBindTargets = (function () {
      */
     PacemBindTargets.prototype.computeAnchor = function (from, to, anchor) {
         if (anchor === void 0) { anchor = 'auto'; }
-        var center = {
-            x: Math.round(from.left + from.width / 2),
-            y: Math.round(from.top + from.height / 2)
-        };
-        var centerTo = {
-            x: Math.round(to.left + to.width / 2),
-            y: Math.round(to.top + to.height / 2)
-        };
-        var ptTop = { x: centerTo.x, y: Math.round(centerTo.y - to.height / 2) };
-        var ptBottom = { x: centerTo.x, y: Math.round(centerTo.y + to.height / 2) };
-        var ptLeft = { x: Math.round(centerTo.x - to.width / 2), y: centerTo.y };
-        var ptRight = { x: Math.round(centerTo.x + to.width / 2), y: centerTo.y };
-        var padBottom = { x: ptBottom.x, y: ptBottom.y + to.height };
-        var padLeft = { x: ptLeft.x - to.width, y: ptLeft.y };
-        var padRight = { x: ptRight.x + to.width, y: ptRight.y };
-        var padTop = { x: ptTop.x, y: ptTop.y - to.height };
+        var center = from.center;
+        var centerTo = to.center;
+        var ptTop = to.top;
+        var ptBottom = to.bottom;
+        var ptLeft = to.left;
+        var ptRight = to.right;
+        var padBottom = { x: 2 * ptBottom.x - ptTop.x, y: 2 * ptBottom.y - ptTop.y };
+        var padLeft = { x: 2 * ptLeft.x - ptRight.x, y: 2 * ptLeft.y - ptRight.y };
+        var padRight = { x: 2 * ptRight.x - ptLeft.x, y: 2 * ptRight.y - ptLeft.y };
+        var padTop = { x: 2 * ptTop.x - ptBottom.x, y: 2 * ptTop.y - ptBottom.y };
+        var padCenter = { x: centerTo.x - .5 * (centerTo.x - center.x), y: centerTo.y - .5 * (centerTo.y - center.y) };
+        var retCenter = [centerTo, padCenter];
         var retTop = [ptTop, padTop];
         var retBottom = [ptBottom, padBottom];
         var retLeft = [ptLeft, padLeft];
         var retRight = [ptRight, padRight];
         switch (anchor.toLowerCase()) {
+            case 'center':
+                return retCenter;
             case 'top':
                 return retTop;
             case 'left':
@@ -2481,7 +2531,7 @@ var PacemBindTarget = (function () {
         this.ref = ref;
     }
     PacemBindTarget.prototype.refresh = function () {
-        this.bindings.onset.emit();
+        this.bindings.refresh(this.key);
     };
     PacemBindTarget.prototype.ngOnChanges = function (changes) {
         var c = changes['key'];

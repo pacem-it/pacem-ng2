@@ -29,4 +29,4 @@ export const pages: { label: string, component: Type<any> }[] = [
 const appRoutes: Routes = pages.map((cmp) => { return { path: 'pacem/' + cmp.component.name, component: cmp.component }; })
     .concat([{ path: '**', component: PageNotFoundComponent }]);
 
-export const routing : ModuleWithProviders = RouterModule.forRoot(appRoutes);
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes, { useHash: false });

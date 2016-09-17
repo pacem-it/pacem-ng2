@@ -60,8 +60,8 @@ export class PacemLightboxComponent implements OnInit {
 
     ngOnInit() {
         this.http.get('gallery.json')
-            .success((responseText) => {
-                this.pictures = JSON.parse(responseText);
+            .success((response) => {
+                this.pictures = response.json;
                 this.size = this.pictures.length;
             })
     }

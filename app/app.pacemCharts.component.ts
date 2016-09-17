@@ -34,7 +34,6 @@ import { Component, Input, ViewChild } from '@angular/core';
     <li class="pacem-input-container"><input class="pacem-input" type="number" required [(ngModel)]="value2" max="100" min="0" /></li>
     <li class="pacem-input-container"><input class="pacem-input" type="number" required [(ngModel)]="value3" max="100" min="0" /></li>
     <li class="pacem-input-container"><input class="pacem-input" type="number" required [(ngModel)]="value4" max="100" min="0" /></li>
-
 </ol>
 `/*,
     entryComponents: [PacemRingChart, PacemRingChartItem, PacemPieChart]*/

@@ -177,6 +177,7 @@ var Pacem3D = (function () {
             //Ctrl.render();
             _this.onSceneUpdated.emit({});
         };
+        this._firstRender = true;
     }
     Pacem3D.prototype.resize = function (width, height) {
         var w = typeof width === 'string' ? width : width + 'px';
@@ -253,6 +254,10 @@ var Pacem3D = (function () {
         if (!cancelable.cancel) {
             this.render();
             this.onRender.emit({ scene: this.scene });
+            if (this._firstRender) {
+                this._firstRender = false;
+                this.onSceneUpdated.emit();
+            }
             window.requestAnimationFrame(function () { return _this.animate(); });
         }
         //#endregion
@@ -387,10 +392,21 @@ var Pacem3DObject = (function () {
             if (!(this.obj3D instanceof THREE.Mesh))
                 return null;
             var mesh = this.obj3D;
-            if (!mesh.geometry.boundingSphere) {
+            if (!mesh.geometry.boundingSphere)
                 mesh.geometry.computeBoundingSphere();
-            }
             return mesh.geometry.boundingSphere;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Pacem3DObject.prototype, "boundingBox", {
+        get: function () {
+            if (!(this.obj3D instanceof THREE.Mesh))
+                return null;
+            var mesh = this.obj3D;
+            if (!mesh.geometry.boundingBox)
+                mesh.geometry.computeBoundingBox();
+            return mesh.geometry.boundingBox;
         },
         enumerable: true,
         configurable: true
@@ -408,22 +424,30 @@ var Pacem3DObject = (function () {
             y: vector.y
         };
     };
-    Object.defineProperty(Pacem3DObject.prototype, "projectionCircle", {
+    Object.defineProperty(Pacem3DObject.prototype, "projectionBox", {
         get: function () {
-            var sphere = this.boundingSphere;
-            var center = this.obj3D.position.clone();
+            var box = this.boundingBox;
+            if (!box)
+                return null;
+            var center = box.center().clone().add(this.obj3D.position), max = box.max.clone(), min = box.min.clone(), med = box.min.clone().cross(box.max);
             var canvas = this.pacem3dCtrl.elementRef.nativeElement;
             var offset = pacem_core_1.PacemUtils.offset(canvas);
-            var camera = this.pacem3dCtrl.camera;
             var pos = this.getPointCoords(center);
-            var orthodir = center.clone().sub(camera.position).cross(camera.up).normalize().multiplyScalar(sphere.radius);
-            var edge = this.getPointCoords(orthodir.sub(center));
-            var radius = pacem_core_1.PacemUtils.distance(pos, edge); // Math.sqrt(Math.pow(pos.x - edge.x, 2) + Math.pow(pos.y - edge.y, 2));
+            var face1 = this.getPointCoords(new THREE.Vector3(max.x, 0, 0).add(center));
+            var face2 = this.getPointCoords(new THREE.Vector3(min.x, 0, 0).add(center));
+            var face3 = this.getPointCoords(new THREE.Vector3(0, max.y, 0).add(center));
+            var face4 = this.getPointCoords(new THREE.Vector3(0, min.y, 0).add(center));
+            var face5 = this.getPointCoords(new THREE.Vector3(0, 0, max.z).add(center));
+            var face6 = this.getPointCoords(new THREE.Vector3(0, 0, min.z).add(center));
             return {
-                center: {
-                    left: offset.left + pos.x,
-                    top: offset.top + pos.y,
-                }, radius: radius
+                offset: {
+                    left: offset.left,
+                    top: offset.top
+                },
+                center: pos,
+                faces: [
+                    face1, face2, face3, face4, face5, face6
+                ]
             };
         },
         enumerable: true,

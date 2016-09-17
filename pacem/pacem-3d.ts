@@ -286,12 +286,17 @@ export class Pacem3D implements OnChanges, OnInit {
 
     }
 
+    private _firstRender: boolean = true;
     private animate() {
         let cancelable = { cancel: false, scene: this.scene };
         this.onPreRender.emit(cancelable);
         if (!cancelable.cancel) {
             this.render();
             this.onRender.emit({ scene: this.scene });
+            if (this._firstRender) {
+                this._firstRender = false;
+                this.onSceneUpdated.emit();
+            }
             window.requestAnimationFrame(() => this.animate());
         }
 
@@ -405,10 +410,17 @@ export class Pacem3DObject implements OnInit, OnDestroy {
     get boundingSphere() {
         if (!(this.obj3D instanceof THREE.Mesh)) return null;
         let mesh = <THREE.Mesh>this.obj3D;
-        if (!mesh.geometry.boundingSphere) {
+        if (!mesh.geometry.boundingSphere)
             mesh.geometry.computeBoundingSphere();
-        }
         return mesh.geometry.boundingSphere;
+    }
+
+    get boundingBox() {
+        if (!(this.obj3D instanceof THREE.Mesh)) return null;
+        let mesh = <THREE.Mesh>this.obj3D;
+        if (!mesh.geometry.boundingBox)
+            mesh.geometry.computeBoundingBox();
+        return mesh.geometry.boundingBox;
     }
 
     private getPointCoords(point: THREE.Vector3) {
@@ -425,26 +437,36 @@ export class Pacem3DObject implements OnInit, OnDestroy {
             y: vector.y
         };
     }
-    
-    get projectionCircle() {
-        let sphere = this.boundingSphere;
-        let center = this.obj3D.position.clone();
+
+    get projectionBox() {
+        let box = this.boundingBox;
+        if (!box)
+            return null;
+        let center = box.center().clone().add(this.obj3D.position),
+            max = box.max.clone(),
+            min = box.min.clone(),
+            med = box.min.clone().cross(box.max);
         let canvas: HTMLCanvasElement = this.pacem3dCtrl.elementRef.nativeElement;
         let offset = PacemUtils.offset(canvas);
-        let camera = this.pacem3dCtrl.camera;
 
         let pos = this.getPointCoords(center);
-
-        let orthodir = center.clone().sub(camera.position).cross(camera.up).normalize().multiplyScalar(sphere.radius);
-        let edge = this.getPointCoords(orthodir.sub(center));
-        let radius = PacemUtils.distance(pos, edge);// Math.sqrt(Math.pow(pos.x - edge.x, 2) + Math.pow(pos.y - edge.y, 2));
+        let face1 = this.getPointCoords(new THREE.Vector3(max.x, 0, 0).add(center));
+        let face2 = this.getPointCoords(new THREE.Vector3(min.x, 0, 0).add(center));
+        let face3 = this.getPointCoords(new THREE.Vector3(0, max.y, 0).add(center));
+        let face4 = this.getPointCoords(new THREE.Vector3(0, min.y, 0).add(center));
+        let face5 = this.getPointCoords(new THREE.Vector3(0, 0, max.z).add(center));
+        let face6 = this.getPointCoords(new THREE.Vector3(0, 0, min.z).add(center));
 
         return {
-            center: {
-                left: offset.left + pos.x,
-                top: offset.top + pos.y,
-            }, radius: radius
-        };
+            offset: {
+                left: offset.left,
+                top: offset.top
+            },
+            center: pos,
+            faces: [
+                face1, face2, face3, face4, face5, face6
+            ]
+        }
     }
 
 }
@@ -626,7 +648,7 @@ export class Pacem3DLight implements OnInit, OnDestroy, OnChanges {
 }
 
 @NgModule({
-    declarations: [ Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject],
+    declarations: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject],
     exports: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject]
 })
 export class Pacem3DModule { }
