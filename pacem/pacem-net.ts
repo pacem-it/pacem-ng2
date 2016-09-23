@@ -124,7 +124,7 @@ export class PacemHttp {
 
         var stopWatch: number;
         req.addEventListener('load', () => {
-            if (req.status == 200) {
+            if (req.status >= 200 && req.status < 300) {
                 // Resolve the promise with the response
                 var response = new PacemResponse(req, Date.now() - stopWatch);
                 deferred.resolve(response);
