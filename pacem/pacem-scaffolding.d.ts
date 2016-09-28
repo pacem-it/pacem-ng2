@@ -2,7 +2,7 @@ import { Compiler, EventEmitter, ViewContainerRef, ElementRef, OnDestroy, OnInit
 import { NgControl, ControlValueAccessor, NgModel, NgForm } from '@angular/forms';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
@@ -115,6 +115,9 @@ export declare class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     field: pacemFieldMetadata;
     entity: any;
     readonly: boolean;
+    parameters: {
+        [key: string]: any;
+    };
     private _form;
     form: NgForm;
     constructor(compiler: Compiler, builder: PacemFieldBuilder);

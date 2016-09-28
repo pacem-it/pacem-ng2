@@ -8,20 +8,24 @@ import { PacemDatetimePicker } from './../pacem/pacem-scaffolding';
 <p>Custom <i>datepicker</i> component.<br />
 Standard version:</p>
 
+<div class="pacem-field pacem-input-container">
 <pacem-datetime-picker [(dateValue)]="value"></pacem-datetime-picker>
-
+</div>
 <p>Minute-level precision:</p>
 
+<div class="pacem-field pacem-input-container">
 <pacem-datetime-picker precision="minute" [(dateValue)]="value"></pacem-datetime-picker>
-
+</div>
 <p>Second-level precision:</p>
 
+<div class="pacem-field pacem-input-container">
 <pacem-datetime-picker precision="second" [(dateValue)]="value"></pacem-datetime-picker>
-
+</div>
 <p>Challenging ancient times:</p>
 
+<div class="pacem-field pacem-input-container">
 <pacem-datetime-picker precision="minute" [min]="min0" [max]="value || now" [(dateValue)]="value0"></pacem-datetime-picker>
-`
+</div>`
 })
 export class PacemCalendarComponent {
     

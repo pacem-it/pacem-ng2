@@ -18,7 +18,7 @@ var PacemCalendarComponent = (function () {
     PacemCalendarComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-calendar',
-            template: "<h2>Pacem Datetime Picker</h2>\n<p>Custom <i>datepicker</i> component.<br />\nStandard version:</p>\n\n<pacem-datetime-picker [(dateValue)]=\"value\"></pacem-datetime-picker>\n\n<p>Minute-level precision:</p>\n\n<pacem-datetime-picker precision=\"minute\" [(dateValue)]=\"value\"></pacem-datetime-picker>\n\n<p>Second-level precision:</p>\n\n<pacem-datetime-picker precision=\"second\" [(dateValue)]=\"value\"></pacem-datetime-picker>\n\n<p>Challenging ancient times:</p>\n\n<pacem-datetime-picker precision=\"minute\" [min]=\"min0\" [max]=\"value || now\" [(dateValue)]=\"value0\"></pacem-datetime-picker>\n"
+            template: "<h2>Pacem Datetime Picker</h2>\n<p>Custom <i>datepicker</i> component.<br />\nStandard version:</p>\n\n<div class=\"pacem-field pacem-input-container\">\n<pacem-datetime-picker [(dateValue)]=\"value\"></pacem-datetime-picker>\n</div>\n<p>Minute-level precision:</p>\n\n<div class=\"pacem-field pacem-input-container\">\n<pacem-datetime-picker precision=\"minute\" [(dateValue)]=\"value\"></pacem-datetime-picker>\n</div>\n<p>Second-level precision:</p>\n\n<div class=\"pacem-field pacem-input-container\">\n<pacem-datetime-picker precision=\"second\" [(dateValue)]=\"value\"></pacem-datetime-picker>\n</div>\n<p>Challenging ancient times:</p>\n\n<div class=\"pacem-field pacem-input-container\">\n<pacem-datetime-picker precision=\"minute\" [min]=\"min0\" [max]=\"value || now\" [(dateValue)]=\"value0\"></pacem-datetime-picker>\n</div>"
         }), 
         __metadata('design:paramtypes', [])
     ], PacemCalendarComponent);

@@ -7,10 +7,10 @@ import { PacemHttp } from './../pacem/pacem-net';
     template: `<h2>Pacem Lightbox</h2>
 <p>Toggle <i>lightboxes</i> and picture <i>galleries</i> visibility using the buttons below.<br />
 The <b>add</b>/<b>remove</b> picture button will trigger a <i>toast</i> message.</p>
-<button (click)="visible=true">Lightbox</button>
-<button (click)="galleryVisible=true">Gallery</button>
-<button (click)="addPic($event)" [hidden]="pictures?.length >= size">Add picture</button>
-<button (click)="removePic($event)" [hidden]="pictures?.length < size">Remove picture</button>
+<button class="pacem-btn" (click)="visible=true">Lightbox</button>
+<button class="pacem-btn" (click)="galleryVisible=true">Gallery</button>
+<button class="pacem-btn" (click)="addPic($event)" [hidden]="pictures?.length >= size">Add picture</button>
+<button class="pacem-btn" (click)="removePic($event)" [hidden]="pictures?.length < size">Remove picture</button>
 
 <pacem-lightbox [show]="visible" (close)="visible=false">
     <p>Lightbox content</p>

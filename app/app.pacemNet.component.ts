@@ -10,7 +10,7 @@ import { PacemHub, PacemHttp } from './../pacem/pacem-net';
 
 <pacem-field *ngFor="let item of meta" [field]="item" [entity]="entity"></pacem-field>
 
-<button (click)="send($event)" [disabled]="!entity.message">Boomerang!</button>`
+<button (click)="send($event)" [disabled]="!entity.message" class="pacem-btn primary">Boomerang!</button>`
 })
 export class PacemNetComponent implements OnInit, OnDestroy {
 

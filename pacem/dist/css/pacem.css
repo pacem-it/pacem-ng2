@@ -120,6 +120,51 @@ body {
   transform: scale(1, 1);
 }
 /*#endregion*/
+.pacem-btn {
+  height: 34px;
+  line-height: 34px;
+  font-family: 'Yanone Kaffeesatz', 'Segoe UI', Helvetica, sans-serif;
+  text-transform: uppercase;
+  padding: 0 12px;
+  min-width: 126px;
+  display: inline-block;
+  color: #fff;
+  background-color: #262b3e;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0, rgba(255, 255, 255, 0) 50%) 1;
+  font-size: 1.1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin: 0 8px 8px 0;
+  transition: all .1s linear;
+}
+.pacem-btn.accent {
+  background: #ff005a;
+}
+.pacem-btn.primary {
+  background: rgba(167, 248, 171, 0.6);
+}
+.pacem-btn.warn {
+  color: #fffcc0;
+  background: #3c351a;
+}
+.pacem-btn[disabled] {
+  border-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0, rgba(255, 255, 255, 0) 50%) 1;
+  background-color: #262b3e;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: default;
+}
+.pacem-btn:active {
+  border-image: none;
+  transform: translateY(1px);
+  box-shadow: none;
+}
+.pacem-btn.flat {
+  box-shadow: none;
+  border-image: none;
+  background-color: transparent;
+  color: #fff;
+}
 .pacem-highlight {
   background-color: #ff0;
 }
@@ -1055,6 +1100,9 @@ svg.pacem-bind path {
   background-size: 14.4px;
   background-position: left 4.8px;
   background-repeat: no-repeat;
+}
+.pacem-field .pacem-input-container input.pacem-input[type=color] {
+  cursor: pointer;
 }
 .pacem-field .pacem-readonly {
   margin-left: 20px;

@@ -1,4 +1,4 @@
-﻿import { PacemLooper } from './../pacem/pacem-core';
+﻿import { PacemLooper, PacemPromise } from './../pacem/pacem-core';
 import { PacemHttp } from './../pacem/pacem-net';
 import { PacemField } from './../pacem/pacem-scaffolding';
 import { JsonPipe } from '@angular/common';
@@ -15,16 +15,17 @@ It includes styling, custom validation and fetching for complex data.</p>
     <pacem-datetime-picker name="Birthdate" [(ngModel)]="entity.Birthdate"></pacem-datetime-picker>
 </form>-->
 
-    <button (click)="readonly=!readonly">toggle readonly</button>
+    <button (click)="readonly=!readonly" class="pacem-btn">toggle readonly</button>
 
     <p></p>
     <form #f="ngForm" novalidate (ngSubmit)="check(f)">
-    <pacem-field    *ngFor="let item of meta" [field]="item" [entity]="entity" [readonly]="readonly" 
+    <pacem-field    *ngFor="let item of meta" [field]="item" [entity]="entity" [readonly]="readonly"
+                    [params]="params" 
                     [form]="f">
     </pacem-field>
     <p>{{ entity | json }}</p>
     
-    <input type="submit" value="submit" />
+    <input type="submit" value="submit" class="pacem-btn primary" [disabled]="f.pristine || f.invalid" />
 
     <b>{{ ( f.valid ? 'valid': 'invalid' ) }}</b> and <b>{{ (f.pristine ?  'pristine' : 'dirty') }}</b>
 
@@ -44,11 +45,27 @@ export class PacemScaffoldingComponent implements AfterViewInit {
         console.log(form.valid ? 'VALID' : 'INVALID');
     }
 
+    get params() {
+        return { culture: 'it' };
+    }
+
+    get foodsPromise(): PacemPromise<{ caption: string, value: any, entity: any }[]> {
+        let deferred = PacemPromise.defer();
+        this.http.get('foods.json').success(response => {
+            let json = response.json;
+            let array: string[] = json.result;
+            deferred.resolve(array.map(food => { return { caption: food, value: food, entity: food }; }));
+        });
+        return deferred.promise;
+    }
+
     ngAfterViewInit() {
         this.http.get('metadata.json')
             .success((response) => {
                 const meta = response.json as any[];
                 this.looper.loop(meta, (item) => {
+                    if (item.prop === 'FavFood')
+                        item.extra.fetch = this.foodsPromise;
                     this.meta.push(item);
                 });
             });

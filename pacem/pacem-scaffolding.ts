@@ -8,7 +8,8 @@ import { Validators, Validator, ValidatorFn, NG_VALIDATORS, AbstractControl, NgC
     SelectControlValueAccessor, NgSelectOption, CheckboxControlValueAccessor, ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel, NgForm,
     FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PacemUtils, PacemDate, PacemCoreModule } from './pacem-core';
+import { PacemUtils, PacemDate, PacemCoreModule, PacemPromise } from './pacem-core';
+import { PacemHttp } from './pacem-net';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import { PacemBalloon, PacemHighlight, PacemUIModule, PacemSnapshot, PacemLightbox } from './pacem-ui';
 import { Http, Response, XHRBackend }     from '@angular/http';
@@ -18,12 +19,19 @@ import { Subject } from 'rxjs/Subject';
 // Observable class extensions
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/fromPromise';
 // Observable operators
-import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
+
+interface IDatasourceItem {
+    value: any
+    caption: any
+    selected?: boolean
+    entity: any
+}
 
 interface IFetchData {
     sourceUrl: string;
@@ -32,13 +40,7 @@ interface IFetchData {
     dependsOn?: { prop: string, alias?: string };
     textProperty?: string;
     valueProperty?: string;
-}
-
-interface IDatasourceItem {
-    value: any
-    caption: any
-    selected?: boolean
-    entity: any
+    fetch?: Promise<IDatasourceItem[]>;
 }
 
 @Injectable()
@@ -49,24 +51,58 @@ class DatasourceFetcher {
 
     constructor(private http: Http) { }
 
+    /**
+     * Returns the url and the body dictionary necessary for the request.
+     * @param verb
+     * @param urlTmpl Url template (`{token}` placeholders accepted)
+     * @param body
+     */
+    private prepareRequest(verb: string, urlTmpl: string, params: { [key: string]: any }): { url: string, body: any } {
+        let isPost = verb === 'post';
+        let body = {}, url = urlTmpl;
+        let asyncs = [];
+        let fnNject = (prop: string, value: any) => {
+            let pattern = new RegExp(`\{${prop}\}`, 'ig');
+            if (pattern.test(urlTmpl)) {
+                url = url.replace(pattern, value);
+            } else if (!isPost)
+                url += (url.indexOf('?') == -1 ? '?' : '&') + prop + '=' + encodeURI(value);
+            else
+                body[prop] = value;
+        };
+        for (let prop in params) {
+            let value = params[prop];
+            fnNject(prop, value);
+        }
+        return { url: url, body: body };
+    }
+
+    private createDatasource(items: IDatasourceItem[], valueProperty?:string) {
+        let datasource = new Datasource(items.length);
+        //datasource.textProperty = data.textProperty;
+        datasource.valueProperty = valueProperty;
+        Datasource.prototype.splice.apply(datasource, (<any[]>[0, datasource.length]).concat(items));
+        return datasource;
+    }
+
     fetch(data: IFetchData, entity?: any): Observable<Datasource> {
+        let fn = data.fetch;
+        if (fn)
+            return Observable.fromPromise(fn).map(items => this.createDatasource(items, data.valueProperty));
+        //
         let verb = (data.verb || 'get').toLowerCase();
         let isPost = verb === 'post';
         let url = data.sourceUrl;
-        let body = data.params || {};
+        let params = data.params || {};
         let dependsOn = data.dependsOn;
-        if (!isPost)
-            for (let prop in body)
-                url += (url.indexOf('?') == -1 ? '?' : '&') + prop + '=' + encodeURI(body[prop]);
         //
         if (dependsOn) {
-            if (isPost)
-                body[dependsOn.alias || dependsOn.prop] = entity[dependsOn.prop];
-            else
-                url += (url.indexOf('?') == -1 ? '?' : '&') + (dependsOn.alias || dependsOn.prop) + '=' + encodeURI(entity[dependsOn.prop]);
+            params[dependsOn.alias || dependsOn.prop] = entity[dependsOn.prop];
         }
+        //
         this.onFetching.emit({});
-        let observable: Observable<Response> = verb === 'post' ? this.http.post(url, body) : this.http.get(url);
+        var request = this.prepareRequest(verb, url, params);
+        let observable: Observable<Response> = verb === 'post' ? this.http.post(request.url, request.body) : this.http.get(request.url);
         return observable.map((r: Response) => {
             this.onFetched.emit({});
             let json = r.json();
@@ -82,11 +118,7 @@ class DatasourceFetcher {
                             }
                             return { value: value, caption: caption, entity: i };
                         });
-                let datasource = new Datasource(items.length);
-                //datasource.textProperty = data.textProperty;
-                datasource.valueProperty = data.valueProperty;
-                Datasource.prototype.splice.apply(datasource, (<any[]>[0, datasource.length]).concat(items));
-                return datasource;
+                return this.createDatasource(items, data.valueProperty);
             }
         });
     }
@@ -1185,7 +1217,7 @@ export class PacemFieldBuilder {
     <div #placeholder hidden></div>
     `,
     //entryComponents: [PacemSelectMany, PacemAutocomplete],
-    providers: [/*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder, 
+    providers: [/*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder,
         PacemDate, MinValidator, MaxValidator, CompareValidator]
 })
 export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
@@ -1201,6 +1233,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
     @Input() field: pacemFieldMetadata;
     @Input() entity: any;
     @Input() readonly: boolean;
+    @Input('params') parameters: { [key: string]: any } = [];
 
     private _form: NgForm;
     @Input() set form(v: NgForm) {
@@ -1378,6 +1411,9 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                     case 'emailaddress':
                         attrs['type'] = 'email';
                         break;
+                    case "color":
+                        attrs['type'] = 'color';
+                        break;
                     case "time":
                         attrs['type'] = 'time';
                         break;
@@ -1552,7 +1588,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                 let component = this.componentRef.instance;
                 component.entity = this.entity;
                 if (fetchData)
-                    component.fetchData = fetchData;
+                    component.fetchData = PacemUtils.extend({ params: this.parameters }, fetchData);
                 this.syncControl();
             });
     }

@@ -24,12 +24,13 @@ var pacem_core_1 = require('./pacem-core');
 var platform_browser_1 = require('@angular/platform-browser');
 var pacem_ui_1 = require('./pacem-ui');
 var http_1 = require('@angular/http');
+var Observable_1 = require('rxjs/Observable');
 var Subject_1 = require('rxjs/Subject');
 // Observable class extensions
 require('rxjs/add/observable/of');
 require('rxjs/add/observable/throw');
+require('rxjs/add/observable/fromPromise');
 // Observable operators
-require('rxjs/add/operator/toPromise');
 require('rxjs/add/operator/catch');
 require('rxjs/add/operator/distinctUntilChanged');
 require('rxjs/add/operator/debounceTime');
@@ -40,25 +41,58 @@ var DatasourceFetcher = (function () {
         this.onFetched = new core_1.EventEmitter();
         this.onFetching = new core_1.EventEmitter();
     }
+    /**
+     * Returns the url and the body dictionary necessary for the request.
+     * @param verb
+     * @param urlTmpl Url template (`{token}` placeholders accepted)
+     * @param body
+     */
+    DatasourceFetcher.prototype.prepareRequest = function (verb, urlTmpl, params) {
+        var isPost = verb === 'post';
+        var body = {}, url = urlTmpl;
+        var asyncs = [];
+        var fnNject = function (prop, value) {
+            var pattern = new RegExp("{" + prop + "}", 'ig');
+            if (pattern.test(urlTmpl)) {
+                url = url.replace(pattern, value);
+            }
+            else if (!isPost)
+                url += (url.indexOf('?') == -1 ? '?' : '&') + prop + '=' + encodeURI(value);
+            else
+                body[prop] = value;
+        };
+        for (var prop in params) {
+            var value = params[prop];
+            fnNject(prop, value);
+        }
+        return { url: url, body: body };
+    };
+    DatasourceFetcher.prototype.createDatasource = function (items, valueProperty) {
+        var datasource = new Datasource(items.length);
+        //datasource.textProperty = data.textProperty;
+        datasource.valueProperty = valueProperty;
+        Datasource.prototype.splice.apply(datasource, [0, datasource.length].concat(items));
+        return datasource;
+    };
     DatasourceFetcher.prototype.fetch = function (data, entity) {
         var _this = this;
+        var fn = data.fetch;
+        if (fn)
+            return Observable_1.Observable.fromPromise(fn).map(function (items) { return _this.createDatasource(items, data.valueProperty); });
+        //
         var verb = (data.verb || 'get').toLowerCase();
         var isPost = verb === 'post';
         var url = data.sourceUrl;
-        var body = data.params || {};
+        var params = data.params || {};
         var dependsOn = data.dependsOn;
-        if (!isPost)
-            for (var prop in body)
-                url += (url.indexOf('?') == -1 ? '?' : '&') + prop + '=' + encodeURI(body[prop]);
         //
         if (dependsOn) {
-            if (isPost)
-                body[dependsOn.alias || dependsOn.prop] = entity[dependsOn.prop];
-            else
-                url += (url.indexOf('?') == -1 ? '?' : '&') + (dependsOn.alias || dependsOn.prop) + '=' + encodeURI(entity[dependsOn.prop]);
+            params[dependsOn.alias || dependsOn.prop] = entity[dependsOn.prop];
         }
+        //
         this.onFetching.emit({});
-        var observable = verb === 'post' ? this.http.post(url, body) : this.http.get(url);
+        var request = this.prepareRequest(verb, url, params);
+        var observable = verb === 'post' ? this.http.post(request.url, request.body) : this.http.get(request.url);
         return observable.map(function (r) {
             _this.onFetched.emit({});
             var json = r.json();
@@ -73,11 +107,7 @@ var DatasourceFetcher = (function () {
                     }
                     return { value: value, caption: caption, entity: i };
                 });
-                var datasource = new Datasource(items.length);
-                //datasource.textProperty = data.textProperty;
-                datasource.valueProperty = data.valueProperty;
-                Datasource.prototype.splice.apply(datasource, [0, datasource.length].concat(items));
-                return datasource;
+                return _this.createDatasource(items, data.valueProperty);
             }
         });
     };
@@ -1187,6 +1217,7 @@ var PacemField = (function () {
     function PacemField(compiler, builder) {
         this.compiler = compiler;
         this.builder = builder;
+        this.parameters = [];
         this.uid = "_" + pacem_core_1.PacemUtils.uniqueCode();
     }
     Object.defineProperty(PacemField.prototype, "form", {
@@ -1349,6 +1380,9 @@ var PacemField = (function () {
                         break;
                     case 'emailaddress':
                         attrs['type'] = 'email';
+                        break;
+                    case "color":
+                        attrs['type'] = 'color';
                         break;
                     case "time":
                         attrs['type'] = 'time';
@@ -1519,7 +1553,7 @@ var PacemField = (function () {
             var component = _this.componentRef.instance;
             component.entity = _this.entity;
             if (fetchData)
-                component.fetchData = fetchData;
+                component.fetchData = pacem_core_1.PacemUtils.extend({ params: _this.parameters }, fetchData);
             _this.syncControl();
         });
     };
@@ -1543,6 +1577,10 @@ var PacemField = (function () {
         core_1.Input(), 
         __metadata('design:type', Boolean)
     ], PacemField.prototype, "readonly", void 0);
+    __decorate([
+        core_1.Input('params'), 
+        __metadata('design:type', Object)
+    ], PacemField.prototype, "parameters", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', forms_1.NgForm), 

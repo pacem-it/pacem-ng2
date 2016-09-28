@@ -6,19 +6,19 @@ import { NgForm } from '@angular/forms';
     selector: 'app-pacem-balloon',
     template: `<h2>Pacem Balloon</h2>
 
-<div>
+<div class="pacem-field">
 <input type="radio" [(ngModel)]="model.trigger" name="trig" id="trigHover" value="hover" /><label for="trigHover">hover</label>
 <input type="radio" [(ngModel)]="model.trigger" name="trig" id="trigClick" value="click" /><label for="trigClick">click</label>
 </div>
-<div>
+<div class="pacem-field">
 <input type="radio" [(ngModel)]="model.behavior" name="beh" id="behMenu" value="menu" /><label for="behMenu">menu-like</label>
 <input type="radio" [(ngModel)]="model.behavior" name="beh" id="behTip" value="tooltip" /><label for="behTip">tooltip</label>
 </div>
-<div>
+<div class="pacem-field">
 <input type="radio" [(ngModel)]="balloonName" name="b" id="b1" value="balloon1" /><label for="b1">balloon 1</label>
 <input type="radio" [(ngModel)]="balloonName" name="b" id="b2" value="balloon2" /><label for="b2">balloon 2</label>
 </div>
-<div>
+<div class="pacem-field">
 <input type="radio" [(ngModel)]="model.position" name="pos" id="posTop" value="top" /><label for="posTop">top</label>
 <input type="radio" [(ngModel)]="model.position" name="pos" id="posLeft" value="left" /><label for="posLeft">left</label>
 <input type="radio" [(ngModel)]="model.position" name="pos" id="posBottom" value="bottom" /><label for="posBottom">bottom</label>

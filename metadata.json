@@ -165,7 +165,7 @@
       "description": "Type you state's initials and then pick it by selecting from the list"
     },
     "extra": {
-      "sourceUrl": "autocomplete.ashx",
+      "sourceUrl": "{culture}/autocomplete.ashx",
       "textProperty": "Name",
       "valueProperty": "ID",
       "tooltip": true
@@ -178,12 +178,13 @@
     ]
   },
   {
-    "prop": "Email",
-    "type": "emailaddress",
+    "prop": "FavColor",
+    "type": "color",
+    "display": { "name": "Favorite color", "watrmark":  "pick..." },
     "validators": [
       {
-        "type": "email",
-        "errorMessage": "this isn't a valid email address at all"
+        "type": "required",
+        "errorMessage": "Please select a color"
       }
     ]
   },

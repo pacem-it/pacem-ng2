@@ -23,6 +23,10 @@
     text-overflow: ellipsis;
 }
 
+.GradientBorderVertical(@size, @from, @to, @color1, @color2) {
+    border-image: linear-gradient(to bottom, @color1 @from,@color2 @to) @size;
+}
+
 .GradientVertical(@from, @to, @color1, @color2) {
     background: @color2;
     background: -moz-linear-gradient(top, @color1 @from, @color2 @to);

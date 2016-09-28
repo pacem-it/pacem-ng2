@@ -61,7 +61,7 @@ var PacemNetComponent = (function () {
     PacemNetComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-net',
-            template: "<ul #echo>\n</ul>\n\n<p><b>{{ counter }}</b> message{{ counter == 1 ? ' has' : 's have' }} already been sent.</p>\n\n<pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n\n<button (click)=\"send($event)\" [disabled]=\"!entity.message\">Boomerang!</button>"
+            template: "<ul #echo>\n</ul>\n\n<p><b>{{ counter }}</b> message{{ counter == 1 ? ' has' : 's have' }} already been sent.</p>\n\n<pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n\n<button (click)=\"send($event)\" [disabled]=\"!entity.message\" class=\"pacem-btn primary\">Boomerang!</button>"
         }), 
         __metadata('design:paramtypes', [pacem_net_1.PacemHub, pacem_net_1.PacemHttp])
     ], PacemNetComponent);
