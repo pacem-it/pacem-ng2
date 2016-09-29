@@ -87,8 +87,17 @@ class DatasourceFetcher {
 
     fetch(data: IFetchData, entity?: any): Observable<Datasource> {
         let fn = data.fetch;
-        if (fn)
-            return Observable.fromPromise(fn).map(items => this.createDatasource(items, data.valueProperty));
+        if (fn) {
+            this.onFetching.emit({});
+            let obs: Observable<IDatasourceItem[]> = Observable
+                .fromPromise(fn)
+                .map(items => this.createDatasource(items, data.valueProperty));
+            let subs = obs.subscribe(_ => {
+                subs.unsubscribe();
+                this.onFetched.emit({});
+            });
+            return obs;
+        }
         //
         let verb = (data.verb || 'get').toLowerCase();
         let isPost = verb === 'post';

@@ -77,8 +77,17 @@ var DatasourceFetcher = (function () {
     DatasourceFetcher.prototype.fetch = function (data, entity) {
         var _this = this;
         var fn = data.fetch;
-        if (fn)
-            return Observable_1.Observable.fromPromise(fn).map(function (items) { return _this.createDatasource(items, data.valueProperty); });
+        if (fn) {
+            this.onFetching.emit({});
+            var obs = Observable_1.Observable
+                .fromPromise(fn)
+                .map(function (items) { return _this.createDatasource(items, data.valueProperty); });
+            var subs_1 = obs.subscribe(function (_) {
+                subs_1.unsubscribe();
+                _this.onFetched.emit({});
+            });
+            return obs;
+        }
         //
         var verb = (data.verb || 'get').toLowerCase();
         var isPost = verb === 'post';

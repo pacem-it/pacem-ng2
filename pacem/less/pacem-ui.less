@@ -3,10 +3,22 @@
 /*#region HIDDEN*/
 
 .pacem-hidden {
-    transition: all .3s cubic-bezier(0.6, -0.28, 0.735, 0.045), display .01s .3s;
+    transition: all .3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
     //display: none !important;
     opacity: 0;
     transform: scale(0,0);
+
+    &.slide {
+        transition: all .3s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+        transform: none;
+        overflow: hidden;
+        height: 0;
+
+        &.horizontal {
+            height: auto;
+            width: 0;
+        }
+    }
 }
 
 .pacem-shown {
@@ -14,6 +26,13 @@
     //display: normal;
     opacity: 1;
     transform: scale(1,1);
+
+    &.slide{
+        transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+        transform: none;
+        overflow: hidden;
+
+    }
 }
 
 /*#endregion*/
@@ -42,7 +61,7 @@
     box-shadow: 0 2px @grid_spacing / 3 rgba(0,0,0,0.5);
     margin: 0 @grid_spacing/3 @grid_spacing/3 0;
     transition: all .1s linear;
-    
+
     &.accent {
         background: @color_red;
     }
@@ -57,20 +76,20 @@
         background: #3c351a;
     }
 
-    &[disabled]{
+    &[disabled] {
         .GradientBorderVertical(1, 0, 50%, fade(@color_light, 25), fade(@color_light, 0));
         background-color: @color_lightblue;
         color: fade(@color_light, 30);
         cursor: default;
     }
-    
-    &:active{
+
+    &:active {
         border-image: none;
         transform: translateY(@_brd);
         box-shadow: none;
     }
 
-    &.flat{
+    &.flat {
         box-shadow: none;
         border-image: none;
         background-color: transparent;

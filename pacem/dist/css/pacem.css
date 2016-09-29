@@ -110,14 +110,29 @@ body {
 }
 /*#region HIDDEN*/
 .pacem-hidden {
-  transition: all 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045), display 0.01s 0.3s;
+  transition: all 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
   opacity: 0;
   transform: scale(0, 0);
+}
+.pacem-hidden.slide {
+  transition: all 0.3s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  transform: none;
+  overflow: hidden;
+  height: 0;
+}
+.pacem-hidden.slide.horizontal {
+  height: auto;
+  width: 0;
 }
 .pacem-shown {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 1;
   transform: scale(1, 1);
+}
+.pacem-shown.slide {
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: none;
+  overflow: hidden;
 }
 /*#endregion*/
 .pacem-btn {
@@ -1246,7 +1261,7 @@ svg.pacem-bind path {
 .pacem-input-container .pacem-datetime-picker .pacem-datetime-picker-hours .pacem-select,
 .pacem-input-container .pacem-datetime-picker .pacem-datetime-picker-minutes .pacem-select,
 .pacem-input-container .pacem-datetime-picker .pacem-datetime-picker-seconds .pacem-select {
-  min-width: 0;
+  min-width: 40px;
 }
 .pacem-field .pacem-input-container pacem-datetime-picker.ng-pristine.ng-invalid .pacem-select {
   border-color: rgba(255, 0, 90, 0.2);

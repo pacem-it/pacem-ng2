@@ -17,7 +17,6 @@ It includes styling, custom validation and fetching for complex data.</p>
 
     <button (click)="readonly=!readonly" class="pacem-btn">toggle readonly</button>
 
-    <p></p>
     <form #f="ngForm" novalidate (ngSubmit)="check(f)">
     <pacem-field    *ngFor="let item of meta" [field]="item" [entity]="entity" [readonly]="readonly"
                     [params]="params" 
@@ -25,9 +24,10 @@ It includes styling, custom validation and fetching for complex data.</p>
     </pacem-field>
     <p>{{ entity | json }}</p>
     
+    <div [hidden]="readonly">
     <input type="submit" value="submit" class="pacem-btn primary" [disabled]="f.pristine || f.invalid" />
 
-    <b>{{ ( f.valid ? 'valid': 'invalid' ) }}</b> and <b>{{ (f.pristine ?  'pristine' : 'dirty') }}</b>
+    <b>{{ ( f.valid ? 'valid': 'invalid' ) }}</b> and <b>{{ (f.pristine ?  'pristine' : 'dirty') }}</b></div>
 
     </form>
 
