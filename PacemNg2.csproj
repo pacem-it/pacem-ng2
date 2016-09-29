@@ -87,7 +87,7 @@
     <Content Include="tsconfig.json" />
     <Content Include="typings.json" />
     <Content Include="packages.config" />
-    <Content Include="autocomplete.ashx" />
+    <Content Include="it\autocomplete.ashx" />
     <Content Include="uploader.ashx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
