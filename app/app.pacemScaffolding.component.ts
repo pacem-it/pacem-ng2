@@ -7,8 +7,8 @@ import { Component, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, AfterVi
 
 @Component({
     selector: 'app-pacem-scaffolding',
-    template: `<h2>Pacem Scaffolding</h2>
-<p>Many input data types (and more to come) are involved in this self-composing form system.<br />
+    template: `<h2 class="pacem-animatable">Pacem Scaffolding</h2>
+<p class="pacem-animatable">Many input data types (and more to come) are involved in this self-composing form system.<br />
 It includes styling, custom validation and fetching for complex data.</p>
 
 <!--<form>

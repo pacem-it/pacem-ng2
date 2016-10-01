@@ -2,7 +2,7 @@ import { ElementRef, EventEmitter, OnChanges, SimpleChanges, OnInit, OnDestroy }
 export declare class Detector3D {
     private detected;
     constructor();
-    info: {
+    readonly info: {
         supported: boolean;
         info: {};
     };
@@ -75,10 +75,10 @@ export declare class Pacem3DObject implements OnInit, OnDestroy {
     ngOnInit(): void;
     ngOnDestroy(): void;
     private init();
-    boundingSphere: THREE.Sphere;
-    boundingBox: THREE.Box3;
+    readonly boundingSphere: THREE.Sphere;
+    readonly boundingBox: THREE.Box3;
     private getPointCoords(point);
-    projectionBox: {
+    readonly projectionBox: {
         offset: {
             left: number;
             top: number;
@@ -118,7 +118,7 @@ export declare class Pacem3DLight implements OnInit, OnDestroy, OnChanges {
     intensity: number;
     color: number;
     private _light;
-    light: THREE.Light;
+    readonly light: THREE.Light;
     ngOnInit(): void;
     ngOnChanges(): void;
     ngOnDestroy(): void;

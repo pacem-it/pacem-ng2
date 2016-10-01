@@ -1,0 +1,104 @@
+﻿@import 'shared.less';
+
+@keyframes core-anim {
+    0% {
+        transform: translateY(@grid_spacing);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes default-anim {
+    0% {
+        transform: translateY(@grid_spacing);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes enhanced-anim {
+    0% {
+        transform: translateY(@grid_spacing) scaleY(1.5);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes header-anim {
+    0% {
+        transform: translateX(@grid_cell);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.pacem-anim.enabled {
+    overflow-x: hidden;
+
+    .Animatable(@anim, @delay) {
+
+        &:not(.pacem-viewport-aware),
+        &.pacem-viewport-aware.pacem-in-viewport {
+            animation: @anim .3s ease-out @delay both;
+        }
+    }
+
+    .Animatable(@delay) {
+        .Animatable(default-anim, @delay);
+    }
+
+    .pacem-animatable {
+        .Animatable(.2s);
+    }
+
+    .pacem-ring-chart,
+    .pacem-pie-chart,
+    .pacem-carousel,
+    .pacem-carousel-dashboard,
+    .pacem-map,
+    .pacem-btn {
+        .Animatable(.4s);
+    }
+
+    .pacem-field {
+        .Animatable(enhanced-anim, .3s);
+    }
+
+    .loop(@counter) when (@counter > 0) {
+        .loop((@counter - 1));
+
+        &:nth-child(@{counter}) .pacem-field {
+            .Animatable(core-anim, (@counter - 1) * .01s);
+        }
+    }
+
+    pacem-field {
+        .loop(50);
+    }
+
+    h1.pacem-animatable {
+        .Animatable(header-anim, 0s);
+    }
+
+    h2.pacem-animatable {
+        .Animatable(header-anim, .1s);
+    }
+
+    h3.pacem-animatable {
+        .Animatable(header-anim, .2s);
+    }
+}

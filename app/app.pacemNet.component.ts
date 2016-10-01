@@ -3,10 +3,10 @@ import { PacemHub, PacemHttp } from './../pacem/pacem-net';
 
 @Component({
     selector: 'app-pacem-net',
-    template: `<ul #echo>
+    template: `<h2 class="pacem-animatable">Pacem Networking</h2><ul #echo>
 </ul>
 
-<p><b>{{ counter }}</b> message{{ counter == 1 ? ' has' : 's have' }} already been sent.</p>
+<p class="pacem-animatable"><b>{{ counter }}</b> message{{ counter == 1 ? ' has' : 's have' }} already been sent.</p>
 
 <pacem-field *ngFor="let item of meta" [field]="item" [entity]="entity"></pacem-field>
 

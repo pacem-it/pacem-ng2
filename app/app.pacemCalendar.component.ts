@@ -4,7 +4,7 @@ import { PacemDatetimePicker } from './../pacem/pacem-scaffolding';
 
 @Component({
     selector: 'app-pacem-calendar',
-    template: `<h2>Pacem Datetime Picker</h2>
+    template: `<h2 class="pacem-animatable">Pacem Datetime Picker</h2>
 <p>Custom <i>datepicker</i> component.<br />
 Standard version:</p>
 

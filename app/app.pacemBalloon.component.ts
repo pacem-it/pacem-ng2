@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'app-pacem-balloon',
-    template: `<h2>Pacem Balloon</h2>
+    template: `<h2 class="pacem-animatable">Pacem Balloon</h2>
 
 <div class="pacem-field">
 <input type="radio" [(ngModel)]="model.trigger" name="trig" id="trigHover" value="hover" /><label for="trigHover">hover</label>

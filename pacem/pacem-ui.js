@@ -111,6 +111,7 @@ var PacemInfiniteScroll = (function () {
         this.$viewport = null;
         this.$scroller = null;
         this.$bottomGap = 10;
+        this.$container = this.$viewport = this.$scroller = this.element.nativeElement;
     }
     Object.defineProperty(PacemInfiniteScroll.prototype, "pacemInfiniteScrollContainer", {
         set: function (v) {
@@ -148,7 +149,6 @@ var PacemInfiniteScroll = (function () {
         configurable: true
     });
     PacemInfiniteScroll.prototype.ngOnInit = function () {
-        this.$container = this.$viewport = this.$scroller = this.element.nativeElement;
         this.$scroller.addEventListener('scroll', this.$scrollDelegate, false);
     };
     PacemInfiniteScroll.prototype.ngOnDestroy = function () {
@@ -169,7 +169,8 @@ var PacemInfiniteScroll = (function () {
         if (!this.computeHeight()) {
             var scrollTop = this.$scroller instanceof Document ? window.pageYOffset : this.$scroller.scrollTop;
             var viewportHeight = this.viewportHeight, innerHeight = this.innerHeight;
-            if ((innerHeight - (scrollTop + viewportHeight)) < this.$bottomGap /* pixels */
+            var threshold = innerHeight - (scrollTop + viewportHeight);
+            if (threshold < this.$bottomGap /* pixels */
                 || innerHeight <= viewportHeight) {
                 this.pacemInfiniteScroll.emit({});
                 window.requestAnimationFrame(function () {
@@ -1326,7 +1327,7 @@ var PacemInViewport = (function () {
                 if (newviz !== _this._visible) {
                     var visible = _this._visible = newviz;
                     _this.pacemInViewport.emit({ visible: visible });
-                    if (!!visible)
+                    if (visible)
                         pacem_core_1.PacemUtils.addClass(el, 'pacem-in-viewport');
                     else
                         pacem_core_1.PacemUtils.removeClass(el, 'pacem-in-viewport');
@@ -1347,7 +1348,9 @@ var PacemInViewport = (function () {
         }
     };
     PacemInViewport.prototype.ngOnInit = function () {
-        var el = this.element.nativeElement.parentElement;
+        var thisel = this.element.nativeElement;
+        pacem_core_1.PacemUtils.addClass(thisel, 'pacem-viewport-aware');
+        var el = thisel.parentElement;
         this.addEventListeners(window);
         while (el) {
             this.addEventListeners(el);
@@ -1356,7 +1359,9 @@ var PacemInViewport = (function () {
         this._scrollHandler();
     };
     PacemInViewport.prototype.ngOnDestroy = function () {
-        var el = this.element.nativeElement.parentElement;
+        var thisel = this.element.nativeElement;
+        pacem_core_1.PacemUtils.removeClass(thisel, 'pacem-viewport-aware');
+        var el = thisel.parentElement;
         this.removeEventListeners(window);
         while (el) {
             this.removeEventListeners(el);

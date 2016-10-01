@@ -8,22 +8,22 @@ export declare class PacemResponse {
     private _type;
     private _allHeadersRaw;
     private _headers;
-    processTime: number;
-    headers: {
+    readonly processTime: number;
+    readonly headers: {
         [key: string]: string;
     };
-    size: number;
-    mime: string;
-    date: Date;
+    readonly size: number;
+    readonly mime: string;
+    readonly date: Date;
     private _parseHeaders();
-    status: number;
-    text: string;
-    content: any;
-    type: string;
+    readonly status: number;
+    readonly text: string;
+    readonly content: any;
+    readonly type: string;
     /**
      * Short-hand utility for getting or parsing json content (if any).
      */
-    json: any;
+    readonly json: any;
 }
 /**
  * Vanilla implementation for http requests.

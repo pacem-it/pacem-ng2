@@ -6,7 +6,7 @@ const baseUrl: string = 'uploader.ashx';
 
 @Component({
     selector: 'app-pacem-uploader',
-    template: `<h2>Pacem Uploader</h2>
+    template: `<h2 class="pacem-animatable">Pacem Uploader</h2>
 
 <p>Select a file from your storage and send it for upload.<br />
 Just by selecting it, the upload process starts.</p>

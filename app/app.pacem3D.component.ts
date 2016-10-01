@@ -9,7 +9,7 @@ import { PacemBindService } from './../pacem/pacem-ui';
         '#target { position: absolute; top: 24px; right: 24px; width: 240px; }',
         '#target > span { display: block; height: 24px; line-height: 24px; background: #ff005a; text-align:center; margin-bottom: 4px; }'
     ],
-    template: `<h2>Pacem 3D</h2>
+    template: `<h2 class="pacem-animatable">Pacem 3D</h2>
 <div #container (window:resize)="onResize($event)">
 <pacem-3d orbit="true" interactive="true" #canvas (sceneupdated)="bindings.refresh()">
     <pacem-3d-object *ngFor="let obj of objects; let i=index" [url]="obj.url" [object]="obj.mesh" [position]="obj.position" [tag]="obj.tag" [format]="obj.format"

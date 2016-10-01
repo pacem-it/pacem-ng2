@@ -18,7 +18,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'pacem-scripts',
-            template: "<h1>Pacem - Angular 2 Utility Library</h1>\n<pacem-hamburger-menu>\n    <a *ngFor=\"let cmp of components\" [routerLink]=\"['/pacem', cmp.name]\" [routerLinkActive]=\"'active'\">{{ cmp.caption }}</a>\n</pacem-hamburger-menu>\n<router-outlet></router-outlet>\n", entryComponents: [pacem_ui_1.PacemHamburgerMenu]
+            template: "<h1 class=\"pacem-animatable\">Pacem - Angular 2 Utility Library</h1>\n<pacem-hamburger-menu>\n    <a *ngFor=\"let cmp of components\" [routerLink]=\"['/pacem', cmp.name]\" [routerLinkActive]=\"'active'\">{{ cmp.caption }}</a>\n</pacem-hamburger-menu>\n<router-outlet></router-outlet>\n", entryComponents: [pacem_ui_1.PacemHamburgerMenu]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

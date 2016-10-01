@@ -535,7 +535,7 @@ export class Pacem3DCamera implements OnInit, OnDestroy, OnChanges {
                 }
             }
             let p = new three.Vector3(), t = new three.Vector3();
-            function merge(vec: THREE.Vector3, v: string | THREE.Vector3) {
+            let merge = (vec: THREE.Vector3, v: string | THREE.Vector3) => {
                 let p: THREE.Vector3;
                 if (typeof v === 'string') {
                     var matches = parseVec3(v || '0,0,0');

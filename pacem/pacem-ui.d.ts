@@ -177,7 +177,7 @@ export declare class PacemCarousel extends PacemCarouselBase<PacemCarouselItem> 
     constructor(compiler: Compiler, adapter: PacemCarouselAdapter<PacemCarouselItem>, viewContainerRef: ViewContainerRef, differs: KeyValueDiffers);
     private static defaults;
     configuration: pacemCarouselConfiguration;
-    element: HTMLElement;
+    readonly element: HTMLElement;
     protected getItems(): QueryList<PacemCarouselItem>;
     ngDoCheck(): void;
     ngOnInit(): void;
@@ -370,7 +370,7 @@ export declare class PacemPieChartSlice {
     private _value;
     value: number;
     constructor(ref: ElementRef);
-    color: string;
+    readonly color: string;
     /**
     * @internal
     */

@@ -89,7 +89,7 @@ class DatasourceFetcher {
         let fn = data.fetch;
         if (fn) {
             this.onFetching.emit({});
-            let obs: Observable<IDatasourceItem[]> = Observable
+            let obs: Observable<Datasource> = Observable
                 .fromPromise(fn)
                 .map(items => this.createDatasource(items, data.valueProperty));
             let subs = obs.subscribe(_ => {

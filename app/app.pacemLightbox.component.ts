@@ -4,8 +4,8 @@ import { PacemHttp } from './../pacem/pacem-net';
 
 @Component({
     selector: 'app-pacem-lightbox',
-    template: `<h2>Pacem Lightbox</h2>
-<p>Toggle <i>lightboxes</i> and picture <i>galleries</i> visibility using the buttons below.<br />
+    template: `<h2 class="pacem-animatable">Pacem Lightbox</h2>
+<p class="pacem-animatable">Toggle <i>lightboxes</i> and picture <i>galleries</i> visibility using the buttons below.<br />
 The <b>add</b>/<b>remove</b> picture button will trigger a <i>toast</i> message.</p>
 <button class="pacem-btn" (click)="visible=true">Lightbox</button>
 <button class="pacem-btn" (click)="galleryVisible=true">Gallery</button>
@@ -20,7 +20,7 @@ The <b>add</b>/<b>remove</b> picture button will trigger a <i>toast</i> message.
     <pacem-gallery-item *ngFor="let pic of pictures, let i = index" [url]="pic.url" [caption]="'('+ (i+1) +'/'+ (pictures?.length) +') - '+ pic.caption"></pacem-gallery-item>
 </pacem-gallery>
 
-<p><b>Carousel</b> (below) is a fully customizable flexible component, that might need some extra DOM and css tuning due to its templatable layout. 
+<p class="pacem-animatable"><b>Carousel</b> (below) is a fully customizable flexible component, that might need some extra DOM and css tuning due to its templatable layout. 
 In this case we reuse the datasource of the pic gallery.</p>
 
 <div style="position: relative;"></div>

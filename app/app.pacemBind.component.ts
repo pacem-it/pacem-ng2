@@ -5,7 +5,7 @@ import { Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject, ITrackedObj } from
 
 @Component({
     selector: 'app-pacem-bind',
-    template: `<h2>Pacem Bind</h2>
+    template: `<h2 class="pacem-animatable">Pacem Bind</h2>
 <div>
 
 <div class="target" pacemBindTarget="target" #target="pacemBindTarget"></div>

@@ -3,7 +3,7 @@ import { PacemInfiniteScroll, PacemInViewport } from './../pacem/pacem-ui';
 
 @Component({
     selector: 'app-pacem-infinite-scroll',
-    template: `<h2>Pacem Infinite Scroll</h2>
+    template: `<h2 class="pacem-animatable">Pacem Infinite Scroll</h2>
 
 <ol (pacemInfiniteScroll)="fetch($event)" [pacemInfiniteScrollEnabled]="items.length < 500 && enabled" pacemInfiniteScrollContainer="$document">
     <li *ngFor="let item of items">

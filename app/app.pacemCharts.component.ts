@@ -3,9 +3,9 @@ import { Component, Input, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-pacem-charts',
-    template: `<h2>Pacem Charts</h2>
+    template: `<h2 class="pacem-animatable">Pacem Charts</h2>
 
-<p>Modify the inputs and see the triple-folded chart updating live.</p>
+<p class="pacem-animatable">Modify the inputs and see the triple-folded chart updating live.</p>
 
     <pacem-ring-chart>
         <pacem-ring-chart-item [value]="value1"></pacem-ring-chart-item>
@@ -14,13 +14,13 @@ import { Component, Input, ViewChild } from '@angular/core';
         <pacem-ring-chart-item [value]="value4"></pacem-ring-chart-item>
     </pacem-ring-chart>
 
-<p>The following chart allow interaction in order to modify the value "graphically".</p>
+<p class="pacem-animatable">The following chart allow interaction in order to modify the value "graphically".</p>
 
     <pacem-ring-chart>
         <pacem-ring-chart-item [(value)]="value4" interactive="true" round="0"></pacem-ring-chart-item>
     </pacem-ring-chart>
 
-<p>Same input values trigger the redraw of the following pie-chart as well.</p>
+<p class="pacem-animatable">Same input values trigger the redraw of the following pie-chart as well.</p>
 
     <pacem-pie-chart>
         <pacem-pie-chart-slice [value]="value1"></pacem-pie-chart-slice>

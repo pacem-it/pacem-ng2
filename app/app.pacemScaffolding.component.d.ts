@@ -9,10 +9,10 @@ export declare class PacemScaffoldingComponent implements AfterViewInit {
     private readonly;
     constructor(ref: ChangeDetectorRef, looper: PacemLooper, http: PacemHttp);
     check(form: NgForm): void;
-    params: {
+    readonly params: {
         culture: string;
     };
-    foodsPromise: PacemPromise<{
+    readonly foodsPromise: PacemPromise<{
         caption: string;
         value: any;
         entity: any;

@@ -1,6 +1,6 @@
 export declare var pacem: any;
 export declare class PacemUtils {
-    static core: any;
+    static readonly core: any;
     static uniqueCode(): string;
     static parseDate(input: string | Date): Date;
     static blobToDataURL(blob: Blob): PacemPromise<Blob>;
@@ -37,7 +37,7 @@ export declare class PacemUtils {
         x: number;
         y: number;
     }): number;
-    static windowSize: {
+    static readonly windowSize: {
         width: number;
         height: number;
     };

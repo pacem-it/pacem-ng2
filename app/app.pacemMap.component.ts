@@ -5,7 +5,7 @@ import { PacemPromise, PacemUtils } from './../pacem/pacem-core';
 
 @Component({
     selector: 'app-pacem-map',
-    template: `<h2>Pacem Map</h2>
+    template: `<h2 class="pacem-animatable">Pacem Map</h2>
 <div #container (window:resize)="onResize($event)"><pacem-map>
     <pacem-map-polyline [stroke]="'yellow'" [path]="steps">I'm a polyline!</pacem-map-polyline>
     <pacem-map-circle [center]="hereSpot" [radius]="hereInfluence">Influence of <b>{{ (hereInfluence * 0.001) }}</b>km radius</pacem-map-circle>

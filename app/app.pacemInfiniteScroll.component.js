@@ -27,7 +27,7 @@ var PacemInfiniteScrollComponent = (function () {
     PacemInfiniteScrollComponent = __decorate([
         core_1.Component({
             selector: 'app-pacem-infinite-scroll',
-            template: "<h2>Pacem Infinite Scroll</h2>\n\n<ol (pacemInfiniteScroll)=\"fetch($event)\" [pacemInfiniteScrollEnabled]=\"items.length < 500 && enabled\" pacemInfiniteScrollContainer=\"$document\">\n    <li *ngFor=\"let item of items\">\n        <div class=\"card\" (pacemInViewport)=\"toggleVisibility(item, $event)\">{{ item.label }} (visible: {{ !!item.visible }})</div></li>\n</ol>\n",
+            template: "<h2 class=\"pacem-animatable\">Pacem Infinite Scroll</h2>\n\n<ol (pacemInfiniteScroll)=\"fetch($event)\" [pacemInfiniteScrollEnabled]=\"items.length < 500 && enabled\" pacemInfiniteScrollContainer=\"$document\">\n    <li *ngFor=\"let item of items\">\n        <div class=\"card\" (pacemInViewport)=\"toggleVisibility(item, $event)\">{{ item.label }} (visible: {{ !!item.visible }})</div></li>\n</ol>\n",
             styles: [
                 'ol > li { display: inline-block; font-size: 0; width: 25%; }',
                 '.card { transition: opacity 1s; opacity: 0.25; font-size: 12px; color: #000; border: 1px solid #c0c0c0; background: #fff; padding: 48px 24px; }',

@@ -544,7 +544,7 @@ var Pacem3DCamera = (function () {
                 }
             }
             var p = new three.Vector3(), t = new three.Vector3();
-            function merge(vec, v) {
+            var merge = function (vec, v) {
                 var p;
                 if (typeof v === 'string') {
                     var matches = parseVec3(v || '0,0,0');
@@ -559,7 +559,7 @@ var Pacem3DCamera = (function () {
                     vec.y = p.y;
                     vec.z = p.z;
                 }
-            }
+            };
             merge(p, this.position);
             merge(t, this.target);
             camera.position.x = p.x;
