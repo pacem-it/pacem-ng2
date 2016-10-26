@@ -63,11 +63,16 @@ export class PacemScaffoldingComponent implements AfterViewInit {
         this.http.get('metadata.json')
             .success((response) => {
                 const meta = response.json as any[];
-                this.looper.loop(meta, (item) => {
+                let iterator = (item: any) => {
                     if (item.prop === 'FavFood')
                         item.extra.fetch = this.foodsPromise;
-                    this.meta.push(item);
-                });
+                };
+                //this.looper.loop(meta, (item) => {
+                //    iterator(item);
+                //    this.meta.push(item);
+                //});
+                meta.forEach(iterator);
+                this.meta = meta;
             });
     }
 

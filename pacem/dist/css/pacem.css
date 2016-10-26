@@ -110,7 +110,15 @@ body {
 }
 @keyframes core-anim {
   0% {
-    transform: translateY(24px);
+    transform: translateY(48px);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes pop-anim {
+  0% {
+    transform: scale(0, 0);
   }
   100% {
     transform: none;
@@ -157,15 +165,36 @@ body {
 .pacem-anim.enabled .pacem-pie-chart:not(.pacem-viewport-aware),
 .pacem-anim.enabled .pacem-carousel:not(.pacem-viewport-aware),
 .pacem-anim.enabled .pacem-carousel-dashboard:not(.pacem-viewport-aware),
+.pacem-anim.enabled .pacem-uploader:not(.pacem-viewport-aware),
+.pacem-anim.enabled .pacem-snapshot:not(.pacem-viewport-aware),
 .pacem-anim.enabled .pacem-map:not(.pacem-viewport-aware),
 .pacem-anim.enabled .pacem-btn:not(.pacem-viewport-aware),
 .pacem-anim.enabled .pacem-ring-chart.pacem-viewport-aware.pacem-in-viewport,
 .pacem-anim.enabled .pacem-pie-chart.pacem-viewport-aware.pacem-in-viewport,
 .pacem-anim.enabled .pacem-carousel.pacem-viewport-aware.pacem-in-viewport,
 .pacem-anim.enabled .pacem-carousel-dashboard.pacem-viewport-aware.pacem-in-viewport,
+.pacem-anim.enabled .pacem-uploader.pacem-viewport-aware.pacem-in-viewport,
+.pacem-anim.enabled .pacem-snapshot.pacem-viewport-aware.pacem-in-viewport,
 .pacem-anim.enabled .pacem-map.pacem-viewport-aware.pacem-in-viewport,
 .pacem-anim.enabled .pacem-btn.pacem-viewport-aware.pacem-in-viewport {
   animation: default-anim 0.3s ease-out 0.4s both;
+}
+.pacem-anim.enabled .pacem-uploader .pacem-uploader-filewrapper,
+.pacem-anim.enabled .pacem-uploader .pacem-uploader-retry,
+.pacem-anim.enabled .pacem-uploader .pacem-uploader-undo {
+  animation: default-anim 0.3s ease-out 0.45s both;
+}
+.pacem-anim.enabled pacem-ring-chart-item:nth-child(1) .pacem-ring-chart-item {
+  animation: pop-anim 0.3s ease-out 0.4s both;
+}
+.pacem-anim.enabled pacem-ring-chart-item:nth-child(2) .pacem-ring-chart-item {
+  animation: pop-anim 0.3s ease-out 0.475s both;
+}
+.pacem-anim.enabled pacem-ring-chart-item:nth-child(3) .pacem-ring-chart-item {
+  animation: pop-anim 0.3s ease-out 0.55s both;
+}
+.pacem-anim.enabled .pacem-pie-chart svg {
+  animation: pop-anim 0.3s ease-out 0.4s both;
 }
 .pacem-anim.enabled .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled .pacem-field.pacem-viewport-aware.pacem-in-viewport {
@@ -177,199 +206,199 @@ body {
 }
 .pacem-anim.enabled pacem-field:nth-child(2) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(2) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.01s both;
+  animation: core-anim 0.3s ease-out 0.03s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(3) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(3) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.02s both;
+  animation: core-anim 0.3s ease-out 0.06s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(4) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(4) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.03s both;
+  animation: core-anim 0.3s ease-out 0.09s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(5) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(5) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.04s both;
+  animation: core-anim 0.3s ease-out 0.12s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(6) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(6) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.05s both;
+  animation: core-anim 0.3s ease-out 0.15s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(7) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(7) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.06s both;
+  animation: core-anim 0.3s ease-out 0.18s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(8) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(8) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.07s both;
+  animation: core-anim 0.3s ease-out 0.21s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(9) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(9) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.08s both;
+  animation: core-anim 0.3s ease-out 0.24s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(10) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(10) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.09s both;
+  animation: core-anim 0.3s ease-out 0.27s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(11) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(11) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.1s both;
+  animation: core-anim 0.3s ease-out 0.3s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(12) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(12) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.11s both;
+  animation: core-anim 0.3s ease-out 0.33s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(13) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(13) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.12s both;
+  animation: core-anim 0.3s ease-out 0.36s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(14) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(14) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.13s both;
+  animation: core-anim 0.3s ease-out 0.39s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(15) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(15) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.14s both;
+  animation: core-anim 0.3s ease-out 0.42s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(16) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(16) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.15s both;
+  animation: core-anim 0.3s ease-out 0.45s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(17) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(17) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.16s both;
+  animation: core-anim 0.3s ease-out 0.48s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(18) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(18) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.17s both;
+  animation: core-anim 0.3s ease-out 0.51s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(19) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(19) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.18s both;
+  animation: core-anim 0.3s ease-out 0.54s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(20) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(20) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.19s both;
+  animation: core-anim 0.3s ease-out 0.57s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(21) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(21) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.2s both;
+  animation: core-anim 0.3s ease-out 0.6s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(22) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(22) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.21s both;
+  animation: core-anim 0.3s ease-out 0.63s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(23) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(23) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.22s both;
+  animation: core-anim 0.3s ease-out 0.66s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(24) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(24) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.23s both;
+  animation: core-anim 0.3s ease-out 0.69s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(25) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(25) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.24s both;
+  animation: core-anim 0.3s ease-out 0.72s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(26) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(26) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.25s both;
+  animation: core-anim 0.3s ease-out 0.75s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(27) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(27) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.26s both;
+  animation: core-anim 0.3s ease-out 0.78s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(28) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(28) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.27s both;
+  animation: core-anim 0.3s ease-out 0.81s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(29) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(29) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.28s both;
+  animation: core-anim 0.3s ease-out 0.84s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(30) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(30) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.29s both;
+  animation: core-anim 0.3s ease-out 0.87s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(31) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(31) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.3s both;
+  animation: core-anim 0.3s ease-out 0.9s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(32) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(32) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.31s both;
+  animation: core-anim 0.3s ease-out 0.93s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(33) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(33) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.32s both;
+  animation: core-anim 0.3s ease-out 0.96s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(34) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(34) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.33s both;
+  animation: core-anim 0.3s ease-out 0.99s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(35) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(35) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.34s both;
+  animation: core-anim 0.3s ease-out 1.02s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(36) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(36) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.35s both;
+  animation: core-anim 0.3s ease-out 1.05s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(37) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(37) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.36s both;
+  animation: core-anim 0.3s ease-out 1.08s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(38) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(38) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.37s both;
+  animation: core-anim 0.3s ease-out 1.11s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(39) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(39) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.38s both;
+  animation: core-anim 0.3s ease-out 1.14s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(40) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(40) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.39s both;
+  animation: core-anim 0.3s ease-out 1.17s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(41) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(41) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.4s both;
+  animation: core-anim 0.3s ease-out 1.2s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(42) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(42) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.41s both;
+  animation: core-anim 0.3s ease-out 1.23s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(43) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(43) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.42s both;
+  animation: core-anim 0.3s ease-out 1.26s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(44) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(44) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.43s both;
+  animation: core-anim 0.3s ease-out 1.29s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(45) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(45) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.44s both;
+  animation: core-anim 0.3s ease-out 1.32s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(46) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(46) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.45s both;
+  animation: core-anim 0.3s ease-out 1.35s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(47) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(47) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.46s both;
+  animation: core-anim 0.3s ease-out 1.38s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(48) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(48) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.47s both;
+  animation: core-anim 0.3s ease-out 1.41s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(49) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(49) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.48s both;
+  animation: core-anim 0.3s ease-out 1.44s both;
 }
 .pacem-anim.enabled pacem-field:nth-child(50) .pacem-field:not(.pacem-viewport-aware),
 .pacem-anim.enabled pacem-field:nth-child(50) .pacem-field.pacem-viewport-aware.pacem-in-viewport {
-  animation: core-anim 0.3s ease-out 0.49s both;
+  animation: core-anim 0.3s ease-out 1.47s both;
 }
 .pacem-anim.enabled h1.pacem-animatable:not(.pacem-viewport-aware),
 .pacem-anim.enabled h1.pacem-animatable.pacem-viewport-aware.pacem-in-viewport {

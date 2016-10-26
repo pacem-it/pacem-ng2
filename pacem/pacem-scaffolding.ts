@@ -1492,7 +1492,8 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
                 switch (validator.type) {
                     case 'required':
                         attrs['required'] = 'required';
-                        PacemUtils.addClass(label, 'pacem-required');
+                        if (!this.readonly)
+                            PacemUtils.addClass(label, 'pacem-required');
                         validatorsTmpl += `<li *ngIf="${formReference}.errors" [hidden]="!${formReference}.errors.required">${validator.errorMessage}</li>`;
                         break;
                     case 'length':
@@ -1570,7 +1571,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
 
         let labelOuterHtml = label.outerHTML;
         // tooltip?
-        if (field.extra && !!field.extra.tooltip && field.display && field.display.description) {
+        if (!this.readonly && field.extra && !!field.extra.tooltip && field.display && field.display.description) {
             let toolTipID: string = `ttip${this.uid}`;
             labelOuterHtml = labelOuterHtml.replace(/>/, ` [ngClass]="{ 'pacem-tooltip': !readonly }" pacemBalloon="#${toolTipID}" [pacemBalloonOptions]="{ position: 'auto', behavior: 'tooltip', disabled: readonly, hoverDelay: 0, hoverTimeout: 0 }">`)
                 + `<div hidden id="${toolTipID}">${field.display.description}</div>`;

@@ -442,7 +442,7 @@ export class Pacem3DObject implements OnInit, OnDestroy {
         let box = this.boundingBox;
         if (!box)
             return null;
-        let center = box.center().clone().add(this.obj3D.position),
+        let center = box.getCenter().clone().add(this.obj3D.position),
             max = box.max.clone(),
             min = box.min.clone(),
             med = box.min.clone().cross(box.max);

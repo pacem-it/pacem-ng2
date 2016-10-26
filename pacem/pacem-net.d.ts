@@ -1,3 +1,4 @@
+/// <reference types="core-js" />
 import { PacemPromise } from './pacem-core';
 export declare class PacemResponse {
     constructor(req: XMLHttpRequest, processTime: number);

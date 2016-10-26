@@ -1,3 +1,4 @@
+/// <reference types="core-js" />
 import { Compiler, EventEmitter, ViewContainerRef, ElementRef, OnDestroy, OnInit, OnChanges, AfterViewInit, SimpleChanges } from '@angular/core';
 import { NgControl, ControlValueAccessor, NgModel, NgForm } from '@angular/forms';
 import 'rxjs/add/observable/of';

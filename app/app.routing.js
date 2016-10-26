@@ -1,6 +1,7 @@
 "use strict";
 var router_1 = require('@angular/router');
 var app_404_component_1 = require('./app.404.component');
+var app_perf_component_1 = require('./app.perf.component');
 var app_pacemMap_component_1 = require('./app.pacemMap.component');
 var app_pacemInfiniteScroll_component_1 = require('./app.pacemInfiniteScroll.component');
 var app_pacemLightbox_component_1 = require('./app.pacemLightbox.component');
@@ -13,6 +14,7 @@ var app_pacemBind_component_1 = require('./app.pacemBind.component');
 var app_pacemNet_component_1 = require('./app.pacemNet.component');
 var app_pacemCalendar_component_1 = require('./app.pacemCalendar.component');
 exports.pages = [
+    { label: 'performances', component: app_perf_component_1.PerfComponent },
     { label: 'networking', component: app_pacemNet_component_1.PacemNetComponent },
     { label: 'map (leafletJS)', component: app_pacemMap_component_1.PacemMapComponent },
     { label: 'infinite scroll', component: app_pacemInfiniteScroll_component_1.PacemInfiniteScrollComponent },

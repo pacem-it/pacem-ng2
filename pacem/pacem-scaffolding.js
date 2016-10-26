@@ -1461,7 +1461,8 @@ var PacemField = (function () {
                 switch (validator.type) {
                     case 'required':
                         attrs['required'] = 'required';
-                        pacem_core_1.PacemUtils.addClass(label, 'pacem-required');
+                        if (!_this.readonly)
+                            pacem_core_1.PacemUtils.addClass(label, 'pacem-required');
                         validatorsTmpl += "<li *ngIf=\"" + formReference + ".errors\" [hidden]=\"!" + formReference + ".errors.required\">" + validator.errorMessage + "</li>";
                         break;
                     case 'length':
@@ -1537,7 +1538,7 @@ var PacemField = (function () {
             detailTmpl = "<span class=\"pacem-readonly\">{{ entity." + field.prop + " }}</span>";
         var labelOuterHtml = label.outerHTML;
         // tooltip?
-        if (field.extra && !!field.extra.tooltip && field.display && field.display.description) {
+        if (!this.readonly && field.extra && !!field.extra.tooltip && field.display && field.display.description) {
             var toolTipID = "ttip" + this.uid;
             labelOuterHtml = labelOuterHtml.replace(/>/, " [ngClass]=\"{ 'pacem-tooltip': !readonly }\" pacemBalloon=\"#" + toolTipID + "\" [pacemBalloonOptions]=\"{ position: 'auto', behavior: 'tooltip', disabled: readonly, hoverDelay: 0, hoverTimeout: 0 }\">")
                 + ("<div hidden id=\"" + toolTipID + "\">" + field.display.description + "</div>");

@@ -1,3 +1,4 @@
+/// <reference types="core-js" />
 export declare var pacem: any;
 export declare class PacemUtils {
     static readonly core: any;

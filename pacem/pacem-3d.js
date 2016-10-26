@@ -429,7 +429,7 @@ var Pacem3DObject = (function () {
             var box = this.boundingBox;
             if (!box)
                 return null;
-            var center = box.center().clone().add(this.obj3D.position), max = box.max.clone(), min = box.min.clone(), med = box.min.clone().cross(box.max);
+            var center = box.getCenter().clone().add(this.obj3D.position), max = box.max.clone(), min = box.min.clone(), med = box.min.clone().cross(box.max);
             var canvas = this.pacem3dCtrl.elementRef.nativeElement;
             var offset = pacem_core_1.PacemUtils.offset(canvas);
             var pos = this.getPointCoords(center);

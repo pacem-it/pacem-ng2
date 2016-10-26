@@ -8,7 +8,7 @@ const baseUrl: string = 'uploader.ashx';
     selector: 'app-pacem-uploader',
     template: `<h2 class="pacem-animatable">Pacem Uploader</h2>
 
-<p>Select a file from your storage and send it for upload.<br />
+<p class="pacem-animatable">Select a file from your storage and send it for upload.<br />
 Just by selecting it, the upload process starts.</p>
 
 <div style="position: relative; width: 108px; height: 108px;">
@@ -25,13 +25,13 @@ Just by selecting it, the upload process starts.</p>
 </form></div>
     <div [hidden]="!uploader.invalidFile">File non valido! ({{ uploader.pattern }})</div>
 
-<h2>Pacem Snapshot</h2>
-<p>Pick a snapshot from you <b>webcam</b> and send it to the uploader</p>
+<h2 class="pacem-animatable">Pacem Snapshot</h2>
+<p class="pacem-animatable">Pick a snapshot from you <b>webcam</b> and send it to the uploader</p>
 
 <pacem-snapshot (select)="upload($event)">
 Webcam access is <b>impossile</b> on this machine!
 </pacem-snapshot>
-<p>The style provided along with the <i>snapshot</i> component automatically changes its size based on the status of the process.</p>
+<p class="pacem-animatable">The style provided along with the <i>snapshot</i> component automatically changes its size based on the status of the process.</p>
 `,
     entryComponents: [PacemUploader, PacemSnapshot]
 })

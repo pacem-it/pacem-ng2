@@ -2,7 +2,17 @@
 
 @keyframes core-anim {
     0% {
-        transform: translateY(@grid_spacing);
+        transform: translateY(@grid_spacing * 2);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes pop-anim {
+    0% {
+        transform: scale(0,0);
     }
 
     100% {
@@ -49,11 +59,15 @@
 .pacem-anim.enabled {
     overflow-x: hidden;
 
+    .AnimatableCore(@anim, @delay) {
+        animation: @anim .3s ease-out @delay both;
+    }
+
     .Animatable(@anim, @delay) {
 
         &:not(.pacem-viewport-aware),
         &.pacem-viewport-aware.pacem-in-viewport {
-            animation: @anim .3s ease-out @delay both;
+            .AnimatableCore(@anim, @delay);
         }
     }
 
@@ -69,25 +83,61 @@
     .pacem-pie-chart,
     .pacem-carousel,
     .pacem-carousel-dashboard,
+    .pacem-uploader,
+    .pacem-snapshot,
     .pacem-map,
     .pacem-btn {
         .Animatable(.4s);
     }
 
+    .pacem-uploader {
+
+        .pacem-uploader-filewrapper,
+        .pacem-uploader-retry,
+        .pacem-uploader-undo {
+            .AnimatableCore(default-anim, .45s);
+        }
+    }
+
+    .loop-ring-chart-item(@counter) when (@counter > 0) {
+        .loop-ring-chart-item((@counter - 1));
+
+        &:nth-child(@{counter}) .pacem-ring-chart-item {
+            .AnimatableCore(pop-anim, .4s + (@counter - 1) * .075s);
+        }
+    }
+
+    pacem-ring-chart-item {
+        .loop-ring-chart-item(3);
+    }
+
+    .pacem-pie-chart svg{
+            .AnimatableCore(pop-anim, .4s);
+    }
+
+    // TODO: wrap the two buttons in two elements to obtain thet following effect
+    //.pacem-snapshot{
+    //    .pacem-browse{
+    //        .AnimatableCore(default-anim, .435s);
+    //    }
+    //    .pacem-camera{
+    //        .AnimatableCore(default-anim, .455s);
+    //    }
+    //}
     .pacem-field {
         .Animatable(enhanced-anim, .3s);
     }
 
-    .loop(@counter) when (@counter > 0) {
-        .loop((@counter - 1));
+    .loop-field(@counter) when (@counter > 0) {
+        .loop-field((@counter - 1));
 
         &:nth-child(@{counter}) .pacem-field {
-            .Animatable(core-anim, (@counter - 1) * .01s);
+            .Animatable(core-anim, (@counter - 1) * .03s);
         }
     }
 
     pacem-field {
-        .loop(50);
+        .loop-field(50);
     }
 
     h1.pacem-animatable {

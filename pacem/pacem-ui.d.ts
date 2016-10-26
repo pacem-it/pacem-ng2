@@ -1,3 +1,4 @@
+/// <reference types="core-js" />
 import { QueryList, PipeTransform, OnChanges, Renderer, SimpleChanges, ElementRef, ViewContainerRef, EventEmitter, AfterContentInit, AfterViewInit, Compiler, OnInit, OnDestroy, KeyValueDiffers, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 import { Location } from '@angular/common';

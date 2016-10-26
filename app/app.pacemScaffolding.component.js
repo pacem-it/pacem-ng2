@@ -51,11 +51,16 @@ var PacemScaffoldingComponent = (function () {
         this.http.get('metadata.json')
             .success(function (response) {
             var meta = response.json;
-            _this.looper.loop(meta, function (item) {
+            var iterator = function (item) {
                 if (item.prop === 'FavFood')
                     item.extra.fetch = _this.foodsPromise;
-                _this.meta.push(item);
-            });
+            };
+            //this.looper.loop(meta, (item) => {
+            //    iterator(item);
+            //    this.meta.push(item);
+            //});
+            meta.forEach(iterator);
+            _this.meta = meta;
         });
     };
     PacemScaffoldingComponent = __decorate([
