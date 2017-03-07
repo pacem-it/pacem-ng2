@@ -9,8 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-var core_1 = require('@angular/core');
-var pacem_core_1 = require('./pacem-core');
+var core_1 = require("@angular/core");
+var pacem_core_1 = require("./pacem-core");
 //import { OBJMTLLoader } from './three-objmtlloader';
 var Detector3D = (function () {
     function Detector3D() {
@@ -82,12 +82,12 @@ var Detector3D = (function () {
         enumerable: true,
         configurable: true
     });
-    Detector3D = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], Detector3D);
     return Detector3D;
 }());
+Detector3D = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], Detector3D);
 exports.Detector3D = Detector3D;
 var three = THREE;
 function parseVec3(input) {
@@ -262,58 +262,58 @@ var Pacem3D = (function () {
         }
         //#endregion
     };
-    __decorate([
-        core_1.ViewChild('threeDCanvas'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], Pacem3D.prototype, "elementRef", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], Pacem3D.prototype, "interactive", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], Pacem3D.prototype, "orbit", void 0);
-    __decorate([
-        core_1.Output('itemout'), 
-        __metadata('design:type', Object)
-    ], Pacem3D.prototype, "onItemOut", void 0);
-    __decorate([
-        core_1.Output('itemover'), 
-        __metadata('design:type', Object)
-    ], Pacem3D.prototype, "onItemOver", void 0);
-    __decorate([
-        core_1.Output('itemclick'), 
-        __metadata('design:type', Object)
-    ], Pacem3D.prototype, "onItemClick", void 0);
-    __decorate([
-        core_1.Output('sceneupdated'), 
-        __metadata('design:type', Object)
-    ], Pacem3D.prototype, "onSceneUpdated", void 0);
-    __decorate([
-        core_1.Output('render'), 
-        __metadata('design:type', Object)
-    ], Pacem3D.prototype, "onRender", void 0);
-    __decorate([
-        core_1.Output('prerender'), 
-        __metadata('design:type', Object)
-    ], Pacem3D.prototype, "onPreRender", void 0);
-    Pacem3D = __decorate([
-        core_1.Component({
-            selector: 'pacem-3d',
-            template: "<canvas class=\"pacem-3d\" #threeDCanvas></canvas>",
-            host: {
-                '(mousemove)': 'onMove($event)',
-                '(click)': 'onClick($event)',
-                '(window:resize)': 'onResize($event)'
-            }
-        }), 
-        __metadata('design:paramtypes', [])
-    ], Pacem3D);
     return Pacem3D;
 }());
+__decorate([
+    core_1.ViewChild('threeDCanvas'),
+    __metadata("design:type", core_1.ElementRef)
+], Pacem3D.prototype, "elementRef", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], Pacem3D.prototype, "interactive", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], Pacem3D.prototype, "orbit", void 0);
+__decorate([
+    core_1.Output('itemout'),
+    __metadata("design:type", Object)
+], Pacem3D.prototype, "onItemOut", void 0);
+__decorate([
+    core_1.Output('itemover'),
+    __metadata("design:type", Object)
+], Pacem3D.prototype, "onItemOver", void 0);
+__decorate([
+    core_1.Output('itemclick'),
+    __metadata("design:type", Object)
+], Pacem3D.prototype, "onItemClick", void 0);
+__decorate([
+    core_1.Output('sceneupdated'),
+    __metadata("design:type", Object)
+], Pacem3D.prototype, "onSceneUpdated", void 0);
+__decorate([
+    core_1.Output('render'),
+    __metadata("design:type", Object)
+], Pacem3D.prototype, "onRender", void 0);
+__decorate([
+    core_1.Output('prerender'),
+    __metadata("design:type", Object)
+], Pacem3D.prototype, "onPreRender", void 0);
+Pacem3D = __decorate([
+    core_1.Component({
+        selector: 'pacem-3d',
+        template: "<canvas class=\"pacem-3d\" #threeDCanvas></canvas>",
+        host: {
+            '(mousemove)': 'onMove($event)',
+            '(click)': 'onClick($event)',
+            '(window:resize)': 'onResize($event)'
+        }
+    }),
+    __metadata("design:paramtypes", [])
+], Pacem3D);
 exports.Pacem3D = Pacem3D;
-var Pacem3DObject = (function () {
+var Pacem3DObject = Pacem3DObject_1 = (function () {
     function Pacem3DObject(pacem3dCtrl, elRef) {
         this.pacem3dCtrl = pacem3dCtrl;
         this.elRef = elRef;
@@ -332,7 +332,7 @@ var Pacem3DObject = (function () {
     };
     Pacem3DObject.prototype.init = function () {
         var me = this;
-        me.elRef.nativeElement[Pacem3DObject.datasetKey] = me;
+        me.elRef.nativeElement[Pacem3DObject_1.datasetKey] = me;
         var scene = me.pacem3dCtrl.scene;
         function addToScene(obj) {
             me.obj3D = obj;
@@ -453,47 +453,47 @@ var Pacem3DObject = (function () {
         enumerable: true,
         configurable: true
     });
-    Pacem3DObject.datasetKey = 'pacem3dObject';
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], Pacem3DObject.prototype, "tag", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], Pacem3DObject.prototype, "format", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], Pacem3DObject.prototype, "object", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], Pacem3DObject.prototype, "url", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], Pacem3DObject.prototype, "position", void 0);
-    __decorate([
-        core_1.Output('click'), 
-        __metadata('design:type', Object)
-    ], Pacem3DObject.prototype, "onClick", void 0);
-    __decorate([
-        core_1.Output('over'), 
-        __metadata('design:type', Object)
-    ], Pacem3DObject.prototype, "onOver", void 0);
-    __decorate([
-        core_1.Output('out'), 
-        __metadata('design:type', Object)
-    ], Pacem3DObject.prototype, "onOut", void 0);
-    Pacem3DObject = __decorate([
-        core_1.Directive({
-            selector: 'pacem-3d-object'
-        }), 
-        __metadata('design:paramtypes', [Pacem3D, core_1.ElementRef])
-    ], Pacem3DObject);
     return Pacem3DObject;
 }());
+Pacem3DObject.datasetKey = 'pacem3dObject';
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], Pacem3DObject.prototype, "tag", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], Pacem3DObject.prototype, "format", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], Pacem3DObject.prototype, "object", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], Pacem3DObject.prototype, "url", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], Pacem3DObject.prototype, "position", void 0);
+__decorate([
+    core_1.Output('click'),
+    __metadata("design:type", Object)
+], Pacem3DObject.prototype, "onClick", void 0);
+__decorate([
+    core_1.Output('over'),
+    __metadata("design:type", Object)
+], Pacem3DObject.prototype, "onOver", void 0);
+__decorate([
+    core_1.Output('out'),
+    __metadata("design:type", Object)
+], Pacem3DObject.prototype, "onOut", void 0);
+Pacem3DObject = Pacem3DObject_1 = __decorate([
+    core_1.Directive({
+        selector: 'pacem-3d-object'
+    }),
+    __metadata("design:paramtypes", [Pacem3D, core_1.ElementRef])
+], Pacem3DObject);
 exports.Pacem3DObject = Pacem3DObject;
 var Pacem3DCamera = (function () {
     function Pacem3DCamera(pacem3dCtrl) {
@@ -586,30 +586,30 @@ var Pacem3DCamera = (function () {
         }
         this.camera = ortho || perspective;
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], Pacem3DCamera.prototype, "type", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], Pacem3DCamera.prototype, "active", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], Pacem3DCamera.prototype, "position", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], Pacem3DCamera.prototype, "target", void 0);
-    Pacem3DCamera = __decorate([
-        core_1.Directive({
-            selector: 'pacem-3d-camera'
-        }), 
-        __metadata('design:paramtypes', [Pacem3D])
-    ], Pacem3DCamera);
     return Pacem3DCamera;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], Pacem3DCamera.prototype, "type", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], Pacem3DCamera.prototype, "active", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], Pacem3DCamera.prototype, "position", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], Pacem3DCamera.prototype, "target", void 0);
+Pacem3DCamera = __decorate([
+    core_1.Directive({
+        selector: 'pacem-3d-camera'
+    }),
+    __metadata("design:paramtypes", [Pacem3D])
+], Pacem3DCamera);
 exports.Pacem3DCamera = Pacem3DCamera;
 var Pacem3DLight = (function () {
     function Pacem3DLight(pacem3dCtrl) {
@@ -666,41 +666,42 @@ var Pacem3DLight = (function () {
         var manageLight = function () {
         };
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], Pacem3DLight.prototype, "position", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], Pacem3DLight.prototype, "on", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], Pacem3DLight.prototype, "intensity", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], Pacem3DLight.prototype, "color", void 0);
-    Pacem3DLight = __decorate([
-        core_1.Directive({
-            selector: 'pacem-3d-light'
-        }), 
-        __metadata('design:paramtypes', [Pacem3D])
-    ], Pacem3DLight);
     return Pacem3DLight;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], Pacem3DLight.prototype, "position", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], Pacem3DLight.prototype, "on", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], Pacem3DLight.prototype, "intensity", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], Pacem3DLight.prototype, "color", void 0);
+Pacem3DLight = __decorate([
+    core_1.Directive({
+        selector: 'pacem-3d-light'
+    }),
+    __metadata("design:paramtypes", [Pacem3D])
+], Pacem3DLight);
 exports.Pacem3DLight = Pacem3DLight;
 var Pacem3DModule = (function () {
     function Pacem3DModule() {
     }
-    Pacem3DModule = __decorate([
-        core_1.NgModule({
-            declarations: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject],
-            exports: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], Pacem3DModule);
     return Pacem3DModule;
 }());
+Pacem3DModule = __decorate([
+    core_1.NgModule({
+        declarations: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject],
+        exports: [Pacem3D, Pacem3DCamera, Pacem3DLight, Pacem3DObject]
+    }),
+    __metadata("design:paramtypes", [])
+], Pacem3DModule);
 exports.Pacem3DModule = Pacem3DModule;
+var Pacem3DObject_1;

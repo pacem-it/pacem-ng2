@@ -1607,7 +1607,7 @@ export class PacemField implements OnChanges, AfterViewInit, OnDestroy {
 @NgModule({
     imports: [FormsModule, ReactiveFormsModule, CommonModule, PacemUIModule, PacemCoreModule, PacemScaffoldingInternalModule],
     declarations: [PacemField],
-    exports: [PacemField, PacemDatetimePicker],
+    exports: [PacemField],
     providers: [PacemExecCommand]
 })
 export class PacemScaffoldingModule { }

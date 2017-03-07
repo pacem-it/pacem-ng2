@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-var core_1 = require('@angular/core');
-var platform_browser_1 = require('@angular/platform-browser');
-var common_1 = require('@angular/common');
-var pacem_ui_1 = require('./pacem-ui');
+var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
+var common_1 = require("@angular/common");
+var pacem_ui_1 = require("./pacem-ui");
 var consts = {
     TIMEOUT: 1000,
     MAP_SELECTOR: 'pacem-map',
@@ -58,19 +58,19 @@ var PacemMapLink = (function () {
         }
         this.link = this.sanitizer.bypassSecurityTrustUrl(url);
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemMapLink.prototype, "target", void 0);
-    PacemMapLink = __decorate([
-        core_1.Component({
-            selector: consts.LINK_SELECTOR,
-            template: '<a [href]="link"><ng-content></ng-content></a>'
-        }), 
-        __metadata('design:paramtypes', [platform_browser_1.DomSanitizer])
-    ], PacemMapLink);
     return PacemMapLink;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemMapLink.prototype, "target", void 0);
+PacemMapLink = __decorate([
+    core_1.Component({
+        selector: consts.LINK_SELECTOR,
+        template: '<a [href]="link"><ng-content></ng-content></a>'
+    }),
+    __metadata("design:paramtypes", [platform_browser_1.DomSanitizer])
+], PacemMapLink);
 exports.PacemMapLink = PacemMapLink;
 //#endregion
 // #region MAP
@@ -263,75 +263,75 @@ var PacemMap = (function () {
         }, 500);
     };
     ;
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMap.prototype, "zoom", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMap.prototype, "center", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMap.prototype, "tiles", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMap.prototype, "attribution", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemMap.prototype, "scale", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemMap.prototype, "zoomControl", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemMap.prototype, "draggable", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemMap.prototype, "doubleClickZoom", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemMap.prototype, "keyboardShortcuts", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMap.prototype, "paddingTop", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMap.prototype, "paddingLeft", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMap.prototype, "paddingRight", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMap.prototype, "paddingBottom", void 0);
-    __decorate([
-        core_1.Output('loaded'), 
-        __metadata('design:type', Object)
-    ], PacemMap.prototype, "mapLoaded", void 0);
-    __decorate([
-        core_1.ViewChild('mapCanvas'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemMap.prototype, "canvas", void 0);
-    PacemMap = __decorate([
-        core_1.Component({
-            selector: consts.MAP_SELECTOR,
-            template: "<div class=\"pacem-map\" #mapCanvas (window:resize)=\"onResize($event)\"></div>"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemMap);
     return PacemMap;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMap.prototype, "zoom", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMap.prototype, "center", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMap.prototype, "tiles", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMap.prototype, "attribution", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemMap.prototype, "scale", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMap.prototype, "zoomControl", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemMap.prototype, "draggable", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemMap.prototype, "doubleClickZoom", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemMap.prototype, "keyboardShortcuts", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMap.prototype, "paddingTop", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMap.prototype, "paddingLeft", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMap.prototype, "paddingRight", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMap.prototype, "paddingBottom", void 0);
+__decorate([
+    core_1.Output('loaded'),
+    __metadata("design:type", Object)
+], PacemMap.prototype, "mapLoaded", void 0);
+__decorate([
+    core_1.ViewChild('mapCanvas'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemMap.prototype, "canvas", void 0);
+PacemMap = __decorate([
+    core_1.Component({
+        selector: consts.MAP_SELECTOR,
+        template: "<div class=\"pacem-map\" #mapCanvas (window:resize)=\"onResize($event)\"></div>"
+    }),
+    __metadata("design:paramtypes", [])
+], PacemMap);
 exports.PacemMap = PacemMap;
 // #endregion
 //#region MARKER
@@ -461,55 +461,55 @@ var PacemMapMarker = (function () {
         if (marker.getPopup() && marker.getPopup().getContent() != content)
             marker.setPopupContent(content);
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemMapMarker.prototype, "position", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapMarker.prototype, "icon", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapMarker.prototype, "size", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapMarker.prototype, "anchor", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapMarker.prototype, "popupAnchor", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemMapMarker.prototype, "draggable", void 0);
-    __decorate([
-        core_1.Output('drag'), 
-        __metadata('design:type', Object)
-    ], PacemMapMarker.prototype, "ondrag", void 0);
-    __decorate([
-        core_1.Output('info'), 
-        __metadata('design:type', Object)
-    ], PacemMapMarker.prototype, "oninfo", void 0);
-    __decorate([
-        core_1.Output('close'), 
-        __metadata('design:type', Object)
-    ], PacemMapMarker.prototype, "onclose", void 0);
-    __decorate([
-        core_1.ViewChild('content'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemMapMarker.prototype, "contentElement", void 0);
-    PacemMapMarker = __decorate([
-        core_1.Component({
-            selector: consts.MARKER_SELECTOR,
-            template: "<div class=\"pacem-map-marker-info\" #content><ng-content></ng-content><div>"
-        }), 
-        __metadata('design:paramtypes', [PacemMap])
-    ], PacemMapMarker);
     return PacemMapMarker;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemMapMarker.prototype, "position", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapMarker.prototype, "icon", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapMarker.prototype, "size", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapMarker.prototype, "anchor", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapMarker.prototype, "popupAnchor", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemMapMarker.prototype, "draggable", void 0);
+__decorate([
+    core_1.Output('drag'),
+    __metadata("design:type", Object)
+], PacemMapMarker.prototype, "ondrag", void 0);
+__decorate([
+    core_1.Output('info'),
+    __metadata("design:type", Object)
+], PacemMapMarker.prototype, "oninfo", void 0);
+__decorate([
+    core_1.Output('close'),
+    __metadata("design:type", Object)
+], PacemMapMarker.prototype, "onclose", void 0);
+__decorate([
+    core_1.ViewChild('content'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemMapMarker.prototype, "contentElement", void 0);
+PacemMapMarker = __decorate([
+    core_1.Component({
+        selector: consts.MARKER_SELECTOR,
+        template: "<div class=\"pacem-map-marker-info\" #content><ng-content></ng-content><div>"
+    }),
+    __metadata("design:paramtypes", [PacemMap])
+], PacemMapMarker);
 exports.PacemMapMarker = PacemMapMarker;
 //#endregion
 //#region CIRCLE
@@ -613,47 +613,47 @@ var PacemMapCircle = (function () {
             return;
         ctrl.circle.setStyle({ 'weight': th || 3 });
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMapCircle.prototype, "radius", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemMapCircle.prototype, "center", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapCircle.prototype, "stroke", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapCircle.prototype, "fill", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMapCircle.prototype, "thickness", void 0);
-    __decorate([
-        core_1.Output('info'), 
-        __metadata('design:type', Object)
-    ], PacemMapCircle.prototype, "oninfo", void 0);
-    __decorate([
-        core_1.Output('close'), 
-        __metadata('design:type', Object)
-    ], PacemMapCircle.prototype, "onclose", void 0);
-    __decorate([
-        core_1.ViewChild('content'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemMapCircle.prototype, "contentElement", void 0);
-    PacemMapCircle = __decorate([
-        core_1.Component({
-            selector: consts.CIRCLE_SELECTOR,
-            template: "<div class=\"pacem-map-circle-info\" #content><ng-content></ng-content><div>"
-        }), 
-        __metadata('design:paramtypes', [PacemMap])
-    ], PacemMapCircle);
     return PacemMapCircle;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMapCircle.prototype, "radius", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemMapCircle.prototype, "center", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapCircle.prototype, "stroke", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapCircle.prototype, "fill", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMapCircle.prototype, "thickness", void 0);
+__decorate([
+    core_1.Output('info'),
+    __metadata("design:type", Object)
+], PacemMapCircle.prototype, "oninfo", void 0);
+__decorate([
+    core_1.Output('close'),
+    __metadata("design:type", Object)
+], PacemMapCircle.prototype, "onclose", void 0);
+__decorate([
+    core_1.ViewChild('content'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemMapCircle.prototype, "contentElement", void 0);
+PacemMapCircle = __decorate([
+    core_1.Component({
+        selector: consts.CIRCLE_SELECTOR,
+        template: "<div class=\"pacem-map-circle-info\" #content><ng-content></ng-content><div>"
+    }),
+    __metadata("design:paramtypes", [PacemMap])
+], PacemMapCircle);
 exports.PacemMapCircle = PacemMapCircle;
 //#endregion
 //#region POLYLINE
@@ -744,52 +744,52 @@ var PacemMapPolyline = (function () {
             return;
         ctrl.polyline.setStyle({ 'weight': th || 3 });
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Array)
-    ], PacemMapPolyline.prototype, "path", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemMapPolyline.prototype, "stroke", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemMapPolyline.prototype, "thickness", void 0);
-    __decorate([
-        core_1.Output('info'), 
-        __metadata('design:type', Object)
-    ], PacemMapPolyline.prototype, "oninfo", void 0);
-    __decorate([
-        core_1.Output('close'), 
-        __metadata('design:type', Object)
-    ], PacemMapPolyline.prototype, "onclose", void 0);
-    __decorate([
-        core_1.ViewChild('content'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemMapPolyline.prototype, "contentElement", void 0);
-    PacemMapPolyline = __decorate([
-        core_1.Component({
-            selector: consts.POLYLINE_SELECTOR,
-            template: "<div class=\"pacem-map-polyline-info\" #content><ng-content></ng-content><div>"
-        }), 
-        __metadata('design:paramtypes', [PacemMap])
-    ], PacemMapPolyline);
     return PacemMapPolyline;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Array)
+], PacemMapPolyline.prototype, "path", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemMapPolyline.prototype, "stroke", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemMapPolyline.prototype, "thickness", void 0);
+__decorate([
+    core_1.Output('info'),
+    __metadata("design:type", Object)
+], PacemMapPolyline.prototype, "oninfo", void 0);
+__decorate([
+    core_1.Output('close'),
+    __metadata("design:type", Object)
+], PacemMapPolyline.prototype, "onclose", void 0);
+__decorate([
+    core_1.ViewChild('content'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemMapPolyline.prototype, "contentElement", void 0);
+PacemMapPolyline = __decorate([
+    core_1.Component({
+        selector: consts.POLYLINE_SELECTOR,
+        template: "<div class=\"pacem-map-polyline-info\" #content><ng-content></ng-content><div>"
+    }),
+    __metadata("design:paramtypes", [PacemMap])
+], PacemMapPolyline);
 exports.PacemMapPolyline = PacemMapPolyline;
 //#endregion
 var PacemMapsLeafletModule = (function () {
     function PacemMapsLeafletModule() {
     }
-    PacemMapsLeafletModule = __decorate([
-        core_1.NgModule({
-            imports: [common_1.CommonModule, pacem_ui_1.PacemUIModule],
-            declarations: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline],
-            exports: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemMapsLeafletModule);
     return PacemMapsLeafletModule;
 }());
+PacemMapsLeafletModule = __decorate([
+    core_1.NgModule({
+        imports: [common_1.CommonModule, pacem_ui_1.PacemUIModule],
+        declarations: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline],
+        exports: [PacemMap, PacemMapCircle, PacemMapLink, PacemMapMarker, PacemMapPolyline]
+    }),
+    __metadata("design:paramtypes", [])
+], PacemMapsLeafletModule);
 exports.PacemMapsLeafletModule = PacemMapsLeafletModule;

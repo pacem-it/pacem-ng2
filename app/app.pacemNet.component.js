@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var pacem_net_1 = require('./../pacem/pacem-net');
+var core_1 = require("@angular/core");
+var pacem_net_1 = require("./../pacem/pacem-net");
 var PacemNetComponent = (function () {
     function PacemNetComponent(hub, http) {
         this.hub = hub;
@@ -46,25 +46,27 @@ var PacemNetComponent = (function () {
             var li = document.createElement('li');
             li.innerText = ret + ' (from SignalR)';
             ul.appendChild(li);
+            return ret;
         }, function (err) {
             var li = document.createElement('li');
             li.style.color = 'red';
             li.innerText = err;
             ul.appendChild(li);
+            return err;
         });
         this.entity.message = '';
     };
-    __decorate([
-        core_1.ViewChild('echo'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemNetComponent.prototype, "list", void 0);
-    PacemNetComponent = __decorate([
-        core_1.Component({
-            selector: 'app-pacem-net',
-            template: "<h2 class=\"pacem-animatable\">Pacem Networking</h2><ul #echo>\n</ul>\n\n<p class=\"pacem-animatable\"><b>{{ counter }}</b> message{{ counter == 1 ? ' has' : 's have' }} already been sent.</p>\n\n<pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n\n<button (click)=\"send($event)\" [disabled]=\"!entity.message\" class=\"pacem-btn primary\">Boomerang!</button>"
-        }), 
-        __metadata('design:paramtypes', [pacem_net_1.PacemHub, pacem_net_1.PacemHttp])
-    ], PacemNetComponent);
     return PacemNetComponent;
 }());
+__decorate([
+    core_1.ViewChild('echo'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemNetComponent.prototype, "list", void 0);
+PacemNetComponent = __decorate([
+    core_1.Component({
+        selector: 'app-pacem-net',
+        template: "<h2 class=\"pacem-animatable\">Pacem Networking</h2><ul #echo>\n</ul>\n\n<p class=\"pacem-animatable\"><b>{{ counter }}</b> message{{ counter == 1 ? ' has' : 's have' }} already been sent.</p>\n\n<pacem-field *ngFor=\"let item of meta\" [field]=\"item\" [entity]=\"entity\"></pacem-field>\n\n<button (click)=\"send($event)\" [disabled]=\"!entity.message\" class=\"pacem-btn primary\">Boomerang!</button>"
+    }),
+    __metadata("design:paramtypes", [pacem_net_1.PacemHub, pacem_net_1.PacemHttp])
+], PacemNetComponent);
 exports.PacemNetComponent = PacemNetComponent;

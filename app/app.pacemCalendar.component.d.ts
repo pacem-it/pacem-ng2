@@ -1,4 +1,3 @@
-/// <reference types="core-js" />
 export declare class PacemCalendarComponent {
     value0: Date | string;
     value: Date;

@@ -52,11 +52,13 @@ export class PacemNetComponent implements OnInit, OnDestroy {
                 let li = document.createElement('li');
                 li.innerText = ret + ' (from SignalR)';
                 ul.appendChild(li);
+                return ret;
             }, (err) => {
                 let li = <HTMLLIElement>document.createElement('li');
                 li.style.color = 'red';
                 li.innerText = err;
                 ul.appendChild(li);
+                return err;
             });
         this.entity.message = '';
     }

@@ -1362,8 +1362,8 @@ export class PacemUploader implements AfterViewInit, OnDestroy {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', Uploader['startUploadUrl'], true);
         xhr.onload = function (e) {
-            if (this.status == 200) {
-                var json = JSON.parse(this.responseText);
+            if (xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText);
                 if (!!json.success) {
 
                     fields.retryFrom = 0;
@@ -1393,9 +1393,9 @@ export class PacemUploader implements AfterViewInit, OnDestroy {
             xhr.onload = function (e) {
                 fields.ongoing--;
                 if (!!fields.undone) return;
-                if (this.status == 200) {
+                if (xhr.status == 200) {
                     // Note: .response instead of .responseText
-                    var json = JSON.parse(this.responseText);
+                    var json = JSON.parse(xhr.responseText);
                     if (!!json.success) {
                         Uploader.percentage = json.result.Percentage;
                         if (Uploader.complete != json.result.Complete) {
@@ -1464,9 +1464,9 @@ export class PacemUploader implements AfterViewInit, OnDestroy {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', Uploader.undoUploadUrl, true);
         xhr.onload = function (e) {
-            if (this.status == 200) {
+            if (xhr.status == 200) {
                 // Note: .response instead of .responseText
-                var json = JSON.parse(this.responseText);
+                var json = JSON.parse(xhr.responseText);
                 if (!!json.success) {
                     input.value = '';
                     fields.undone = true;

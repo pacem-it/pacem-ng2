@@ -9,8 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-var core_1 = require('@angular/core');
-var pacem_core_1 = require('./pacem-core');
+var core_1 = require("@angular/core");
+var pacem_core_1 = require("./pacem-core");
 var noop = function () { };
 var PacemResponse = (function () {
     function PacemResponse(req, processTime) {
@@ -205,12 +205,12 @@ var PacemHttp = (function () {
     PacemHttp.prototype.post = function (url, data, headers) {
         return this.request(url, { 'method': 'POST', 'data': data, 'headers': headers || {} });
     };
-    PacemHttp = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemHttp);
     return PacemHttp;
 }());
+PacemHttp = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemHttp);
 exports.PacemHttp = PacemHttp;
 /**
  * SignalR wrapper for angular (needs jQuery >= 1.64).
@@ -359,22 +359,22 @@ var PacemHub = (function () {
         if (callback && (ndx = this._disconnectCallbacks.indexOf(callback)) > -1)
             this._disconnectCallbacks.splice(ndx, 1);
     };
-    PacemHub = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemHub);
     return PacemHub;
 }());
+PacemHub = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemHub);
 exports.PacemHub = PacemHub;
 var PacemNetModule = (function () {
     function PacemNetModule() {
     }
-    PacemNetModule = __decorate([
-        core_1.NgModule({
-            providers: [PacemHttp, PacemHub]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemNetModule);
     return PacemNetModule;
 }());
+PacemNetModule = __decorate([
+    core_1.NgModule({
+        providers: [PacemHttp, PacemHub]
+    }),
+    __metadata("design:paramtypes", [])
+], PacemNetModule);
 exports.PacemNetModule = PacemNetModule;

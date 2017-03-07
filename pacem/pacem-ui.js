@@ -14,15 +14,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-var core_1 = require('@angular/core');
-var platform_browser_1 = require('@angular/platform-browser');
-var common_1 = require('@angular/common');
-var pacem_core_1 = require('./pacem-core');
-var Rx_1 = require('rxjs/Rx');
-var pacem_3d_1 = require('./pacem-3d');
-require('rxjs/add/operator/debounceTime');
-require('rxjs/add/operator/debounce');
-require('rxjs/add/operator/merge');
+var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
+var common_1 = require("@angular/common");
+var pacem_core_1 = require("./pacem-core");
+var Rx_1 = require("rxjs/Rx");
+var pacem_3d_1 = require("./pacem-3d");
+require("rxjs/add/operator/debounceTime");
+require("rxjs/add/operator/debounce");
+require("rxjs/add/operator/merge");
 function supportsSVGTransforms() {
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     return 'transform' in svg;
@@ -47,19 +47,19 @@ var PacemHidden = (function () {
         enumerable: true,
         configurable: true
     });
-    __decorate([
-        core_1.Input('pacemHidden'), 
-        __metadata('design:type', Boolean), 
-        __metadata('design:paramtypes', [Boolean])
-    ], PacemHidden.prototype, "hidden", null);
-    PacemHidden = __decorate([
-        core_1.Directive({
-            selector: '[pacemHidden]'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef])
-    ], PacemHidden);
     return PacemHidden;
 }());
+__decorate([
+    core_1.Input('pacemHidden'),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], PacemHidden.prototype, "hidden", null);
+PacemHidden = __decorate([
+    core_1.Directive({
+        selector: '[pacemHidden]'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], PacemHidden);
 exports.PacemHidden = PacemHidden;
 /**
  * PacemHighlight Pipe
@@ -85,14 +85,14 @@ var PacemHighlight = (function () {
         }
         return this.sce.bypassSecurityTrustHtml(source);
     };
-    PacemHighlight = __decorate([
-        core_1.Pipe({
-            name: 'pacemHighlight'
-        }), 
-        __metadata('design:paramtypes', [platform_browser_1.DomSanitizer])
-    ], PacemHighlight);
     return PacemHighlight;
 }());
+PacemHighlight = __decorate([
+    core_1.Pipe({
+        name: 'pacemHighlight'
+    }),
+    __metadata("design:paramtypes", [platform_browser_1.DomSanitizer])
+], PacemHighlight);
 exports.PacemHighlight = PacemHighlight;
 /**
  * PacemInfiniteScroll Directive
@@ -213,33 +213,33 @@ var PacemInfiniteScroll = (function () {
         }
         return false;
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object), 
-        __metadata('design:paramtypes', [Object])
-    ], PacemInfiniteScroll.prototype, "pacemInfiniteScrollContainer", null);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean), 
-        __metadata('design:paramtypes', [Boolean])
-    ], PacemInfiniteScroll.prototype, "pacemInfiniteScrollEnabled", null);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number), 
-        __metadata('design:paramtypes', [Number])
-    ], PacemInfiniteScroll.prototype, "pacemInfiniteScrollBottomGap", null);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], PacemInfiniteScroll.prototype, "pacemInfiniteScroll", void 0);
-    PacemInfiniteScroll = __decorate([
-        core_1.Directive({
-            selector: '[pacemInfiniteScroll]'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef])
-    ], PacemInfiniteScroll);
     return PacemInfiniteScroll;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], PacemInfiniteScroll.prototype, "pacemInfiniteScrollContainer", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], PacemInfiniteScroll.prototype, "pacemInfiniteScrollEnabled", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Number])
+], PacemInfiniteScroll.prototype, "pacemInfiniteScrollBottomGap", null);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], PacemInfiniteScroll.prototype, "pacemInfiniteScroll", void 0);
+PacemInfiniteScroll = __decorate([
+    core_1.Directive({
+        selector: '[pacemInfiniteScroll]'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], PacemInfiniteScroll);
 exports.PacemInfiniteScroll = PacemInfiniteScroll;
 var PacemResize = (function () {
     function PacemResize(elementRef) {
@@ -298,23 +298,23 @@ var PacemResize = (function () {
         this.subscription.unsubscribe();
         window.cancelAnimationFrame(this._timer);
     };
-    __decorate([
-        core_1.Input('pacemResizeEnabled'), 
-        __metadata('design:type', Boolean), 
-        __metadata('design:paramtypes', [Boolean])
-    ], PacemResize.prototype, "enabled", null);
-    __decorate([
-        core_1.Output('pacemResize'), 
-        __metadata('design:type', Object)
-    ], PacemResize.prototype, "onresize", void 0);
-    PacemResize = __decorate([
-        core_1.Directive({
-            selector: '[pacemResize]'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef])
-    ], PacemResize);
     return PacemResize;
 }());
+__decorate([
+    core_1.Input('pacemResizeEnabled'),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], PacemResize.prototype, "enabled", null);
+__decorate([
+    core_1.Output('pacemResize'),
+    __metadata("design:type", Object)
+], PacemResize.prototype, "onresize", void 0);
+PacemResize = __decorate([
+    core_1.Directive({
+        selector: '[pacemResize]'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], PacemResize);
 exports.PacemResize = PacemResize;
 /**
  * PacemLightbox Component
@@ -390,30 +390,30 @@ var PacemLightbox = (function () {
         window.requestAnimationFrame(fnPos);
         fnPos();
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean), 
-        __metadata('design:paramtypes', [Boolean])
-    ], PacemLightbox.prototype, "show", null);
-    __decorate([
-        core_1.Output('close'), 
-        __metadata('design:type', Object)
-    ], PacemLightbox.prototype, "onclose", void 0);
-    __decorate([
-        core_1.ViewChild('wrapper'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemLightbox.prototype, "wrapperElement", void 0);
-    PacemLightbox = __decorate([
-        core_1.Component({
-            selector: 'pacem-lightbox',
-            template: "<div class=\"pacem-lightbox-wrapper\" [hidden]=\"hide\" [pacemHidden]=\"hide\" #wrapper>\n<div class=\"pacem-lightbox\" (pacemResize)=\"resize($event)\" [pacemResizeEnabled]=\"!hide\"><ng-content></ng-content></div>\n</div>"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemLightbox);
     return PacemLightbox;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], PacemLightbox.prototype, "show", null);
+__decorate([
+    core_1.Output('close'),
+    __metadata("design:type", Object)
+], PacemLightbox.prototype, "onclose", void 0);
+__decorate([
+    core_1.ViewChild('wrapper'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemLightbox.prototype, "wrapperElement", void 0);
+PacemLightbox = __decorate([
+    core_1.Component({
+        selector: 'pacem-lightbox',
+        template: "<div class=\"pacem-lightbox-wrapper\" [hidden]=\"hide\" [pacemHidden]=\"hide\" #wrapper>\n<div class=\"pacem-lightbox\" (pacemResize)=\"resize($event)\" [pacemResizeEnabled]=\"!hide\"><ng-content></ng-content></div>\n</div>"
+    }),
+    __metadata("design:paramtypes", [])
+], PacemLightbox);
 exports.PacemLightbox = PacemLightbox;
-var PacemCarouselAdapter = (function () {
+var PacemCarouselAdapter = PacemCarouselAdapter_1 = (function () {
     function PacemCarouselAdapter() {
         this._index = -1;
         this.subscription = null;
@@ -437,7 +437,7 @@ var PacemCarouselAdapter = (function () {
         set: function (v) {
             var _this = this;
             if (this._items != null)
-                throw "Items have already been set for this " + PacemCarouselAdapter.name + ".";
+                throw "Items have already been set for this " + PacemCarouselAdapter_1.name + ".";
             var items = this._items = v;
             this.subscription = items.changes.subscribe(function () { return _this.adjustFocusIndex(); });
             this.adjustFocusIndex();
@@ -514,12 +514,12 @@ var PacemCarouselAdapter = (function () {
             return;
         _this.index = (index + 1) % length;
     };
-    PacemCarouselAdapter = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemCarouselAdapter);
     return PacemCarouselAdapter;
 }());
+PacemCarouselAdapter = PacemCarouselAdapter_1 = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemCarouselAdapter);
 exports.PacemCarouselAdapter = PacemCarouselAdapter;
 var PacemCarouselBase = (function () {
     function PacemCarouselBase(adapter) {
@@ -556,16 +556,16 @@ var PacemCarouselBase = (function () {
     PacemCarouselBase.prototype.next = function () {
         this.adapter.next();
     };
-    __decorate([
-        core_1.Output('indexChange'), 
-        __metadata('design:type', Object)
-    ], PacemCarouselBase.prototype, "onindex", void 0);
-    __decorate([
-        core_1.Output('indexChanged'), 
-        __metadata('design:type', Object)
-    ], PacemCarouselBase.prototype, "onindexchanged", void 0);
     return PacemCarouselBase;
 }());
+__decorate([
+    core_1.Output('indexChange'),
+    __metadata("design:type", Object)
+], PacemCarouselBase.prototype, "onindex", void 0);
+__decorate([
+    core_1.Output('indexChanged'),
+    __metadata("design:type", Object)
+], PacemCarouselBase.prototype, "onindexchanged", void 0);
 exports.PacemCarouselBase = PacemCarouselBase;
 /**
  * PacemCarouselItem Directive
@@ -664,27 +664,28 @@ var PacemCarouselItem = (function () {
     PacemCarouselItem.prototype.ngOnDestroy = function () {
         pacem_core_1.PacemUtils.removeClass(this.elementRef.nativeElement, "pacem-carousel-item pacem-carousel-item-previous pacem-carousel-item-next pacem-carousel-item-near");
     };
-    PacemCarouselItem = __decorate([
-        core_1.Directive({
-            selector: '[pacemCarouselItem]',
-            exportAs: 'pacemCarouselItem'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef])
-    ], PacemCarouselItem);
     return PacemCarouselItem;
 }());
+PacemCarouselItem = __decorate([
+    core_1.Directive({
+        selector: '[pacemCarouselItem]',
+        exportAs: 'pacemCarouselItem'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], PacemCarouselItem);
 exports.PacemCarouselItem = PacemCarouselItem;
 /**
  * PacemCarousel Directive
  */
-var PacemCarousel = (function (_super) {
+var PacemCarousel = PacemCarousel_1 = (function (_super) {
     __extends(PacemCarousel, _super);
     function PacemCarousel(compiler, adapter, viewContainerRef, differs) {
-        _super.call(this, adapter);
-        this.compiler = compiler;
-        this.viewContainerRef = viewContainerRef;
-        this.differs = differs;
-        this.configuration = {};
+        var _this = _super.call(this, adapter) || this;
+        _this.compiler = compiler;
+        _this.viewContainerRef = viewContainerRef;
+        _this.differs = differs;
+        _this.configuration = {};
+        return _this;
     }
     Object.defineProperty(PacemCarousel.prototype, "element", {
         get: function () {
@@ -748,7 +749,7 @@ var PacemCarousel = (function (_super) {
         var _this = this;
         this.dispose();
         //
-        var config = pacem_core_1.PacemUtils.extend({}, pacem_core_1.PacemUtils.clone(PacemCarousel.defaults), this.configuration || {});
+        var config = pacem_core_1.PacemUtils.extend({}, pacem_core_1.PacemUtils.clone(PacemCarousel_1.defaults), this.configuration || {});
         this.timeout = config.interval;
         //
         this.timer = window.setTimeout(function () {
@@ -776,25 +777,28 @@ var PacemCarousel = (function (_super) {
         pacem_core_1.PacemUtils.removeClass(this.viewContainerRef.element.nativeElement, "pacem-carousel");
         _super.prototype.ngOnDestroy.call(this);
     };
-    PacemCarousel.defaults = { interactive: false, interval: 5000 };
-    __decorate([
-        core_1.ContentChildren(PacemCarouselItem), 
-        __metadata('design:type', core_1.QueryList)
-    ], PacemCarousel.prototype, "items", void 0);
-    __decorate([
-        core_1.Input('pacemCarousel'), 
-        __metadata('design:type', Object)
-    ], PacemCarousel.prototype, "configuration", void 0);
-    PacemCarousel = __decorate([
-        core_1.Directive({
-            selector: '[pacemCarousel]',
-            providers: [PacemCarouselAdapter],
-            exportAs: 'pacemCarousel'
-        }), 
-        __metadata('design:paramtypes', [core_1.Compiler, PacemCarouselAdapter, core_1.ViewContainerRef, core_1.KeyValueDiffers])
-    ], PacemCarousel);
     return PacemCarousel;
 }(PacemCarouselBase));
+PacemCarousel.defaults = { interactive: false, interval: 5000 };
+__decorate([
+    core_1.ContentChildren(PacemCarouselItem),
+    __metadata("design:type", core_1.QueryList)
+], PacemCarousel.prototype, "items", void 0);
+__decorate([
+    core_1.Input('pacemCarousel'),
+    __metadata("design:type", Object)
+], PacemCarousel.prototype, "configuration", void 0);
+PacemCarousel = PacemCarousel_1 = __decorate([
+    core_1.Directive({
+        selector: '[pacemCarousel]',
+        providers: [PacemCarouselAdapter],
+        exportAs: 'pacemCarousel'
+    }),
+    __metadata("design:paramtypes", [core_1.Compiler,
+        PacemCarouselAdapter,
+        core_1.ViewContainerRef,
+        core_1.KeyValueDiffers])
+], PacemCarousel);
 exports.PacemCarousel = PacemCarousel;
 /**
  * PacemCarouselDashboard Component
@@ -868,37 +872,37 @@ var PacemCarouselDashboard = (function () {
         if (c)
             c.setIndex(ndx);
     };
-    PacemCarouselDashboard = __decorate([
-        core_1.Component({
-            selector: 'pacem-carousel-dashboard',
-            template: "\n    <div class=\"pacem-carousel-previous\" (click)=\"previous($event)\" *ngIf=\"_carousel?.items?.length > 1\">&lt;</div>\n    <div class=\"pacem-carousel-next\" (click)=\"next($event)\" *ngIf=\"_carousel?.items?.length > 1\">&gt;</div>\n    <ol class=\"pacem-carousel-dashboard\" *ngIf=\"_carousel?.items?.length > 1\">\n        <li *ngFor=\"let item of _carousel?.items, let ndx = index\">\n            <div (click)=\"page(ndx, $event)\" class=\"pacem-carousel-page\" [ngClass]=\"{ 'pacem-carousel-active': ndx === _carousel?.index }\">{{ ndx+1 }}</div>\n        </li>\n    <ol>", changeDetection: core_1.ChangeDetectionStrategy.Default
-        }), 
-        __metadata('design:paramtypes', [core_1.ChangeDetectorRef, core_1.ElementRef])
-    ], PacemCarouselDashboard);
     return PacemCarouselDashboard;
 }());
+PacemCarouselDashboard = __decorate([
+    core_1.Component({
+        selector: 'pacem-carousel-dashboard',
+        template: "\n    <div class=\"pacem-carousel-previous\" (click)=\"previous($event)\" *ngIf=\"_carousel?.items?.length > 1\">&lt;</div>\n    <div class=\"pacem-carousel-next\" (click)=\"next($event)\" *ngIf=\"_carousel?.items?.length > 1\">&gt;</div>\n    <ol class=\"pacem-carousel-dashboard\" *ngIf=\"_carousel?.items?.length > 1\">\n        <li *ngFor=\"let item of _carousel?.items, let ndx = index\">\n            <div (click)=\"page(ndx, $event)\" class=\"pacem-carousel-page\" [ngClass]=\"{ 'pacem-carousel-active': ndx === _carousel?.index }\">{{ ndx+1 }}</div>\n        </li>\n    <ol>", changeDetection: core_1.ChangeDetectionStrategy.Default
+    }),
+    __metadata("design:paramtypes", [core_1.ChangeDetectorRef, core_1.ElementRef])
+], PacemCarouselDashboard);
 /**
  * PacemGalleryItem Directive
  */
 var PacemGalleryItem = (function () {
     function PacemGalleryItem() {
     }
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemGalleryItem.prototype, "url", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemGalleryItem.prototype, "caption", void 0);
-    PacemGalleryItem = __decorate([
-        core_1.Directive({
-            selector: 'pacem-gallery-item'
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemGalleryItem);
     return PacemGalleryItem;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemGalleryItem.prototype, "url", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemGalleryItem.prototype, "caption", void 0);
+PacemGalleryItem = __decorate([
+    core_1.Directive({
+        selector: 'pacem-gallery-item'
+    }),
+    __metadata("design:paramtypes", [])
+], PacemGalleryItem);
 exports.PacemGalleryItem = PacemGalleryItem;
 /**
  * PacemGallery Component
@@ -906,9 +910,10 @@ exports.PacemGalleryItem = PacemGalleryItem;
 var PacemGallery = (function (_super) {
     __extends(PacemGallery, _super);
     function PacemGallery(adapter) {
-        _super.call(this, adapter);
-        this.onclose = new core_1.EventEmitter();
-        this.hide = true;
+        var _this = _super.call(this, adapter) || this;
+        _this.onclose = new core_1.EventEmitter();
+        _this.hide = true;
+        return _this;
     }
     PacemGallery.prototype.getItems = function () {
         return this.items;
@@ -934,35 +939,35 @@ var PacemGallery = (function (_super) {
         this.hide = true;
         this.onclose.emit(_);
     };
-    __decorate([
-        core_1.ContentChildren(PacemGalleryItem), 
-        __metadata('design:type', core_1.QueryList)
-    ], PacemGallery.prototype, "items", void 0);
-    __decorate([
-        core_1.Output('close'), 
-        __metadata('design:type', Object)
-    ], PacemGallery.prototype, "onclose", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean), 
-        __metadata('design:paramtypes', [Boolean])
-    ], PacemGallery.prototype, "show", null);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number), 
-        __metadata('design:paramtypes', [Number])
-    ], PacemGallery.prototype, "startIndex", null);
-    PacemGallery = __decorate([
-        core_1.Component({
-            selector: 'pacem-gallery',
-            template: "<pacem-lightbox class=\"pacem-gallery\" [show]=\"!hide\" (close)=\"close($event)\">\n    <ol class=\"pacem-gallery-list\">\n        <template ngFor \n            [ngForOf]=\"items\" \n            let-pic=\"$implicit\" \n            let-ndx=\"index\">\n        <li *ngIf=\"isNear(ndx)\"\n        [ngClass]=\"{ 'pacem-gallery-active': ndx === index }\" \n        [ngStyle]=\"{ 'background-image': 'url('+pic.url+')' }\">\n            <div class=\"pacem-gallery-caption\" [innerHTML]=\"pic.caption\"></div>\n        </li></template>\n    </ol>\n    <div class=\"pacem-gallery-close\" (click)=\"close($event)\">X</div>\n    <div class=\"pacem-gallery-previous\" (click)=\"previous($event)\" *ngIf=\"items.length > 1\">&lt;</div>\n    <div class=\"pacem-gallery-next\" (click)=\"next($event)\" *ngIf=\"items.length > 1\">&gt;</div>\n</pacem-lightbox>",
-            entryComponents: [PacemLightbox],
-            providers: [PacemCarouselAdapter]
-        }), 
-        __metadata('design:paramtypes', [PacemCarouselAdapter])
-    ], PacemGallery);
     return PacemGallery;
 }(PacemCarouselBase));
+__decorate([
+    core_1.ContentChildren(PacemGalleryItem),
+    __metadata("design:type", core_1.QueryList)
+], PacemGallery.prototype, "items", void 0);
+__decorate([
+    core_1.Output('close'),
+    __metadata("design:type", Object)
+], PacemGallery.prototype, "onclose", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], PacemGallery.prototype, "show", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Number])
+], PacemGallery.prototype, "startIndex", null);
+PacemGallery = __decorate([
+    core_1.Component({
+        selector: 'pacem-gallery',
+        template: "<pacem-lightbox class=\"pacem-gallery\" [show]=\"!hide\" (close)=\"close($event)\">\n    <ol class=\"pacem-gallery-list\">\n        <template ngFor \n            [ngForOf]=\"items\" \n            let-pic=\"$implicit\" \n            let-ndx=\"index\">\n        <li *ngIf=\"isNear(ndx)\"\n        [ngClass]=\"{ 'pacem-gallery-active': ndx === index }\" \n        [ngStyle]=\"{ 'background-image': 'url('+pic.url+')' }\">\n            <div class=\"pacem-gallery-caption\" [innerHTML]=\"pic.caption\"></div>\n        </li></template>\n    </ol>\n    <div class=\"pacem-gallery-close\" (click)=\"close($event)\">X</div>\n    <div class=\"pacem-gallery-previous\" (click)=\"previous($event)\" *ngIf=\"items.length > 1\">&lt;</div>\n    <div class=\"pacem-gallery-next\" (click)=\"next($event)\" *ngIf=\"items.length > 1\">&gt;</div>\n</pacem-lightbox>",
+        entryComponents: [PacemLightbox],
+        providers: [PacemCarouselAdapter]
+    }),
+    __metadata("design:paramtypes", [PacemCarouselAdapter])
+], PacemGallery);
 exports.PacemGallery = PacemGallery;
 /**
  * PacemBalloon Directive
@@ -1285,35 +1290,35 @@ var PacemBalloon = (function () {
             }
         }
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemBalloon.prototype, "pacemBalloon", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemBalloon.prototype, "pacemBalloonOptions", void 0);
-    __decorate([
-        core_1.Output('popup'), 
-        __metadata('design:type', Object)
-    ], PacemBalloon.prototype, "onpopup", void 0);
-    __decorate([
-        core_1.Output('popout'), 
-        __metadata('design:type', Object)
-    ], PacemBalloon.prototype, "onpopout", void 0);
-    PacemBalloon = __decorate([
-        core_1.Directive({
-            selector: '[pacemBalloon]'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef, core_1.KeyValueDiffers, core_1.Renderer])
-    ], PacemBalloon);
     return PacemBalloon;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemBalloon.prototype, "pacemBalloon", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemBalloon.prototype, "pacemBalloonOptions", void 0);
+__decorate([
+    core_1.Output('popup'),
+    __metadata("design:type", Object)
+], PacemBalloon.prototype, "onpopup", void 0);
+__decorate([
+    core_1.Output('popout'),
+    __metadata("design:type", Object)
+], PacemBalloon.prototype, "onpopout", void 0);
+PacemBalloon = __decorate([
+    core_1.Directive({
+        selector: '[pacemBalloon]'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef, core_1.KeyValueDiffers, core_1.Renderer])
+], PacemBalloon);
 exports.PacemBalloon = PacemBalloon;
 /**
  * PacemInViewport Directive
  */
-var PacemInViewport = (function () {
+var PacemInViewport = PacemInViewport_1 = (function () {
     function PacemInViewport(element) {
         var _this = this;
         this.element = element;
@@ -1336,13 +1341,13 @@ var PacemInViewport = (function () {
         };
     }
     PacemInViewport.prototype.addEventListeners = function (what) {
-        for (var _i = 0, _a = PacemInViewport._events; _i < _a.length; _i++) {
+        for (var _i = 0, _a = PacemInViewport_1._events; _i < _a.length; _i++) {
             var evt = _a[_i];
             what.addEventListener(evt, this._scrollHandler, false);
         }
     };
     PacemInViewport.prototype.removeEventListeners = function (what) {
-        for (var _i = 0, _a = PacemInViewport._events; _i < _a.length; _i++) {
+        for (var _i = 0, _a = PacemInViewport_1._events; _i < _a.length; _i++) {
             var evt = _a[_i];
             what.removeEventListener(evt, this._scrollHandler, false);
         }
@@ -1374,23 +1379,23 @@ var PacemInViewport = (function () {
         return rect.bottom > 0 && rect.top < (0 + vHeight)
             && (this.pacemInViewportIgnoreHorizontal || (rect.left < (vWidth + 0) && rect.right > 0));
     };
-    PacemInViewport._events = 'DOMContentLoaded load resize scroll'.split(' ');
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], PacemInViewport.prototype, "pacemInViewport", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemInViewport.prototype, "pacemInViewportIgnoreHorizontal", void 0);
-    PacemInViewport = __decorate([
-        core_1.Directive({
-            selector: '[pacemInViewport]'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef])
-    ], PacemInViewport);
     return PacemInViewport;
 }());
+PacemInViewport._events = 'DOMContentLoaded load resize scroll'.split(' ');
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], PacemInViewport.prototype, "pacemInViewport", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemInViewport.prototype, "pacemInViewportIgnoreHorizontal", void 0);
+PacemInViewport = PacemInViewport_1 = __decorate([
+    core_1.Directive({
+        selector: '[pacemInViewport]'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], PacemInViewport);
 exports.PacemInViewport = PacemInViewport;
 /**
  * PacemUploader Component
@@ -1473,8 +1478,8 @@ var PacemUploader = (function () {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', Uploader['startUploadUrl'], true);
         xhr.onload = function (e) {
-            if (this.status == 200) {
-                var json = JSON.parse(this.responseText);
+            if (xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText);
                 if (!!json.success) {
                     fields.retryFrom = 0;
                     fields.blob = blob;
@@ -1503,9 +1508,9 @@ var PacemUploader = (function () {
                 fields.ongoing--;
                 if (!!fields.undone)
                     return;
-                if (this.status == 200) {
+                if (xhr.status == 200) {
                     // Note: .response instead of .responseText
-                    var json = JSON.parse(this.responseText);
+                    var json = JSON.parse(xhr.responseText);
                     if (!!json.success) {
                         Uploader.percentage = json.result.Percentage;
                         if (Uploader.complete != json.result.Complete) {
@@ -1575,9 +1580,9 @@ var PacemUploader = (function () {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', Uploader.undoUploadUrl, true);
         xhr.onload = function (e) {
-            if (this.status == 200) {
+            if (xhr.status == 200) {
                 // Note: .response instead of .responseText
-                var json = JSON.parse(this.responseText);
+                var json = JSON.parse(xhr.responseText);
                 if (!!json.success) {
                     input.value = '';
                     fields.undone = true;
@@ -1597,54 +1602,54 @@ var PacemUploader = (function () {
         this.failed = false;
         this.manage();
     };
-    __decorate([
-        core_1.ViewChild('fileupload'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemUploader.prototype, "fileupload", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String), 
-        __metadata('design:paramtypes', [String])
-    ], PacemUploader.prototype, "undoCaption", null);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String), 
-        __metadata('design:paramtypes', [String])
-    ], PacemUploader.prototype, "retryCaption", null);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemUploader.prototype, "pattern", void 0);
-    __decorate([
-        core_1.Input('startUrl'), 
-        __metadata('design:type', String)
-    ], PacemUploader.prototype, "startUploadUrl", void 0);
-    __decorate([
-        core_1.Input('uploadUrl'), 
-        __metadata('design:type', String)
-    ], PacemUploader.prototype, "doUploadUrl", void 0);
-    __decorate([
-        core_1.Input('undoUrl'), 
-        __metadata('design:type', String)
-    ], PacemUploader.prototype, "undoUploadUrl", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number), 
-        __metadata('design:paramtypes', [Number])
-    ], PacemUploader.prototype, "parallelism", null);
-    __decorate([
-        core_1.Output('complete'), 
-        __metadata('design:type', Object)
-    ], PacemUploader.prototype, "oncomplete", void 0);
-    PacemUploader = __decorate([
-        core_1.Component({
-            selector: 'pacem-uploader',
-            template: "<div class=\"pacem-uploader\">\n    <div class=\"pacem-uploader-filewrapper\" \n         [hidden]=\"(uploading || failed)\"><input type=\"file\" #fileupload /></div>\n    <button class=\"pacem-uploader-retry\" \n            [title]=\"fields.retry\" \n            [hidden]=\"!failed\" \n            (click)=\"retry($event)\">{{ fields.retry }}</button>\n    <button class=\"pacem-uploader-undo\" \n            [title]=\"fields.undo\" \n            (click)=\"undo($event)\" \n            [hidden]=\"!uploading\">{{ fields.undo }}</button>\n</div>"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemUploader);
     return PacemUploader;
 }());
+__decorate([
+    core_1.ViewChild('fileupload'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemUploader.prototype, "fileupload", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], PacemUploader.prototype, "undoCaption", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], PacemUploader.prototype, "retryCaption", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemUploader.prototype, "pattern", void 0);
+__decorate([
+    core_1.Input('startUrl'),
+    __metadata("design:type", String)
+], PacemUploader.prototype, "startUploadUrl", void 0);
+__decorate([
+    core_1.Input('uploadUrl'),
+    __metadata("design:type", String)
+], PacemUploader.prototype, "doUploadUrl", void 0);
+__decorate([
+    core_1.Input('undoUrl'),
+    __metadata("design:type", String)
+], PacemUploader.prototype, "undoUploadUrl", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Number])
+], PacemUploader.prototype, "parallelism", null);
+__decorate([
+    core_1.Output('complete'),
+    __metadata("design:type", Object)
+], PacemUploader.prototype, "oncomplete", void 0);
+PacemUploader = __decorate([
+    core_1.Component({
+        selector: 'pacem-uploader',
+        template: "<div class=\"pacem-uploader\">\n    <div class=\"pacem-uploader-filewrapper\" \n         [hidden]=\"(uploading || failed)\"><input type=\"file\" #fileupload /></div>\n    <button class=\"pacem-uploader-retry\" \n            [title]=\"fields.retry\" \n            [hidden]=\"!failed\" \n            (click)=\"retry($event)\">{{ fields.retry }}</button>\n    <button class=\"pacem-uploader-undo\" \n            [title]=\"fields.undo\" \n            (click)=\"undo($event)\" \n            [hidden]=\"!uploading\">{{ fields.undo }}</button>\n</div>"
+    }),
+    __metadata("design:paramtypes", [])
+], PacemUploader);
 exports.PacemUploader = PacemUploader;
 function stripBase64FromDataURL(dataURL) {
     return dataURL.replace(/^data:image\/[\w]+;base64,/i, '');
@@ -1807,40 +1812,40 @@ var PacemSnapshot = (function () {
                         me.countdown = 3;
                         timeout();
                     }, false);
-                }, function (e) {
+                }, /* fail */ function (e) {
                     alert((e || e.message).toString());
                 }]);
         }
     };
-    __decorate([
-        core_1.ViewChild('grabber'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemSnapshot.prototype, "grabber", void 0);
-    __decorate([
-        core_1.ViewChild('stage'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemSnapshot.prototype, "canvas", void 0);
-    __decorate([
-        core_1.ViewChild('player'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemSnapshot.prototype, "video", void 0);
-    __decorate([
-        core_1.ViewChild('root'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemSnapshot.prototype, "root", void 0);
-    __decorate([
-        core_1.Output('select'), 
-        __metadata('design:type', Object)
-    ], PacemSnapshot.prototype, "onselect", void 0);
-    PacemSnapshot = __decorate([
-        core_1.Component({
-            selector: 'pacem-snapshot',
-            template: "<div class=\"pacem-snapshot\" [ngClass]=\"{ 'pacem-ongoing': status != 'start', 'pacem-custom-size': (w || h) }\"  #root>\n    \n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); pick($event)\" class=\"pacem-browse\" [pacemHidden]=\"status != 'start'\"></button>\n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); take($event)\" class=\"pacem-camera\" [pacemHidden]=\"status != 'start'\"></button>\n    \n    <canvas class=\"pacem-preview\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            #stage [pacemHidden]=\"status != 'confirm'\"></canvas>\n    <!--<div class=\"pacem-snapshot-progress\" [hidden]=\"!processing\"></div>-->\n    <input type=\"file\" #grabber accept=\"image/*\" capture=\"camera\" (change)=\"handleFiles($event)\" hidden />\n    <video *ngIf=\"canUseWebcam\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            [pacemHidden]=\"status != 'taking'\"\n            autoplay=\"autoplay\"\n            #player></video>\n    <button class=\"pacem-countdown\" \n            [pacemHidden]=\"countdown <= 0\">{{ countdown }}</button>\n    <button class=\"pacem-undo\" [pacemHidden]=\"status == 'start' || countdown > 0\" (click)=\"back($event)\"></button>\n    <button class=\"pacem-confirm\" [pacemHidden]=\"status != 'confirm'\" (click)=\"confirm($event)\"></button>\n    <span [hidden]=\"canUseWebcam\"><ng-content></ng-content></span>\n</div>"
-        }), 
-        __metadata('design:paramtypes', [core_1.ChangeDetectorRef])
-    ], PacemSnapshot);
     return PacemSnapshot;
 }());
+__decorate([
+    core_1.ViewChild('grabber'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemSnapshot.prototype, "grabber", void 0);
+__decorate([
+    core_1.ViewChild('stage'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemSnapshot.prototype, "canvas", void 0);
+__decorate([
+    core_1.ViewChild('player'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemSnapshot.prototype, "video", void 0);
+__decorate([
+    core_1.ViewChild('root'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemSnapshot.prototype, "root", void 0);
+__decorate([
+    core_1.Output('select'),
+    __metadata("design:type", Object)
+], PacemSnapshot.prototype, "onselect", void 0);
+PacemSnapshot = __decorate([
+    core_1.Component({
+        selector: 'pacem-snapshot',
+        template: "<div class=\"pacem-snapshot\" [ngClass]=\"{ 'pacem-ongoing': status != 'start', 'pacem-custom-size': (w || h) }\"  #root>\n    \n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); pick($event)\" class=\"pacem-browse\" [pacemHidden]=\"status != 'start'\"></button>\n    <button (click)=\"$event.preventDefault(); $event.stopPropagation(); take($event)\" class=\"pacem-camera\" [pacemHidden]=\"status != 'start'\"></button>\n    \n    <canvas class=\"pacem-preview\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            #stage [pacemHidden]=\"status != 'confirm'\"></canvas>\n    <!--<div class=\"pacem-snapshot-progress\" [hidden]=\"!processing\"></div>-->\n    <input type=\"file\" #grabber accept=\"image/*\" capture=\"camera\" (change)=\"handleFiles($event)\" hidden />\n    <video *ngIf=\"canUseWebcam\"\n            [ngClass]=\"{ 'pacem-taking': branch == 'take' && status != 'start' }\" \n            [pacemHidden]=\"status != 'taking'\"\n            autoplay=\"autoplay\"\n            #player></video>\n    <button class=\"pacem-countdown\" \n            [pacemHidden]=\"countdown <= 0\">{{ countdown }}</button>\n    <button class=\"pacem-undo\" [pacemHidden]=\"status == 'start' || countdown > 0\" (click)=\"back($event)\"></button>\n    <button class=\"pacem-confirm\" [pacemHidden]=\"status != 'confirm'\" (click)=\"confirm($event)\"></button>\n    <span [hidden]=\"canUseWebcam\"><ng-content></ng-content></span>\n</div>"
+    }),
+    __metadata("design:paramtypes", [core_1.ChangeDetectorRef])
+], PacemSnapshot);
 exports.PacemSnapshot = PacemSnapshot;
 /**
  * PacemRingChartItem Component
@@ -1948,48 +1953,48 @@ var PacemRingChartItem = (function () {
         ctx.strokeStyle = bgcolor;
         ctx.stroke();
     };
-    __decorate([
-        core_1.ViewChild('canvas'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemRingChartItem.prototype, "element", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemRingChartItem.prototype, "stroke", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemRingChartItem.prototype, "thickness", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemRingChartItem.prototype, "value", void 0);
-    __decorate([
-        core_1.Output('valueChange'), 
-        __metadata('design:type', Object)
-    ], PacemRingChartItem.prototype, "valuechange", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemRingChartItem.prototype, "max", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemRingChartItem.prototype, "interactive", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number), 
-        __metadata('design:paramtypes', [Number])
-    ], PacemRingChartItem.prototype, "round", null);
-    PacemRingChartItem = __decorate([
-        core_1.Component({
-            selector: 'pacem-ring-chart-item',
-            template: "<canvas class=\"pacem-ring-chart-item\" #canvas \n[ngClass]=\"{ 'pacem-interactive': interactive }\"\n(mousedown)=\"startDrag($event)\" (window:mousemove)=\"drag($event)\" (window:mouseup)=\"drop($event)\"></canvas>"
-        }), 
-        __metadata('design:paramtypes', [core_1.Renderer])
-    ], PacemRingChartItem);
     return PacemRingChartItem;
 }());
+__decorate([
+    core_1.ViewChild('canvas'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemRingChartItem.prototype, "element", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemRingChartItem.prototype, "stroke", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemRingChartItem.prototype, "thickness", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemRingChartItem.prototype, "value", void 0);
+__decorate([
+    core_1.Output('valueChange'),
+    __metadata("design:type", Object)
+], PacemRingChartItem.prototype, "valuechange", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemRingChartItem.prototype, "max", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemRingChartItem.prototype, "interactive", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Number])
+], PacemRingChartItem.prototype, "round", null);
+PacemRingChartItem = __decorate([
+    core_1.Component({
+        selector: 'pacem-ring-chart-item',
+        template: "<canvas class=\"pacem-ring-chart-item\" #canvas \n[ngClass]=\"{ 'pacem-interactive': interactive }\"\n(mousedown)=\"startDrag($event)\" (window:mousemove)=\"drag($event)\" (window:mouseup)=\"drop($event)\"></canvas>"
+    }),
+    __metadata("design:paramtypes", [core_1.Renderer])
+], PacemRingChartItem);
 exports.PacemRingChartItem = PacemRingChartItem;
 /**
  * PacemRingChart Component
@@ -2017,19 +2022,19 @@ var PacemRingChart = (function () {
     PacemRingChart.prototype.redraw = function () {
         this.items.forEach(function (item) { return item.draw(); });
     };
-    __decorate([
-        core_1.ContentChildren(PacemRingChartItem), 
-        __metadata('design:type', core_1.QueryList)
-    ], PacemRingChart.prototype, "items", void 0);
-    PacemRingChart = __decorate([
-        core_1.Component({
-            selector: 'pacem-ring-chart',
-            template: "<div class=\"pacem-ring-chart\"><ng-content></ng-content></div>"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemRingChart);
     return PacemRingChart;
 }());
+__decorate([
+    core_1.ContentChildren(PacemRingChartItem),
+    __metadata("design:type", core_1.QueryList)
+], PacemRingChart.prototype, "items", void 0);
+PacemRingChart = __decorate([
+    core_1.Component({
+        selector: 'pacem-ring-chart',
+        template: "<div class=\"pacem-ring-chart\"><ng-content></ng-content></div>"
+    }),
+    __metadata("design:paramtypes", [])
+], PacemRingChart);
 exports.PacemRingChart = PacemRingChart;
 /**
  * PacemPieChartSlice Directive
@@ -2058,19 +2063,19 @@ var PacemPieChartSlice = (function () {
         enumerable: true,
         configurable: true
     });
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number), 
-        __metadata('design:paramtypes', [Number])
-    ], PacemPieChartSlice.prototype, "value", null);
-    PacemPieChartSlice = __decorate([
-        core_1.Directive({
-            selector: 'pacem-pie-chart-slice'
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef])
-    ], PacemPieChartSlice);
     return PacemPieChartSlice;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Number])
+], PacemPieChartSlice.prototype, "value", null);
+PacemPieChartSlice = __decorate([
+    core_1.Directive({
+        selector: 'pacem-pie-chart-slice'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], PacemPieChartSlice);
 exports.PacemPieChartSlice = PacemPieChartSlice;
 /**
  * PacemPieChart Component
@@ -2172,19 +2177,19 @@ var PacemPieChart = (function () {
             }
         });
     };
-    __decorate([
-        core_1.ContentChildren(PacemPieChartSlice), 
-        __metadata('design:type', core_1.QueryList)
-    ], PacemPieChart.prototype, "slices", void 0);
-    PacemPieChart = __decorate([
-        core_1.Component({
-            selector: 'pacem-pie-chart',
-            template: "<div class=\"pacem-pie-chart\">\n<ng-content></ng-content>\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0,0,100,100\" width=\"100%\" height=\"100%\">\n    <defs>\n    <mask id=\"slices-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"45\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#000\" />\n    </mask>\n    <mask id=\"inner-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#000\" />\n    </mask>\n    </defs>\n    <circle cx=\"50\" cy=\"50\" r=\"50\" [attr.mask]=\"'url('+ href +'#inner-mask)'\" class=\"pacem-pie-chart-background\" />\n    <g>\n        <svg:path *ngFor=\"let slice of slices\" \n                [attr.mask]=\"'url('+ href +'#slices-mask)'\"\n                [attr.fill]=\"slice.color\" \n                [attr.d]=\"slice.path\"\n                [attr.style]=\"slice.style\"></svg:path>\n    </g>\n</svg></div>"
-        }), 
-        __metadata('design:paramtypes', [platform_browser_1.DomSanitizer, common_1.Location])
-    ], PacemPieChart);
     return PacemPieChart;
 }());
+__decorate([
+    core_1.ContentChildren(PacemPieChartSlice),
+    __metadata("design:type", core_1.QueryList)
+], PacemPieChart.prototype, "slices", void 0);
+PacemPieChart = __decorate([
+    core_1.Component({
+        selector: 'pacem-pie-chart',
+        template: "<div class=\"pacem-pie-chart\">\n<ng-content></ng-content>\n    <svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0,0,100,100\" width=\"100%\" height=\"100%\">\n    <defs>\n    <mask id=\"slices-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"45\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#000\" />\n    </mask>\n    <mask id=\"inner-mask\">\n        <circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"#fff\" />\n        <circle cx=\"50\" cy=\"50\" r=\"10\" fill=\"#000\" />\n    </mask>\n    </defs>\n    <circle cx=\"50\" cy=\"50\" r=\"50\" [attr.mask]=\"'url('+ href +'#inner-mask)'\" class=\"pacem-pie-chart-background\" />\n    <g>\n        <svg:path *ngFor=\"let slice of slices\" \n                [attr.mask]=\"'url('+ href +'#slices-mask)'\"\n                [attr.fill]=\"slice.color\" \n                [attr.d]=\"slice.path\"\n                [attr.style]=\"slice.style\"></svg:path>\n    </g>\n</svg></div>"
+    }),
+    __metadata("design:paramtypes", [platform_browser_1.DomSanitizer, common_1.Location])
+], PacemPieChart);
 exports.PacemPieChart = PacemPieChart;
 /**
  * PacemToast Component
@@ -2224,29 +2229,29 @@ var PacemToast = (function () {
         if (this.autohide)
             this._timeout = window.setTimeout(function () { _this.hidden = true; }, this.timeout);
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemToast.prototype, "autohide", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemToast.prototype, "timeout", void 0);
-    __decorate([
-        core_1.Output('close'), 
-        __metadata('design:type', Object)
-    ], PacemToast.prototype, "onclose", void 0);
-    PacemToast = __decorate([
-        core_1.Component({
-            selector: 'pacem-toast',
-            template: "<div class=\"pacem-toast\" [pacemHidden]=\"hidden\" (click)=\"doHide($event)\"><ng-content></ng-content></div>"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemToast);
     return PacemToast;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemToast.prototype, "autohide", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemToast.prototype, "timeout", void 0);
+__decorate([
+    core_1.Output('close'),
+    __metadata("design:type", Object)
+], PacemToast.prototype, "onclose", void 0);
+PacemToast = __decorate([
+    core_1.Component({
+        selector: 'pacem-toast',
+        template: "<div class=\"pacem-toast\" [pacemHidden]=\"hidden\" (click)=\"doHide($event)\"><ng-content></ng-content></div>"
+    }),
+    __metadata("design:paramtypes", [])
+], PacemToast);
 exports.PacemToast = PacemToast;
-var PacemBindService = (function () {
+var PacemBindService = PacemBindService_1 = (function () {
     function PacemBindService() {
         this.onset = new core_1.EventEmitter();
         this.onremove = new core_1.EventEmitter();
@@ -2257,7 +2262,7 @@ var PacemBindService = (function () {
      * @param target
      */
     PacemBindService.prototype.setTarget = function (key, target) {
-        var dict = PacemBindService.targetMappings;
+        var dict = PacemBindService_1.targetMappings;
         if (dict.has(key) && dict.get(key) != target)
             throw pacem_core_1.pacem.localization.default.errors.KEY_DUPLICATE.replace(/%s/gi, key);
         dict.set(key, target);
@@ -2268,7 +2273,7 @@ var PacemBindService = (function () {
      * @param key
      */
     PacemBindService.prototype.removeTarget = function (key) {
-        var retval = PacemBindService.targetMappings.delete(key);
+        var retval = PacemBindService_1.targetMappings.delete(key);
         this.onremove.emit(key);
         return retval;
     };
@@ -2277,7 +2282,7 @@ var PacemBindService = (function () {
      * @param key
      */
     PacemBindService.prototype.getTarget = function (key) {
-        return PacemBindService.targetMappings.has(key) && PacemBindService.targetMappings.get(key);
+        return PacemBindService_1.targetMappings.has(key) && PacemBindService_1.targetMappings.get(key);
     };
     /**
      * Refreshes the bindings for a provided target key.
@@ -2287,13 +2292,13 @@ var PacemBindService = (function () {
         // TODO: make the argument `key` required and be sure to trigger with a target
         this.onset.emit(key);
     };
-    PacemBindService.targetMappings = new Map();
-    PacemBindService = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemBindService);
     return PacemBindService;
 }());
+PacemBindService.targetMappings = new Map();
+PacemBindService = PacemBindService_1 = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemBindService);
 exports.PacemBindService = PacemBindService;
 var PacemBindTargets = (function () {
     function PacemBindTargets(bindings, elementRef) {
@@ -2516,19 +2521,19 @@ var PacemBindTargets = (function () {
             path.setAttribute('class', css);
         return { x: Math.max(x0, x1, cx0, cx1), y: Math.max(y0, y1, cy0, cy1) };
     };
-    __decorate([
-        core_1.Input('pacemBindTargets'), 
-        __metadata('design:type', Object)
-    ], PacemBindTargets.prototype, "targetKeys", void 0);
-    PacemBindTargets = __decorate([
-        core_1.Directive({
-            selector: '[pacemBindTargets]',
-            exportAs: 'pacemBindTargets'
-        }), 
-        __metadata('design:paramtypes', [PacemBindService, core_1.ElementRef])
-    ], PacemBindTargets);
     return PacemBindTargets;
 }());
+__decorate([
+    core_1.Input('pacemBindTargets'),
+    __metadata("design:type", Array)
+], PacemBindTargets.prototype, "targetKeys", void 0);
+PacemBindTargets = __decorate([
+    core_1.Directive({
+        selector: '[pacemBindTargets]',
+        exportAs: 'pacemBindTargets'
+    }),
+    __metadata("design:paramtypes", [PacemBindService, core_1.ElementRef])
+], PacemBindTargets);
 exports.PacemBindTargets = PacemBindTargets;
 var PacemBindTarget = (function () {
     function PacemBindTarget(bindings, ref) {
@@ -2558,19 +2563,19 @@ var PacemBindTarget = (function () {
             this.bindings.setTarget(k, el[pacem_3d_1.Pacem3DObject.datasetKey] || el);
         }
     };
-    __decorate([
-        core_1.Input('pacemBindTarget'), 
-        __metadata('design:type', String)
-    ], PacemBindTarget.prototype, "key", void 0);
-    PacemBindTarget = __decorate([
-        core_1.Directive({
-            selector: '[pacemBindTarget]',
-            exportAs: 'pacemBindTarget'
-        }), 
-        __metadata('design:paramtypes', [PacemBindService, core_1.ElementRef])
-    ], PacemBindTarget);
     return PacemBindTarget;
 }());
+__decorate([
+    core_1.Input('pacemBindTarget'),
+    __metadata("design:type", String)
+], PacemBindTarget.prototype, "key", void 0);
+PacemBindTarget = __decorate([
+    core_1.Directive({
+        selector: '[pacemBindTarget]',
+        exportAs: 'pacemBindTarget'
+    }),
+    __metadata("design:paramtypes", [PacemBindService, core_1.ElementRef])
+], PacemBindTarget);
 exports.PacemBindTarget = PacemBindTarget;
 // #endregion
 /**
@@ -2580,32 +2585,33 @@ var PacemHamburgerMenu = (function () {
     function PacemHamburgerMenu() {
         this.open = false;
     }
-    PacemHamburgerMenu = __decorate([
-        core_1.Component({
-            selector: 'pacem-hamburger-menu',
-            template: "<div class=\"pacem-hamburger-menu\" [pacemHidden]=\"!open\" (click)=\"open=false\">\n    <nav>\n        <ng-content></ng-content>\n    </nav>\n    <button class=\"pacem-back\" (click)=\"$event.stopPropagation(); $event.preventDefault(); open = !open\">BACK</button>\n    <button class=\"pacem-hamburger\" (click)=\"$event.stopPropagation(); $event.preventDefault(); open = !open\">MENU</button>\n</div>"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemHamburgerMenu);
     return PacemHamburgerMenu;
 }());
+PacemHamburgerMenu = __decorate([
+    core_1.Component({
+        selector: 'pacem-hamburger-menu',
+        template: "<div class=\"pacem-hamburger-menu\" [pacemHidden]=\"!open\" (click)=\"open=false\">\n    <nav>\n        <ng-content></ng-content>\n    </nav>\n    <button class=\"pacem-back\" (click)=\"$event.stopPropagation(); $event.preventDefault(); open = !open\">BACK</button>\n    <button class=\"pacem-hamburger\" (click)=\"$event.stopPropagation(); $event.preventDefault(); open = !open\">MENU</button>\n</div>"
+    }),
+    __metadata("design:paramtypes", [])
+], PacemHamburgerMenu);
 exports.PacemHamburgerMenu = PacemHamburgerMenu;
 var PacemUIModule = (function () {
     function PacemUIModule() {
     }
-    PacemUIModule = __decorate([
-        core_1.NgModule({
-            imports: [common_1.CommonModule],
-            declarations: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
-                PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
-                PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem, PacemCarouselDashboard],
-            exports: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
-                PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
-                PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem],
-            providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemUIModule);
     return PacemUIModule;
 }());
+PacemUIModule = __decorate([
+    core_1.NgModule({
+        imports: [common_1.CommonModule],
+        declarations: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+            PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
+            PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem, PacemCarouselDashboard],
+        exports: [PacemResize, PacemHidden, PacemHighlight, PacemBalloon, PacemBindTarget, PacemBindTargets, PacemGallery, PacemGalleryItem, PacemHamburgerMenu,
+            PacemInfiniteScroll, PacemInViewport, PacemLightbox, PacemPieChart, PacemPieChartSlice, PacemRingChart, PacemRingChartItem, PacemSnapshot,
+            PacemToast, PacemUploader, PacemCarousel, PacemCarouselItem],
+        providers: [PacemBindService] //<- defining the provider here, makes it a singleton at application-level
+    }),
+    __metadata("design:paramtypes", [])
+], PacemUIModule);
 exports.PacemUIModule = PacemUIModule;
+var PacemCarouselAdapter_1, PacemCarousel_1, PacemInViewport_1, PacemBindService_1;

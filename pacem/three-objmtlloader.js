@@ -11,8 +11,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 var OBJMTLLoader = (function (_super) {
     __extends(OBJMTLLoader, _super);
     function OBJMTLLoader(manager) {
-        _super.call(this);
-        this.manager = (manager !== undefined) ? manager : THREE.DefaultLoadingManager;
+        var _this = _super.call(this) || this;
+        _this.manager = (manager !== undefined) ? manager : THREE.DefaultLoadingManager;
+        return _this;
     }
     OBJMTLLoader.prototype.load = function (url, mtlurl, onLoad, onProgress, onError) {
         var scope = this;

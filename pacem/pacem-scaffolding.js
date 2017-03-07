@@ -17,24 +17,24 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-var core_1 = require('@angular/core');
-var forms_1 = require('@angular/forms');
-var common_1 = require('@angular/common');
-var pacem_core_1 = require('./pacem-core');
-var platform_browser_1 = require('@angular/platform-browser');
-var pacem_ui_1 = require('./pacem-ui');
-var http_1 = require('@angular/http');
-var Observable_1 = require('rxjs/Observable');
-var Subject_1 = require('rxjs/Subject');
+var core_1 = require("@angular/core");
+var forms_1 = require("@angular/forms");
+var common_1 = require("@angular/common");
+var pacem_core_1 = require("./pacem-core");
+var platform_browser_1 = require("@angular/platform-browser");
+var pacem_ui_1 = require("./pacem-ui");
+var http_1 = require("@angular/http");
+var Observable_1 = require("rxjs/Observable");
+var Subject_1 = require("rxjs/Subject");
 // Observable class extensions
-require('rxjs/add/observable/of');
-require('rxjs/add/observable/throw');
-require('rxjs/add/observable/fromPromise');
+require("rxjs/add/observable/of");
+require("rxjs/add/observable/throw");
+require("rxjs/add/observable/fromPromise");
 // Observable operators
-require('rxjs/add/operator/catch');
-require('rxjs/add/operator/distinctUntilChanged');
-require('rxjs/add/operator/debounceTime');
-require('rxjs/add/operator/map');
+require("rxjs/add/operator/catch");
+require("rxjs/add/operator/distinctUntilChanged");
+require("rxjs/add/operator/debounceTime");
+require("rxjs/add/operator/map");
 var DatasourceFetcher = (function () {
     function DatasourceFetcher(http) {
         this.http = http;
@@ -120,16 +120,16 @@ var DatasourceFetcher = (function () {
             }
         });
     };
-    DatasourceFetcher = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
-    ], DatasourceFetcher);
     return DatasourceFetcher;
 }());
+DatasourceFetcher = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], DatasourceFetcher);
 var Datasource = (function (_super) {
     __extends(Datasource, _super);
     function Datasource() {
-        _super.apply(this, arguments);
+        return _super.apply(this, arguments) || this;
     }
     return Datasource;
 }(Array));
@@ -200,23 +200,24 @@ exports.BaseValueAccessor = BaseValueAccessor;
 var RadioControlListValueAccessor = (function (_super) {
     __extends(RadioControlListValueAccessor, _super);
     function RadioControlListValueAccessor(model) {
-        _super.call(this, model);
+        return _super.call(this, model) || this;
     }
-    RadioControlListValueAccessor = __decorate([
-        core_1.Directive({
-            selector: '.pacem-radio-list[ngModel]'
-        }), 
-        __metadata('design:paramtypes', [forms_1.NgModel])
-    ], RadioControlListValueAccessor);
     return RadioControlListValueAccessor;
 }(BaseValueAccessor));
+RadioControlListValueAccessor = __decorate([
+    core_1.Directive({
+        selector: '.pacem-radio-list[ngModel]'
+    }),
+    __metadata("design:paramtypes", [forms_1.NgModel])
+], RadioControlListValueAccessor);
 var RadioControlValueAccessor = (function (_super) {
     __extends(RadioControlValueAccessor, _super);
     function RadioControlValueAccessor(_renderer, _elementRef, model, list) {
-        _super.call(this, model);
-        this._renderer = _renderer;
-        this._elementRef = _elementRef;
-        this.list = list;
+        var _this = _super.call(this, model) || this;
+        _this._renderer = _renderer;
+        _this._elementRef = _elementRef;
+        _this.list = list;
+        return _this;
     }
     RadioControlValueAccessor.prototype.writeValue = function (value) {
         _super.prototype.writeValue.call(this, value);
@@ -227,15 +228,15 @@ var RadioControlValueAccessor = (function (_super) {
         if (list)
             list.value = v;
     };
-    RadioControlValueAccessor = __decorate([
-        core_1.Directive({
-            selector: 'input.pacem-radio[type=radio][ngModel]',
-            host: { '(change)': 'onChange($event.target.value);changeValue($event.target.value)', '(blur)': 'onTouched()' }
-        }), 
-        __metadata('design:paramtypes', [core_1.Renderer, core_1.ElementRef, forms_1.NgModel, RadioControlListValueAccessor])
-    ], RadioControlValueAccessor);
     return RadioControlValueAccessor;
 }(BaseValueAccessor));
+RadioControlValueAccessor = __decorate([
+    core_1.Directive({
+        selector: 'input.pacem-radio[type=radio][ngModel]',
+        host: { '(change)': 'onChange($event.target.value);changeValue($event.target.value)', '(blur)': 'onTouched()' }
+    }),
+    __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef, forms_1.NgModel, RadioControlListValueAccessor])
+], RadioControlValueAccessor);
 function MakeValidatorProvider(type) {
     return {
         provide: forms_1.NG_VALIDATORS,
@@ -248,7 +249,7 @@ function isNullOrEmpty(v) {
     return v === null || v === undefined || v === '' || v === emptyVal;
 }
 //#region VALIDATORS integration
-var MinValidator = (function () {
+var MinValidator = MinValidator_1 = (function () {
     function MinValidator(min) {
         this._validator = function (control) {
             if (forms_1.Validators.required(control) /* != null && != undefined */)
@@ -260,17 +261,17 @@ var MinValidator = (function () {
         };
     }
     MinValidator.prototype.validate = function (c) { return this._validator(c); };
-    MinValidator = __decorate([
-        core_1.Directive({
-            selector: '[min][formControlName],[min][formControl],[min][ngModel]',
-            providers: [MakeValidatorProvider(MinValidator)]
-        }),
-        __param(0, core_1.Attribute('min')), 
-        __metadata('design:paramtypes', [Object])
-    ], MinValidator);
     return MinValidator;
 }());
-var MaxValidator = (function () {
+MinValidator = MinValidator_1 = __decorate([
+    core_1.Directive({
+        selector: '[min][formControlName],[min][formControl],[min][ngModel]',
+        providers: [MakeValidatorProvider(MinValidator_1)]
+    }),
+    __param(0, core_1.Attribute('min')),
+    __metadata("design:paramtypes", [Object])
+], MinValidator);
+var MaxValidator = MaxValidator_1 = (function () {
     function MaxValidator(max) {
         this._validator = function (control) {
             if (forms_1.Validators.required(control) /* != null && != undefined */)
@@ -282,17 +283,17 @@ var MaxValidator = (function () {
         };
     }
     MaxValidator.prototype.validate = function (c) { return this._validator(c); };
-    MaxValidator = __decorate([
-        core_1.Directive({
-            selector: '[max][formControlName],[max][formControl],[max][ngModel]',
-            providers: [MakeValidatorProvider(MaxValidator)]
-        }),
-        __param(0, core_1.Attribute('max')), 
-        __metadata('design:paramtypes', [Object])
-    ], MaxValidator);
     return MaxValidator;
 }());
-var CompareValidator = (function () {
+MaxValidator = MaxValidator_1 = __decorate([
+    core_1.Directive({
+        selector: '[max][formControlName],[max][formControl],[max][ngModel]',
+        providers: [MakeValidatorProvider(MaxValidator_1)]
+    }),
+    __param(0, core_1.Attribute('max')),
+    __metadata("design:paramtypes", [Object])
+], MaxValidator);
+var CompareValidator = CompareValidator_1 = (function () {
     function CompareValidator(operator) {
         var _this = this;
         this._validator = function (control) {
@@ -325,23 +326,23 @@ var CompareValidator = (function () {
         configurable: true
     });
     CompareValidator.prototype.validate = function (c) { return this._validator(c); };
-    __decorate([
-        core_1.Input('compare'), 
-        __metadata('design:type', Object), 
-        __metadata('design:paramtypes', [Object])
-    ], CompareValidator.prototype, "compareToValue", null);
-    CompareValidator = __decorate([
-        core_1.Directive({
-            selector: '[compare][formControlName],[compare][formControl],[compare][ngModel]',
-            providers: [MakeValidatorProvider(CompareValidator)]
-        }),
-        __param(0, core_1.Attribute('operator')), 
-        __metadata('design:paramtypes', [String])
-    ], CompareValidator);
     return CompareValidator;
 }());
+__decorate([
+    core_1.Input('compare'),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], CompareValidator.prototype, "compareToValue", null);
+CompareValidator = CompareValidator_1 = __decorate([
+    core_1.Directive({
+        selector: '[compare][formControlName],[compare][formControl],[compare][ngModel]',
+        providers: [MakeValidatorProvider(CompareValidator_1)]
+    }),
+    __param(0, core_1.Attribute('operator')),
+    __metadata("design:paramtypes", [String])
+], CompareValidator);
 //#endregion 
-var PacemExecCommand = (function () {
+var PacemExecCommand = PacemExecCommand_1 = (function () {
     function PacemExecCommand() {
     }
     PacemExecCommand.prototype.getSurroundingNode = function (selection, tagName) {
@@ -356,7 +357,7 @@ var PacemExecCommand = (function () {
         ///<param name="command" type="String" />
         ///<param name="arg" type="String" optional="true" />
         ///<param name="target" type="String" optional="true" />
-        var knownCommands = PacemExecCommand.knownCommands;
+        var knownCommands = PacemExecCommand_1.knownCommands;
         var promise = new Promise(function (resolve, reject) {
             switch (command) {
                 case knownCommands.LINK:
@@ -397,13 +398,13 @@ var PacemExecCommand = (function () {
         });
         return promise;
     };
-    PacemExecCommand.knownCommands = { BOLD: 'bold', ITALIC: 'italic', UNDERLINE: 'underline', LINK: 'hyperlink', ORDEREDLIST: 'orderedList', UNORDEREDLIST: 'unorderedList' };
-    PacemExecCommand = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemExecCommand);
     return PacemExecCommand;
 }());
+PacemExecCommand.knownCommands = { BOLD: 'bold', ITALIC: 'italic', UNDERLINE: 'underline', LINK: 'hyperlink', ORDEREDLIST: 'orderedList', UNORDEREDLIST: 'unorderedList' };
+PacemExecCommand = PacemExecCommand_1 = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemExecCommand);
 exports.PacemExecCommand = PacemExecCommand;
 var keys = {
     UP: 38,
@@ -419,41 +420,42 @@ var PacemDatetimePicker = (function (_super) {
     __extends(PacemDatetimePicker, _super);
     //#endregion
     function PacemDatetimePicker(model) {
-        _super.call(this, model);
-        this.model = model;
-        this.onchange = new core_1.EventEmitter();
-        this.precision = 'day';
-        this.months = [];
-        this.dates = [];
-        this.a24 = [];
-        this.a60 = [];
-        this.years = [];
-        this.datesAssembler = new Subject_1.Subject();
-        this._hours = 0;
-        this._minutes = 0;
-        this._seconds = 0;
+        var _this = _super.call(this, model) || this;
+        _this.model = model;
+        _this.onchange = new core_1.EventEmitter();
+        _this.precision = 'day';
+        _this.months = [];
+        _this.dates = [];
+        _this.a24 = [];
+        _this.a60 = [];
+        _this.years = [];
+        _this.datesAssembler = new Subject_1.Subject();
+        _this._hours = 0;
+        _this._minutes = 0;
+        _this._seconds = 0;
         var today = new Date();
-        var year = this.year = today.getFullYear();
-        this.minDate = new Date(year - 100, 0, 1);
-        this.maxDate = new Date(year + 10, 11, 31);
-        this.month = today.getMonth();
+        var year = _this.year = today.getFullYear();
+        _this.minDate = new Date(year - 100, 0, 1);
+        _this.maxDate = new Date(year + 10, 11, 31);
+        _this.month = today.getMonth();
         //
         var months = [], hours = [], minutes = [];
         // months
         for (var i = 0; i < 12; i++) {
             months.push({ value: i, date: new Date(year, i, 1) });
         }
-        this.months = months;
+        _this.months = months;
         // hours
         for (var i = 0; i < 24; i++) {
             hours.push(i);
         }
-        this.a24 = hours;
+        _this.a24 = hours;
         // minutes/secs
         for (var i = 0; i < 60; i++) {
             minutes.push(i);
         }
-        this.a60 = minutes;
+        _this.a60 = minutes;
+        return _this;
     }
     Object.defineProperty(PacemDatetimePicker.prototype, "dateValue", {
         get: function () {
@@ -667,51 +669,47 @@ var PacemDatetimePicker = (function (_super) {
                 this.dateValue = null;
             }
     };
-    __decorate([
-        core_1.Output('dateValueChange'), 
-        __metadata('design:type', Object)
-    ], PacemDatetimePicker.prototype, "onchange", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemDatetimePicker.prototype, "dateValue", null);
-    __decorate([
-        core_1.Input('min'), 
-        __metadata('design:type', Object), 
-        __metadata('design:paramtypes', [Object])
-    ], PacemDatetimePicker.prototype, "minDate", null);
-    __decorate([
-        core_1.Input('max'), 
-        __metadata('design:type', Object), 
-        __metadata('design:paramtypes', [Object])
-    ], PacemDatetimePicker.prototype, "maxDate", null);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemDatetimePicker.prototype, "precision", void 0);
-    PacemDatetimePicker = __decorate([
-        core_1.Component({
-            selector: 'pacem-datetime-picker',
-            template: "<div class=\"pacem-datetime-picker\">\n    <div class=\"pacem-datetime-picker-year\">\n    <select class=\"pacem-select\" [(ngModel)]=\"year\" #yearel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let yr of years\" [value]=\"yr\">{{ yr }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-month\">\n    <select class=\"pacem-select\" [(ngModel)]=\"month\" #monthel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let mth of months\" [value]=\"mth.value\">{{ mth.date | date: 'MMM' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-date\">\n    <select class=\"pacem-select\" [(ngModel)]=\"date\" [disabled]=\"(yearel.value === '' || monthel.value === '')\">\n        <option value=\"\">...</option>\n        <option *ngFor=\"let dt of dates\" [value]=\"dt.value\" [disabled]=\"dt.date > _maxDate || dt.date < _minDate\">{{ dt.date | date: 'EEE dd' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-hours\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"hours\">\n        <option *ngFor=\"let hr of a24\" [value]=\"hr\">{{ hr | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-minutes\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"minutes\">\n        <option *ngFor=\"let min of a60\" [value]=\"min\">{{ min | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-seconds\" *ngIf=\"precision == 'second'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"seconds\">\n        <option *ngFor=\"let sec of a60\" [value]=\"sec\">{{ sec | number:'2.0-0' }}</option>\n    </select></div>\n    <dl class=\"pacem-datetime-picker-preview\" [pacemHidden]=\"!value\">\n        <dt>local:</dt><dd>{{ dateValue | date:'medium' }}</dd>\n        <dt>iso:</dt><dd>{{ dateValue?.toISOString() }}</dd>\n    </dl>\n</div>", providers: [forms_1.NgModel]
-        }), 
-        __metadata('design:paramtypes', [forms_1.NgModel])
-    ], PacemDatetimePicker);
     return PacemDatetimePicker;
 }(BaseValueAccessor));
+__decorate([
+    core_1.Output('dateValueChange'),
+    __metadata("design:type", Object)
+], PacemDatetimePicker.prototype, "onchange", void 0);
+__decorate([
+    core_1.Input('min'),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], PacemDatetimePicker.prototype, "minDate", null);
+__decorate([
+    core_1.Input('max'),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], PacemDatetimePicker.prototype, "maxDate", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemDatetimePicker.prototype, "precision", void 0);
+PacemDatetimePicker = __decorate([
+    core_1.Component({
+        selector: 'pacem-datetime-picker',
+        template: "<div class=\"pacem-datetime-picker\">\n    <div class=\"pacem-datetime-picker-year\">\n    <select class=\"pacem-select\" [(ngModel)]=\"year\" #yearel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let yr of years\" [value]=\"yr\">{{ yr }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-month\">\n    <select class=\"pacem-select\" [(ngModel)]=\"month\" #monthel>\n        <option value=\"\">...</option>\n        <option *ngFor=\"let mth of months\" [value]=\"mth.value\">{{ mth.date | date: 'MMM' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-date\">\n    <select class=\"pacem-select\" [(ngModel)]=\"date\" [disabled]=\"(yearel.value === '' || monthel.value === '')\">\n        <option value=\"\">...</option>\n        <option *ngFor=\"let dt of dates\" [value]=\"dt.value\" [disabled]=\"dt.date > _maxDate || dt.date < _minDate\">{{ dt.date | date: 'EEE dd' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-hours\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"hours\">\n        <option *ngFor=\"let hr of a24\" [value]=\"hr\">{{ hr | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-minutes\" *ngIf=\"precision != 'day'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"minutes\">\n        <option *ngFor=\"let min of a60\" [value]=\"min\">{{ min | number:'2.0-0' }}</option>\n    </select></div>\n    <div class=\"pacem-datetime-picker-seconds\" *ngIf=\"precision == 'second'\">\n    <select class=\"pacem-select\" [(ngModel)]=\"seconds\">\n        <option *ngFor=\"let sec of a60\" [value]=\"sec\">{{ sec | number:'2.0-0' }}</option>\n    </select></div>\n    <dl class=\"pacem-datetime-picker-preview\" [pacemHidden]=\"!value\">\n        <dt>local:</dt><dd>{{ dateValue | date:'medium' }}</dd>\n        <dt>iso:</dt><dd>{{ dateValue?.toISOString() }}</dd>\n    </dl>\n</div>", providers: [forms_1.NgModel]
+    }),
+    __metadata("design:paramtypes", [forms_1.NgModel])
+], PacemDatetimePicker);
 exports.PacemDatetimePicker = PacemDatetimePicker;
 var PacemAutocomplete = (function (_super) {
     __extends(PacemAutocomplete, _super);
     function PacemAutocomplete(model, root) {
-        var _this = this;
-        _super.call(this, model);
-        this.model = model;
-        this.root = root;
-        this.onquery = new core_1.EventEmitter();
-        this.searchTermStream = new Subject_1.Subject();
-        this.caption = '';
-        this.focusIndex = -1;
-        this.subscription1 = this.model.valueChanges
+        var _this = _super.call(this, model) || this;
+        _this.model = model;
+        _this.root = root;
+        _this.onquery = new core_1.EventEmitter();
+        _this.searchTermStream = new Subject_1.Subject();
+        _this.caption = '';
+        _this.focusIndex = -1;
+        _this.subscription1 = _this.model.valueChanges
             .subscribe(function (_) { return _this.updateCaption(_); });
+        return _this;
     }
     PacemAutocomplete.prototype.resize = function (popup, benchmark) {
         popup.style.minWidth = benchmark.offsetWidth + 'px';
@@ -795,50 +793,50 @@ var PacemAutocomplete = (function (_super) {
     PacemAutocomplete.prototype.ngOnDestroy = function () {
         this.subscription1.unsubscribe();
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Datasource)
-    ], PacemAutocomplete.prototype, "datasource", void 0);
-    __decorate([
-        core_1.Output('query'), 
-        __metadata('design:type', Object)
-    ], PacemAutocomplete.prototype, "onquery", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemAutocomplete.prototype, "placeholder", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', String)
-    ], PacemAutocomplete.prototype, "textProperty", void 0);
-    PacemAutocomplete = __decorate([
-        core_1.Component({
-            selector: 'pacem-autocomplete',
-            template: "<div class=\"pacem-autocomplete\">\n    <input  (keyup)=\"onKeyup($event);fetchTerm(search.value)\"\n            (search)=\"fetchTerm(search.value)\"\n            (keydown)=\"onKeydown($event)\"\n            (blur)=\"onBlur($event)\"\n            (focus)=\"onFocus($event);\"\n            [placeholder]=\"placeholder\"\n            type=\"search\" #search \n            [attr.id]=\"root.nativeElement.id +'_acq'\"\n            class=\"pacem-input\"\n            (popup)=\"resize(balloon, search)\"\n            [ngClass]=\"{ 'ng-invalid': model.invalid, 'ng-dirty': model.dirty, 'ng-valid': model.valid, 'ng-pristine': model.pristine }\"\n            [value]=\"caption\"\n            [pacemBalloon]=\"balloon\" [pacemBalloonOptions]=\"{ position: 'bottom', trigger: 'focus', behavior: 'menu' }\" />\n    <div #balloon hidden><ol [hidden]=\"!datasource?.length\">\n        <li *ngFor=\"let item of datasource; let ndx = index\" \n            (mousedown)=\"onClick($event, ndx)\"\n            [ngClass]=\"{ 'pacem-focused': focusIndex == ndx }\" [innerHTML]=\"item.caption | pacemHighlight:search.value\"></li>\n    </ol></div>\n</div>"
-        }), 
-        __metadata('design:paramtypes', [forms_1.NgModel, core_1.ElementRef])
-    ], PacemAutocomplete);
     return PacemAutocomplete;
 }(BaseValueAccessor));
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Datasource)
+], PacemAutocomplete.prototype, "datasource", void 0);
+__decorate([
+    core_1.Output('query'),
+    __metadata("design:type", Object)
+], PacemAutocomplete.prototype, "onquery", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemAutocomplete.prototype, "placeholder", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemAutocomplete.prototype, "textProperty", void 0);
+PacemAutocomplete = __decorate([
+    core_1.Component({
+        selector: 'pacem-autocomplete',
+        template: "<div class=\"pacem-autocomplete\">\n    <input  (keyup)=\"onKeyup($event);fetchTerm(search.value)\"\n            (search)=\"fetchTerm(search.value)\"\n            (keydown)=\"onKeydown($event)\"\n            (blur)=\"onBlur($event)\"\n            (focus)=\"onFocus($event);\"\n            [placeholder]=\"placeholder\"\n            type=\"search\" #search \n            [attr.id]=\"root.nativeElement.id +'_acq'\"\n            class=\"pacem-input\"\n            (popup)=\"resize(balloon, search)\"\n            [ngClass]=\"{ 'ng-invalid': model.invalid, 'ng-dirty': model.dirty, 'ng-valid': model.valid, 'ng-pristine': model.pristine }\"\n            [value]=\"caption\"\n            [pacemBalloon]=\"balloon\" [pacemBalloonOptions]=\"{ position: 'bottom', trigger: 'focus', behavior: 'menu' }\" />\n    <div #balloon hidden><ol [hidden]=\"!datasource?.length\">\n        <li *ngFor=\"let item of datasource; let ndx = index\" \n            (mousedown)=\"onClick($event, ndx)\"\n            [ngClass]=\"{ 'pacem-focused': focusIndex == ndx }\" [innerHTML]=\"item.caption | pacemHighlight:search.value\"></li>\n    </ol></div>\n</div>"
+    }),
+    __metadata("design:paramtypes", [forms_1.NgModel, core_1.ElementRef])
+], PacemAutocomplete);
 var PacemContentEditable = (function (_super) {
     __extends(PacemContentEditable, _super);
     function PacemContentEditable(element, sce, execCommand, ctrl) {
-        var _this = this;
-        _super.call(this, ctrl);
-        this.element = element;
-        this.sce = sce;
-        this.execCommand = execCommand;
-        this.dashboard = [];
-        this.exec = function (ev) {
+        var _this = _super.call(this, ctrl) || this;
+        _this.element = element;
+        _this.sce = sce;
+        _this.execCommand = execCommand;
+        _this.dashboard = [];
+        _this.exec = function (ev) {
             ev.preventDefault();
             ev.stopPropagation();
             var cmd = (ev.srcElement || ev.target).dataset['pacemCommand'];
             _this.execCommand.exec(cmd).then(function () { return _this.onTyped(); });
         };
-        this.subscription = ctrl.valueChanges.subscribe(function (_) {
+        _this.subscription = ctrl.valueChanges.subscribe(function (_) {
             if (_this.container && _ != _this.container.innerHTML)
                 _this.setViewValue(_);
         });
+        return _this;
     }
     PacemContentEditable.prototype.ngOnInit = function () {
         this.container = this.element.nativeElement;
@@ -916,28 +914,29 @@ var PacemContentEditable = (function (_super) {
     PacemContentEditable.prototype.setViewValue = function (v) {
         this.viewValue = this.sce.bypassSecurityTrustHtml(v || this.value);
     };
-    PacemContentEditable = __decorate([
-        core_1.Directive({
-            selector: '[contenteditable]',
-            providers: [PacemExecCommand],
-            host: {
-                '(blur)': "onTyped()",
-                '(keyup)': "onTyped()",
-                '(change)': "onTyped()",
-                '(keydown)': "onKeydown($event)",
-                '[innerHTML]': "viewValue"
-            }
-        }), 
-        __metadata('design:paramtypes', [core_1.ElementRef, platform_browser_1.DomSanitizer, PacemExecCommand, forms_1.NgControl])
-    ], PacemContentEditable);
     return PacemContentEditable;
 }(BaseValueAccessor));
+PacemContentEditable = __decorate([
+    core_1.Directive({
+        selector: '[contenteditable]',
+        providers: [PacemExecCommand],
+        host: {
+            '(blur)': "onTyped()",
+            '(keyup)': "onTyped()",
+            '(change)': "onTyped()",
+            '(keydown)': "onKeydown($event)",
+            '[innerHTML]': "viewValue"
+        }
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef, platform_browser_1.DomSanitizer, PacemExecCommand, forms_1.NgControl])
+], PacemContentEditable);
 var PacemThumbnail = (function (_super) {
     __extends(PacemThumbnail, _super);
     function PacemThumbnail(model) {
-        _super.call(this, model);
-        this.model = model;
-        this.mode = 'binary';
+        var _this = _super.call(this, model) || this;
+        _this.model = model;
+        _this.mode = 'binary';
+        return _this;
     }
     Object.defineProperty(PacemThumbnail.prototype, "source", {
         get: function () {
@@ -966,45 +965,46 @@ var PacemThumbnail = (function (_super) {
             }
         });
     };
-    __decorate([
-        core_1.ViewChild('lightbox'), 
-        __metadata('design:type', pacem_ui_1.PacemLightbox)
-    ], PacemThumbnail.prototype, "lightbox", void 0);
-    __decorate([
-        core_1.ViewChild('snapshot'), 
-        __metadata('design:type', pacem_ui_1.PacemSnapshot)
-    ], PacemThumbnail.prototype, "snapshot", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemThumbnail.prototype, "mode", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemThumbnail.prototype, "width", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], PacemThumbnail.prototype, "height", void 0);
-    PacemThumbnail = __decorate([
-        core_1.Component({
-            selector: 'pacem-thumbnail[ngModel]',
-            template: "<img [ngStyle]=\"{ 'width': width+'px', 'height': height+'px' }\" class=\"pacem-thumbnail\" [attr.src]=\"source\" (click)=\"changing=true\" />\n<pacem-lightbox #lightbox [show]=\"changing\" (close)=\"changing=false\">\n    <pacem-snapshot (select)=\"onchange($event)\" #snapshot>\n    Webcam access is <b>impossile</b> on this machine!\n    </pacem-snapshot>\n</pacem-lightbox>\n" }), 
-        __metadata('design:paramtypes', [forms_1.NgModel])
-    ], PacemThumbnail);
     return PacemThumbnail;
 }(BaseValueAccessor));
+__decorate([
+    core_1.ViewChild('lightbox'),
+    __metadata("design:type", pacem_ui_1.PacemLightbox)
+], PacemThumbnail.prototype, "lightbox", void 0);
+__decorate([
+    core_1.ViewChild('snapshot'),
+    __metadata("design:type", pacem_ui_1.PacemSnapshot)
+], PacemThumbnail.prototype, "snapshot", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], PacemThumbnail.prototype, "mode", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemThumbnail.prototype, "width", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], PacemThumbnail.prototype, "height", void 0);
+PacemThumbnail = __decorate([
+    core_1.Component({
+        selector: 'pacem-thumbnail[ngModel]',
+        template: "<img [ngStyle]=\"{ 'width': width+'px', 'height': height+'px' }\" class=\"pacem-thumbnail\" [attr.src]=\"source\" (click)=\"changing=true\" />\n<pacem-lightbox #lightbox [show]=\"changing\" (close)=\"changing=false\">\n    <pacem-snapshot (select)=\"onchange($event)\" #snapshot>\n    Webcam access is <b>impossile</b> on this machine!\n    </pacem-snapshot>\n</pacem-lightbox>\n"
+    }),
+    __metadata("design:paramtypes", [forms_1.NgModel])
+], PacemThumbnail);
 var PacemSelectMany = (function (_super) {
     __extends(PacemSelectMany, _super);
     function PacemSelectMany(ref, ctrl) {
-        var _this = this;
-        _super.call(this, ctrl);
-        this.ref = ref;
-        this.ctrl = ctrl;
-        this.uid = pacem_core_1.PacemUtils.uniqueCode();
-        this.subscription = ctrl.valueChanges.subscribe(function (_) {
+        var _this = _super.call(this, ctrl) || this;
+        _this.ref = ref;
+        _this.ctrl = ctrl;
+        _this.uid = pacem_core_1.PacemUtils.uniqueCode();
+        _this.subscription = ctrl.valueChanges.subscribe(function (_) {
             return _this.checkValue();
         });
+        return _this;
     }
     PacemSelectMany.prototype.toggle = function (evt, item) {
         evt.preventDefault();
@@ -1045,24 +1045,24 @@ var PacemSelectMany = (function (_super) {
     PacemSelectMany.prototype.ngOnDestroy = function () {
         this.subscription.unsubscribe();
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Datasource)
-    ], PacemSelectMany.prototype, "datasource", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemSelectMany.prototype, "readonly", void 0);
-    PacemSelectMany = __decorate([
-        core_1.Component({
-            selector: 'pacem-select-many[ngModel]',
-            template: "<ul class=\"pacem-select-many\" *ngIf=\"!readonly\"><li *ngFor=\"let item of datasource; let ndx=index\">\n    <input type=\"checkbox\" [value]=\"item.value\" (change)=\"toggle($event, item)\" [checked]=\"item.selected\" [id]=\"uid+'_'+ndx\" />\n    <label [attr.for]=\"uid+'_'+ndx\">{{ item.caption }}</label>\n</li></ul>\n<ul class=\"pacem-select-many\" *ngIf=\"readonly\">\n    <li [hidden]=\"!item.selected\" *ngFor=\"let item of datasource\"><span class=\"pacem-readonly\">{{ item.caption }}</span></li>\n</ul>",
-            changeDetection: core_1.ChangeDetectionStrategy.OnPush
-        }), 
-        __metadata('design:paramtypes', [core_1.ChangeDetectorRef, forms_1.NgModel])
-    ], PacemSelectMany);
     return PacemSelectMany;
 }(BaseValueAccessor));
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Datasource)
+], PacemSelectMany.prototype, "datasource", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemSelectMany.prototype, "readonly", void 0);
+PacemSelectMany = __decorate([
+    core_1.Component({
+        selector: 'pacem-select-many[ngModel]',
+        template: "<ul class=\"pacem-select-many\" *ngIf=\"!readonly\"><li *ngFor=\"let item of datasource; let ndx=index\">\n    <input type=\"checkbox\" [value]=\"item.value\" (change)=\"toggle($event, item)\" [checked]=\"item.selected\" [id]=\"uid+'_'+ndx\" />\n    <label [attr.for]=\"uid+'_'+ndx\">{{ item.caption }}</label>\n</li></ul>\n<ul class=\"pacem-select-many\" *ngIf=\"readonly\">\n    <li [hidden]=\"!item.selected\" *ngFor=\"let item of datasource\"><span class=\"pacem-readonly\">{{ item.caption }}</span></li>\n</ul>",
+        changeDetection: core_1.ChangeDetectionStrategy.OnPush
+    }),
+    __metadata("design:paramtypes", [core_1.ChangeDetectorRef, forms_1.NgModel])
+], PacemSelectMany);
 var PacemDefaultSelectOption = (function () {
     function PacemDefaultSelectOption(select, optionRef) {
         this.select = select;
@@ -1073,34 +1073,34 @@ var PacemDefaultSelectOption = (function () {
         if (this.defaultValues.indexOf(this.select.value) >= 0 || this.select.value === undefined)
             this.select.writeValue(this.optionRef.nativeElement.value);
     };
-    __decorate([
-        core_1.Input('pacemDefaultSelectOption'), 
-        __metadata('design:type', Array)
-    ], PacemDefaultSelectOption.prototype, "defaultValues", void 0);
-    PacemDefaultSelectOption = __decorate([
-        core_1.Directive({
-            selector: 'option[pacemDefaultSelectOption]'
-        }), 
-        __metadata('design:paramtypes', [forms_1.SelectControlValueAccessor, core_1.ElementRef])
-    ], PacemDefaultSelectOption);
     return PacemDefaultSelectOption;
 }());
+__decorate([
+    core_1.Input('pacemDefaultSelectOption'),
+    __metadata("design:type", Array)
+], PacemDefaultSelectOption.prototype, "defaultValues", void 0);
+PacemDefaultSelectOption = __decorate([
+    core_1.Directive({
+        selector: 'option[pacemDefaultSelectOption]'
+    }),
+    __metadata("design:paramtypes", [forms_1.SelectControlValueAccessor, core_1.ElementRef])
+], PacemDefaultSelectOption);
 var PacemScaffoldingInternalModule = (function () {
     function PacemScaffoldingInternalModule() {
     }
-    PacemScaffoldingInternalModule = __decorate([
-        core_1.NgModule({
-            imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule],
-            declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
-                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
-            exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
-                PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
-            providers: [PacemExecCommand, DatasourceFetcher]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemScaffoldingInternalModule);
     return PacemScaffoldingInternalModule;
 }());
+PacemScaffoldingInternalModule = __decorate([
+    core_1.NgModule({
+        imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule],
+        declarations: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
+            PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
+        exports: [CompareValidator, MinValidator, MaxValidator, PacemDatetimePicker, RadioControlValueAccessor, RadioControlListValueAccessor,
+            PacemSelectMany, PacemAutocomplete, PacemDefaultSelectOption, PacemContentEditable, PacemThumbnail],
+        providers: [PacemExecCommand, DatasourceFetcher]
+    }),
+    __metadata("design:paramtypes", [])
+], PacemScaffoldingInternalModule);
 var PacemFieldBuilder = (function () {
     function PacemFieldBuilder() {
     }
@@ -1111,7 +1111,8 @@ var PacemFieldBuilder = (function () {
                 private differs: KeyValueDiffers*/) {
                 var _this = this;
                 this.ref = ref;
-                this.fetcher = fetcher;
+                this.fetcher = fetcher; /*,
+                private differs: KeyValueDiffers*/
                 this.checkHasValue = function () {
                     var ctrl = _this.ctrl;
                     if (ctrl && ctrl.valueAccessor) {
@@ -1176,51 +1177,53 @@ var PacemFieldBuilder = (function () {
                 this.sub1.unsubscribe();
                 this.sub2.unsubscribe();
             };
-            __decorate([
-                core_1.Input(), 
-                __metadata('design:type', Object)
-            ], PacemFieldDynamicField.prototype, "entity", void 0);
-            __decorate([
-                core_1.Input(), 
-                __metadata('design:type', Object)
-            ], PacemFieldDynamicField.prototype, "fetchData", void 0);
-            __decorate([
-                core_1.ViewChild(ctrlRef), 
-                __metadata('design:type', forms_1.NgModel)
-            ], PacemFieldDynamicField.prototype, "ctrl", void 0);
-            PacemFieldDynamicField = __decorate([
-                core_1.Component({
-                    selector: selector,
-                    template: template,
-                    providers: injectDirectives /*,
-                    changeDetection: ChangeDetectionStrategy.OnPush*/
-                }), 
-                __metadata('design:paramtypes', [core_1.ChangeDetectorRef, DatasourceFetcher])
-            ], PacemFieldDynamicField);
             return PacemFieldDynamicField;
         }());
+        __decorate([
+            core_1.Input(),
+            __metadata("design:type", Object)
+        ], PacemFieldDynamicField.prototype, "entity", void 0);
+        __decorate([
+            core_1.Input(),
+            __metadata("design:type", Object)
+        ], PacemFieldDynamicField.prototype, "fetchData", void 0);
+        __decorate([
+            core_1.ViewChild(ctrlRef),
+            __metadata("design:type", forms_1.NgModel)
+        ], PacemFieldDynamicField.prototype, "ctrl", void 0);
+        PacemFieldDynamicField = __decorate([
+            core_1.Component({
+                selector: selector,
+                template: template,
+                providers: injectDirectives /*,
+                changeDetection: ChangeDetectionStrategy.OnPush*/
+            }),
+            __metadata("design:paramtypes", [core_1.ChangeDetectorRef,
+                DatasourceFetcher /*,
+                private differs: KeyValueDiffers*/])
+        ], PacemFieldDynamicField);
         ;
         var PacemFieldDynamicModule = (function () {
             function PacemFieldDynamicModule() {
             }
-            PacemFieldDynamicModule = __decorate([
-                core_1.NgModule({
-                    imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
-                    declarations: [PacemFieldDynamicField],
-                    exports: [PacemFieldDynamicField]
-                }), 
-                __metadata('design:paramtypes', [])
-            ], PacemFieldDynamicModule);
             return PacemFieldDynamicModule;
         }());
+        PacemFieldDynamicModule = __decorate([
+            core_1.NgModule({
+                imports: [forms_1.FormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
+                declarations: [PacemFieldDynamicField],
+                exports: [PacemFieldDynamicField]
+            }),
+            __metadata("design:paramtypes", [])
+        ], PacemFieldDynamicModule);
         return PacemFieldDynamicModule;
     };
-    PacemFieldBuilder = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemFieldBuilder);
     return PacemFieldBuilder;
 }());
+PacemFieldBuilder = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemFieldBuilder);
 exports.PacemFieldBuilder = PacemFieldBuilder;
 var PacemField = (function () {
     function PacemField(compiler, builder) {
@@ -1330,7 +1333,7 @@ var PacemField = (function () {
                 var watermark = attrs['placeholder'];
                 delete attrs['placeholder'];
                 if (watermark)
-                    innerHtml = ("<option value=\"\" [pacemDefaultSelectOption]=\"[null]\" class=\"pacem-watermark\">" + watermark + "</option>") + innerHtml;
+                    innerHtml = "<option value=\"\" [pacemDefaultSelectOption]=\"[null]\" class=\"pacem-watermark\">" + watermark + "</option>" + innerHtml;
                 fetchData = field.extra;
                 var compareTo = field.prop;
                 if (fetchData.valueProperty)
@@ -1543,7 +1546,7 @@ var PacemField = (function () {
             labelOuterHtml = labelOuterHtml.replace(/>/, " [ngClass]=\"{ 'pacem-tooltip': !readonly }\" pacemBalloon=\"#" + toolTipID + "\" [pacemBalloonOptions]=\"{ position: 'auto', behavior: 'tooltip', disabled: readonly, hoverDelay: 0, hoverTimeout: 0 }\">")
                 + ("<div hidden id=\"" + toolTipID + "\">" + field.display.description + "</div>");
         }
-        tmpl = ("<div class=\"pacem-field form-group\" [ngClass]=\"{ 'pacem-fetching': fetching, 'pacem-has-value': hasValue }\" " + fieldAttrs + ">")
+        tmpl = "<div class=\"pacem-field form-group\" [ngClass]=\"{ 'pacem-fetching': fetching, 'pacem-has-value': hasValue }\" " + fieldAttrs + ">"
             + labelOuterHtml
             + (!this.readonly ? ('<div class="pacem-input-container">' //*ngIf="!readonly"
                 + wrapperOpener + elOuterHtml + wrapperCloser
@@ -1567,60 +1570,61 @@ var PacemField = (function () {
             _this.syncControl();
         });
     };
-    __decorate([
-        core_1.ViewChild('label'), 
-        __metadata('design:type', core_1.ElementRef)
-    ], PacemField.prototype, "labelElementRef", void 0);
-    __decorate([
-        core_1.ViewChild('placeholder', { read: core_1.ViewContainerRef }), 
-        __metadata('design:type', core_1.ViewContainerRef)
-    ], PacemField.prototype, "dynamicComponentTarget", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemField.prototype, "field", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], PacemField.prototype, "entity", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Boolean)
-    ], PacemField.prototype, "readonly", void 0);
-    __decorate([
-        core_1.Input('params'), 
-        __metadata('design:type', Object)
-    ], PacemField.prototype, "parameters", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', forms_1.NgForm), 
-        __metadata('design:paramtypes', [forms_1.NgForm])
-    ], PacemField.prototype, "form", null);
-    PacemField = __decorate([
-        core_1.Component({
-            selector: 'pacem-field',
-            template: "\n    <div #placeholder hidden></div>\n    ",
-            //entryComponents: [PacemSelectMany, PacemAutocomplete],
-            providers: [ /*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/, PacemFieldBuilder,
-                pacem_core_1.PacemDate, MinValidator, MaxValidator, CompareValidator]
-        }), 
-        __metadata('design:paramtypes', [core_1.Compiler, PacemFieldBuilder])
-    ], PacemField);
     return PacemField;
 }());
+__decorate([
+    core_1.ViewChild('label'),
+    __metadata("design:type", core_1.ElementRef)
+], PacemField.prototype, "labelElementRef", void 0);
+__decorate([
+    core_1.ViewChild('placeholder', { read: core_1.ViewContainerRef }),
+    __metadata("design:type", core_1.ViewContainerRef)
+], PacemField.prototype, "dynamicComponentTarget", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemField.prototype, "field", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object)
+], PacemField.prototype, "entity", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], PacemField.prototype, "readonly", void 0);
+__decorate([
+    core_1.Input('params'),
+    __metadata("design:type", Object)
+], PacemField.prototype, "parameters", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", forms_1.NgForm),
+    __metadata("design:paramtypes", [forms_1.NgForm])
+], PacemField.prototype, "form", null);
+PacemField = __decorate([
+    core_1.Component({
+        selector: 'pacem-field',
+        template: "\n    <div #placeholder hidden></div>\n    ",
+        //entryComponents: [PacemSelectMany, PacemAutocomplete],
+        providers: [/*PacemContentEditable, PacemDefaultSelectOption, DatasourceFetcher*/ , PacemFieldBuilder,
+            pacem_core_1.PacemDate, MinValidator, MaxValidator, CompareValidator]
+    }),
+    __metadata("design:paramtypes", [core_1.Compiler, PacemFieldBuilder])
+], PacemField);
 exports.PacemField = PacemField;
 var PacemScaffoldingModule = (function () {
     function PacemScaffoldingModule() {
     }
-    PacemScaffoldingModule = __decorate([
-        core_1.NgModule({
-            imports: [forms_1.FormsModule, forms_1.ReactiveFormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
-            declarations: [PacemField],
-            exports: [PacemField, PacemDatetimePicker],
-            providers: [PacemExecCommand]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemScaffoldingModule);
     return PacemScaffoldingModule;
 }());
+PacemScaffoldingModule = __decorate([
+    core_1.NgModule({
+        imports: [forms_1.FormsModule, forms_1.ReactiveFormsModule, common_1.CommonModule, pacem_ui_1.PacemUIModule, pacem_core_1.PacemCoreModule, PacemScaffoldingInternalModule],
+        declarations: [PacemField],
+        exports: [PacemField],
+        providers: [PacemExecCommand]
+    }),
+    __metadata("design:paramtypes", [])
+], PacemScaffoldingModule);
 exports.PacemScaffoldingModule = PacemScaffoldingModule;
+var MinValidator_1, MaxValidator_1, CompareValidator_1, PacemExecCommand_1;

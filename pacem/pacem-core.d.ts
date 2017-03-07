@@ -1,4 +1,3 @@
-/// <reference types="core-js" />
 export declare var pacem: any;
 export declare class PacemUtils {
     static readonly core: any;
@@ -53,7 +52,7 @@ export declare class PacemPromise<T> {
     private promise;
     private deferred;
     constructor();
-    then(onCompleted: (v?: T) => void | PromiseLike<void>, onFailed?: (v?: any) => void | PromiseLike<void>): this;
+    then(onfulfilled?: (v: T) => T | PromiseLike<T>, onrejected?: (v?: any) => T | PromiseLike<T>): this;
     /**
      * Occurs whenever the promise concludes (either after completion or error).
      * @param {Function } callback

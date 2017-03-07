@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 /*! pacem-ng2 | (c) 2016 Pacem sas | https://github.com/pacem-it/pacem-ng2/blob/master/LICENSE */
-var core_1 = require('@angular/core');
+var core_1 = require("@angular/core");
 var id = 'Pacem';
 exports.pacem = window[id] = window[id] || {};
 var JSON_DATE_PATTERN = /^\/Date\([\d]+\)\/$/i;
@@ -18,7 +18,7 @@ exports.pacem.localization = {
         'errors': { 'NOT_EXPLOITABLE': '%s feature not exploitable on this browser!', 'NETWORK': 'Network error occurred.', 'NOT_ARRAY': '%s is not an array', 'KEY_DUPLICATE': '%s is already a registered key' }
     }
 };
-var PacemUtils = (function () {
+var PacemUtils = PacemUtils_1 = (function () {
     function PacemUtils() {
     }
     Object.defineProperty(PacemUtils, "core", {
@@ -85,7 +85,7 @@ var PacemUtils = (function () {
                 ctx.canvas.width = width;
             if (height)
                 ctx.canvas.height = height;
-            PacemUtils.cropImageOntoCanvas(el, ctx);
+            PacemUtils_1.cropImageOntoCanvas(el, ctx);
             deferred.resolve(ctx.canvas.toDataURL());
         };
         el.src = url;
@@ -100,8 +100,8 @@ var PacemUtils = (function () {
      */
     PacemUtils.cropImageOntoCanvas = function (el, ctx, sourceWidth, sourceHeight) {
         //
-        var tgetW = ctx.canvas.width;
-        var tgetH = ctx.canvas.height;
+        var tgetW = ctx.canvas.width /*= parseFloat(scope.thumbWidth)*/;
+        var tgetH = ctx.canvas.height /*= parseFloat(scope.thumbHeight)*/;
         var cnvW = tgetW, cnvH = tgetH;
         var w = sourceWidth || 1.0 * el.width, h = sourceHeight || 1.0 * el.height;
         //console.log('img original size: ' + w + 'x' + h);
@@ -212,12 +212,12 @@ var PacemUtils = (function () {
             return undefined;
         return JSON.parse(JSON.stringify(obj));
     };
-    PacemUtils = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemUtils);
     return PacemUtils;
 }());
+PacemUtils = PacemUtils_1 = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemUtils);
 exports.PacemUtils = PacemUtils;
 var PacemDate = (function () {
     function PacemDate() {
@@ -225,14 +225,14 @@ var PacemDate = (function () {
     PacemDate.prototype.transform = function (d) {
         return PacemUtils.parseDate(d);
     };
-    PacemDate = __decorate([
-        core_1.Pipe({ name: 'pacemDate' }), 
-        __metadata('design:paramtypes', [])
-    ], PacemDate);
     return PacemDate;
 }());
+PacemDate = __decorate([
+    core_1.Pipe({ name: 'pacemDate' }),
+    __metadata("design:paramtypes", [])
+], PacemDate);
 exports.PacemDate = PacemDate;
-var PacemPromise = (function () {
+var PacemPromise = PacemPromise_1 = (function () {
     function PacemPromise() {
         this.deferred = null;
         var me = this;
@@ -240,8 +240,8 @@ var PacemPromise = (function () {
             me.deferred = { 'resolve': resolve, 'reject': reject, 'promise': me };
         });
     }
-    PacemPromise.prototype.then = function (onCompleted, onFailed) {
-        this.promise.then(onCompleted, onFailed);
+    PacemPromise.prototype.then = function (onfulfilled, onrejected) {
+        this.promise.then(onfulfilled, onrejected);
         return this;
     };
     /**
@@ -261,15 +261,15 @@ var PacemPromise = (function () {
         return this;
     };
     PacemPromise.defer = function () {
-        var q = new PacemPromise();
+        var q = new PacemPromise_1();
         return q.deferred;
     };
-    PacemPromise = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemPromise);
     return PacemPromise;
 }());
+PacemPromise = PacemPromise_1 = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemPromise);
 exports.PacemPromise = PacemPromise;
 var PacemProfile = (function () {
     function PacemProfile() {
@@ -308,12 +308,12 @@ var PacemProfile = (function () {
         storage = this.getStorage(false);
         storage.removeItem(name);
     };
-    PacemProfile = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemProfile);
     return PacemProfile;
 }());
+PacemProfile = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemProfile);
 exports.PacemProfile = PacemProfile;
 var PacemLooper = (function () {
     /**
@@ -398,24 +398,25 @@ var PacemLooper = (function () {
         _this.deferred.promise['finally'](callback);
         return _this;
     };
-    PacemLooper = __decorate([
-        core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], PacemLooper);
     return PacemLooper;
 }());
+PacemLooper = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], PacemLooper);
 exports.PacemLooper = PacemLooper;
 var PacemCoreModule = (function () {
     function PacemCoreModule() {
     }
-    PacemCoreModule = __decorate([
-        core_1.NgModule({
-            providers: [PacemProfile],
-            declarations: [PacemDate],
-            exports: [PacemDate]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], PacemCoreModule);
     return PacemCoreModule;
 }());
+PacemCoreModule = __decorate([
+    core_1.NgModule({
+        providers: [PacemProfile],
+        declarations: [PacemDate],
+        exports: [PacemDate]
+    }),
+    __metadata("design:paramtypes", [])
+], PacemCoreModule);
 exports.PacemCoreModule = PacemCoreModule;
+var PacemUtils_1, PacemPromise_1;
